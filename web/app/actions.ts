@@ -1,6 +1,7 @@
 "use server";
 
 import type { UserProfile } from "@/lib/types";
+import { endpointServer } from "@/lib/variables";
 import axios from "axios";
 
 // Simulate a delay for API calls
@@ -123,7 +124,7 @@ export async function updateProfile(updatedProfile: UserProfile) {
   await simulateDelay(1000);
 
   try {
-    await axios.put(`http://localhost:3000/api/user`, updatedProfile);
+    await axios.put(`${endpointServer}/api/user`, updatedProfile);
 
     return {
       success: true,
