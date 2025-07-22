@@ -9,8 +9,10 @@ export async function POST(req: NextRequest) {
 
   const { data: allUSers, error: errorUsers } = await userTable.select("*");
 
-  if (!allUSers || errorUsers)
+  if (!allUSers || errorUsers){
+    console.error(errorUsers)
     throw new Error("Something wrong when fetching data");
+  }
 
   for (const user of allUSers) {
     const compared: UserProfileDb = user;
