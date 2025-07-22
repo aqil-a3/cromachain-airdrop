@@ -188,7 +188,6 @@ export default function ClaimAirdropPage() {
         onRegisterClick={handleNewUserRegistration}
         onSignInClick={() => setShowSignInDialog(true)}
         onCommunityClick={handleCommunityClick}
-        isUserRegistered={isRegistered}
         userName={userProfile.name}
       />
 

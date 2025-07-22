@@ -341,7 +341,6 @@ export default function AirdropGuidePage() {
         onRegisterClick={handleNewUserRegistration}
         onSignInClick={handleExistingUserSignIn}
         onCommunityClick={handleCommunityClick}
-        isUserRegistered={isUserRegistered}
         userName={userName}
       />
 

@@ -259,7 +259,6 @@ export default function TasksPage() {
         onRegisterClick={handleNewUserRegistration}
         onSignInClick={handleExistingUserSignIn}
         onCommunityClick={handleCommunityClick}
-        isUserRegistered={!!userProfile}
         userName={userProfile?.name || "Guest"}
       />
 
