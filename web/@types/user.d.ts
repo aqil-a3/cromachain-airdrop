@@ -15,3 +15,4 @@ export interface UserProfileDb {
   twitter_username: string;
   eth_address: string;
 }
+
