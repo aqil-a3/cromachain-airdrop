@@ -28,12 +28,13 @@ import {
   Info,
 } from "lucide-react"
 import Link from "next/link"
-import { CustomParticlesBackground } from "@/components/custom-particles-background"
-import { Navbar } from "@/components/navbar"
+import { CustomParticlesBackground } from "@/components/layouts/custom-particles-background"
+import { Navbar } from "@/components/layouts/navbar"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import type { UserProfile } from "@/lib/types"
 import { initialTasks, getTaskIcon, type Task } from "@/lib/tasks"
 import { updateProfile } from "@/app/actions"
+import { signOut } from "next-auth/react"
+import { UserProfile } from "@/@types/user"
 
 // Animation variants
 const fadeInUp = {
@@ -232,7 +233,6 @@ export default function UserProfilePage() {
         onRegisterClick={handleNewUserRegistration}
         onSignInClick={handleExistingUserSignIn}
         onCommunityClick={handleCommunityClick}
-        isUserRegistered={!!userProfile}
         userName={userProfile?.name || "Guest"}
       />
 
@@ -321,6 +321,13 @@ export default function UserProfilePage() {
                       onClick={handleEditProfileClick}
                     >
                       Edit Profile
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white bg-transparent"
+                      onClick={() => signOut({redirectTo:"/"})}
+                    >
+                      Logout
                     </Button>
                   </CardHeader>
                   <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300">

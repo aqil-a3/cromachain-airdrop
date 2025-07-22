@@ -1,42 +1,66 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import Link from "next/link"
-import { Flame, Gift, Menu, X, MessageCircle, User, BookOpen, ListChecks, UserCircle } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import {
+  Flame,
+  Gift,
+  Menu,
+  X,
+  MessageCircle,
+  User,
+  BookOpen,
+  ListChecks,
+  UserCircle,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useSession } from "next-auth/react";
 
 interface NavbarProps {
-  onRegisterClick: () => void
-  onSignInClick: () => void
-  onCommunityClick: () => void
-  isUserRegistered: boolean
-  userName: string
+  onRegisterClick: () => void;
+  onSignInClick: () => void;
+  onCommunityClick: () => void;
+  userName: string;
 }
 
-export function Navbar({ onRegisterClick, onSignInClick, onCommunityClick, isUserRegistered, userName }: NavbarProps) {
-  const [scrolled, setScrolled] = useState(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+export function Navbar({
+  onRegisterClick,
+  onSignInClick,
+  onCommunityClick,
+  userName,
+}: NavbarProps) {
+  const session = useSession();
+  const authStatus = session.status;
+  const userData = session.data?.user;
+
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
-        setScrolled(true)
+        setScrolled(true);
       } else {
-        setScrolled(false)
+        setScrolled(false);
       }
-    }
+    };
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const navLinks = [
     { name: "Claim Airdrop", href: "/claim", icon: Gift, action: null },
     { name: "Airdrop Tasks", href: "/tasks", icon: ListChecks, action: null },
     { name: "Airdrop Guide", href: "/guide", icon: BookOpen, action: null },
-    { name: "Community", href: "#", icon: MessageCircle, action: onCommunityClick },
-  ]
+    {
+      name: "Community",
+      href: "#",
+      icon: MessageCircle,
+      action: onCommunityClick,
+    },
+  ];
 
   return (
     <motion.nav
@@ -52,7 +76,11 @@ export function Navbar({ onRegisterClick, onSignInClick, onCommunityClick, isUse
         <Link href="/" className="flex items-center space-x-2">
           <motion.div
             animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+            transition={{
+              duration: 20,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "linear",
+            }}
           >
             <Flame className="w-7 h-7 text-orange-500" />
           </motion.div>
@@ -82,9 +110,9 @@ export function Navbar({ onRegisterClick, onSignInClick, onCommunityClick, isUse
                 <link.icon className="w-4 h-4" />
                 <span>{link.name}</span>
               </Link>
-            ),
+            )
           )}
-          {isUserRegistered ? (
+          {authStatus === "authenticated" ? (
             <>
               <Link
                 href="/profile"
@@ -100,15 +128,26 @@ export function Navbar({ onRegisterClick, onSignInClick, onCommunityClick, isUse
                 transition={{ duration: 0.3 }}
               >
                 <User className="w-4 h-4" />
-                <span>Welcome, {userName.split(" ")[0]}!</span>
+                <span>Welcome, {userData?.name?.split(" ")[0]}!</span>
               </motion.div>
             </>
+          ) : authStatus === "loading" ? (
+            <div className="flex items-center space-x-3">
+              <div className="h-8 w-20 rounded-md bg-gray-700 animate-pulse" />
+              <div className="h-8 w-20 rounded-md bg-gray-700 animate-pulse" />
+            </div>
           ) : (
             <div className="flex items-center space-x-3">
-              <button onClick={onRegisterClick} className="gradient-border-btn text-sm">
+              <button
+                onClick={onRegisterClick}
+                className="gradient-border-btn text-sm"
+              >
                 Register
               </button>
-              <button onClick={onSignInClick} className="gradient-border-btn text-sm">
+              <button
+                onClick={onSignInClick}
+                className="gradient-border-btn text-sm"
+              >
                 Sign In
               </button>
             </div>
@@ -117,8 +156,16 @@ export function Navbar({ onRegisterClick, onSignInClick, onCommunityClick, isUse
 
         {/* Mobile Menu Button */}
         <div className="md:hidden">
-          <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? <X className="w-6 h-6 text-white" /> : <Menu className="w-6 h-6 text-white" />}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? (
+              <X className="w-6 h-6 text-white" />
+            ) : (
+              <Menu className="w-6 h-6 text-white" />
+            )}
           </Button>
         </div>
       </div>
@@ -139,8 +186,8 @@ export function Navbar({ onRegisterClick, onSignInClick, onCommunityClick, isUse
                   <button
                     key={link.name}
                     onClick={() => {
-                      link.action()
-                      setMobileMenuOpen(false)
+                      link.action();
+                      setMobileMenuOpen(false);
                     }}
                     className="text-gray-300 hover:text-orange-500 transition-colors flex items-center space-x-2 text-lg"
                   >
@@ -157,9 +204,9 @@ export function Navbar({ onRegisterClick, onSignInClick, onCommunityClick, isUse
                     <link.icon className="w-5 h-5" />
                     <span>{link.name}</span>
                   </Link>
-                ),
+                )
               )}
-              {isUserRegistered ? (
+              {authStatus === "authenticated" ? (
                 <>
                   <Link
                     href="/profile"
@@ -183,8 +230,8 @@ export function Navbar({ onRegisterClick, onSignInClick, onCommunityClick, isUse
                 <div className="flex flex-col items-center space-y-3 mt-4">
                   <button
                     onClick={() => {
-                      onRegisterClick()
-                      setMobileMenuOpen(false)
+                      onRegisterClick();
+                      setMobileMenuOpen(false);
                     }}
                     className="gradient-border-btn-mobile text-lg"
                   >
@@ -192,8 +239,8 @@ export function Navbar({ onRegisterClick, onSignInClick, onCommunityClick, isUse
                   </button>
                   <button
                     onClick={() => {
-                      onSignInClick()
-                      setMobileMenuOpen(false)
+                      onSignInClick();
+                      setMobileMenuOpen(false);
                     }}
                     className="gradient-border-btn-mobile text-lg"
                   >
@@ -206,5 +253,5 @@ export function Navbar({ onRegisterClick, onSignInClick, onCommunityClick, isUse
         )}
       </AnimatePresence>
     </motion.nav>
-  )
+  );
 }

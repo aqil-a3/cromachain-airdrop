@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { Particles } from "@tsparticles/react"
-import { loadSlim } from "@tsparticles/slim" // loads tsparticles and all the plugins
+import { Particles } from "@tsparticles/react";
+import { loadSlim } from "@tsparticles/slim"; // loads tsparticles and all the plugins
 
 export function ParticlesBackground() {
   const particlesInit = async (main: any) => {
-    await loadSlim(main)
-  }
+    await loadSlim(main);
+  };
 
   return (
     <Particles
@@ -29,6 +29,7 @@ export function ParticlesBackground() {
               enable: false, // Disable click interaction
               mode: "push",
             },
+            // @ts-ignore
             resize: true,
           },
           modes: {
@@ -48,6 +49,7 @@ export function ParticlesBackground() {
             value: 150, // Increased number of particles
             density: {
               enable: true,
+              // @ts-ignore
               value_area: 800,
             },
           },
@@ -59,6 +61,7 @@ export function ParticlesBackground() {
           },
           opacity: {
             value: 0.8, // Increased opacity for particles
+            // @ts-ignore
             random: true,
             anim: {
               enable: false,
@@ -69,6 +72,7 @@ export function ParticlesBackground() {
           },
           size: {
             value: 3,
+            // @ts-ignore
             random: true,
             anim: {
               enable: false,
@@ -94,6 +98,7 @@ export function ParticlesBackground() {
             bounce: false,
             attract: {
               enable: false,
+              // @ts-ignore
               rotateX: 600,
               rotateY: 1200,
             },
@@ -102,5 +107,5 @@ export function ParticlesBackground() {
         detectRetina: true,
       }}
     />
-  )
+  );
 }

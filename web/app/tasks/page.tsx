@@ -23,8 +23,8 @@ import {
   Loader2,
 } from "lucide-react"
 import Link from "next/link"
-import { CustomParticlesBackground } from "@/components/custom-particles-background"
-import { Navbar } from "@/components/navbar"
+import { CustomParticlesBackground } from "@/components/layouts/custom-particles-background"
+import { Navbar } from "@/components/layouts/navbar"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import type { UserProfile } from "@/lib/types"
 import { initialTasks, getTaskIcon, type Task } from "@/lib/tasks"

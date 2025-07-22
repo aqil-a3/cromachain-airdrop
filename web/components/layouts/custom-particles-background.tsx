@@ -3,7 +3,7 @@
 import { useRef, useEffect, useCallback } from "react"
 
 export function CustomParticlesBackground() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const animationFrameId = useRef<number | null>(null)
 
   const initParticles = useCallback(() => {
@@ -11,13 +11,13 @@ export function CustomParticlesBackground() {
       const canvas = canvasRef.current
       if (!canvas) return
 
-      const ctx = canvas.getContext("2d")
+      const ctx = canvas!.getContext("2d")
       if (!ctx) return
 
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
+      canvas!.width = window.innerWidth
+      canvas!.height = window.innerHeight
 
-      const radiusLength = (canvas.width * canvas.height) / 8000
+      const radiusLength = (canvas!.width * canvas!.height) / 8000
       let particlesArray: Particle[] = []
 
       const mouse = {
@@ -44,17 +44,17 @@ export function CustomParticlesBackground() {
         }
 
         draw() {
-          ctx.beginPath()
-          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false)
-          ctx.fillStyle = "rgba(255, 100, 0, 0.31875)" // Bright orange for particles with 15% reduced opacity
-          ctx.fill()
+          ctx!.beginPath()
+          ctx!.arc(this.x, this.y, this.size, 0, Math.PI * 2, false)
+          ctx!.fillStyle = "rgba(255, 100, 0, 0.31875)" // Bright orange for particles with 15% reduced opacity
+          ctx!.fill()
         }
 
         update() {
-          if (this.x > canvas.width || this.x < 0) {
+          if (this.x > canvas!.width || this.x < 0) {
             this.velX = -this.velX
           }
-          if (this.y > canvas.height || this.y < 0) {
+          if (this.y > canvas!.height || this.y < 0) {
             this.velY = -this.velY
           }
 
@@ -66,13 +66,13 @@ export function CustomParticlesBackground() {
 
             if (dist < mouse.radius + this.size) {
               const buffer = this.size * 10
-              if (mouse.x < this.x && this.x < canvas.width - buffer) {
+              if (mouse.x < this.x && this.x < canvas!.width - buffer) {
                 this.x += 10
               }
               if (mouse.x > this.x && this.x > buffer) {
                 this.x -= 10
               }
-              if (mouse.y < this.y && this.y < canvas.height - buffer) {
+              if (mouse.y < this.y && this.y < canvas!.height - buffer) {
                 this.y += 10
               }
               if (mouse.y > this.y && this.y > buffer) {
@@ -90,7 +90,7 @@ export function CustomParticlesBackground() {
 
       function createParticles() {
         particlesArray = []
-        const noOfParticles = (canvas.width * canvas.height) / 5000
+        const noOfParticles = (canvas!.width * canvas!.height) / 5000
 
         for (let i = 0; i < noOfParticles; i++) {
           const size = Math.random() * 5 + 1
@@ -104,7 +104,7 @@ export function CustomParticlesBackground() {
       }
 
       function connect() {
-        const vicinityDist = (canvas.width * canvas.height) / 81
+        const vicinityDist = (canvas!.width * canvas!.height) / 81
         for (let i = 0; i < particlesArray.length; i++) {
           for (let j = i; j < particlesArray.length; j++) {
             const distance =
@@ -113,19 +113,19 @@ export function CustomParticlesBackground() {
             const opacity = 1 - distance / 25000 // This calculation is based on the original code
 
             if (distance < vicinityDist) {
-              ctx.strokeStyle = `rgba(255, 100, 0, ${opacity * 0.31875})` // Bright orange for lines with 15% reduced opacity
-              ctx.lineWidth = 1
-              ctx.beginPath()
-              ctx.moveTo(particlesArray[i].x, particlesArray[i].y)
-              ctx.lineTo(particlesArray[j].x, particlesArray[j].y)
-              ctx.stroke()
+              ctx!.strokeStyle = `rgba(255, 100, 0, ${opacity * 0.31875})` // Bright orange for lines with 15% reduced opacity
+              ctx!.lineWidth = 1
+              ctx!.beginPath()
+              ctx!.moveTo(particlesArray[i].x, particlesArray[i].y)
+              ctx!.lineTo(particlesArray[j].x, particlesArray[j].y)
+              ctx!.stroke()
             }
           }
         }
       }
 
       const animate = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx!.clearRect(0, 0, canvas!.width, canvas!.height)
         for (let i = 0; i < particlesArray.length; i++) {
           particlesArray[i].update()
         }
@@ -144,9 +144,9 @@ export function CustomParticlesBackground() {
       }
 
       const handleResize = () => {
-        canvas.width = window.innerWidth
-        canvas.height = window.innerHeight
-        mouse.radius = (canvas.width * canvas.height) / 9000
+        canvas!.width = window.innerWidth
+        canvas!.height = window.innerHeight
+        mouse.radius = (canvas!.width * canvas!.height) / 9000
         createParticles()
       }
 
