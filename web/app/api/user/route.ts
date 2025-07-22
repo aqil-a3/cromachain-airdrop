@@ -7,10 +7,13 @@ export async function POST(req: NextRequest) {
   const raw: UserProfile = await req.json();
   const data = mapClientUserToDb(raw);
 
-  const { data: allUSers, error: errorUsers } = await userTable.select("*");
+  const res = await userTable.select("*");
 
-  if (!allUSers || errorUsers){
-    console.error(errorUsers)
+  const { data: allUSers, error: errorUsers } = res;
+
+  if (!allUSers || errorUsers) {
+    console.log(res);
+    console.error(errorUsers);
     throw new Error("Something wrong when fetching data");
   }
 

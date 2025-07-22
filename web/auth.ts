@@ -12,7 +12,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const { data } = await userTable
           .select("*")
           .eq("email", email)
-          .single();
+          .maybeSingle();
 
         const user = mapDbUserToClient(data);
 
@@ -27,7 +27,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const { data: userDb } = await userTable
         .select("*")
         .eq("email", email)
-        .single();
+        .maybeSingle();
 
       if (!userDb) return false;
 
