@@ -1,4 +1,5 @@
 export interface UserProfile {
+  readonly userId?: string;
   name: string;
   email: string;
   telegramUsername: string;
@@ -8,6 +9,7 @@ export interface UserProfile {
 }
 
 export interface UserProfileDb {
+  id?: string;
   full_name: string;
   email: string;
   telegram_username: string;
@@ -15,4 +17,3 @@ export interface UserProfileDb {
   twitter_username: string;
   eth_address: string;
 }
-

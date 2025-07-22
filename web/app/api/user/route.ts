@@ -7,8 +7,6 @@ export async function POST(req: NextRequest) {
   const raw: UserProfile = await req.json();
   const data = mapClientUserToDb(raw);
 
-  const duplicateFields: string[] = [];
-
   const { data: allUSers, error: errorUsers } = await userTable.select("*");
 
   if (!allUSers || errorUsers)
@@ -65,4 +63,23 @@ export async function POST(req: NextRequest) {
   }
 
   return NextResponse.json(data, { status: 200 });
+}
+
+export async function PUT(req: NextRequest) {
+  const raw = await req.json();
+  const userId = raw.userId;
+
+  const formData = mapClientUserToDb(raw);
+
+  const { data, error } = await userTable
+    .update(formData)
+    .eq("id", userId)
+    .select();
+
+  if (error) {
+    console.error(error);
+    return NextResponse.json({ error: error.message }, { status: 400 });
+  }
+
+  return NextResponse.json({ user: data }, { status: 200 });
 }

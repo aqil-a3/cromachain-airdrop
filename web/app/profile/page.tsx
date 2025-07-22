@@ -61,6 +61,7 @@ export default function UserProfilePage() {
   const session = useSession();
   const userData = session.data?.user;
   const authStatus = session.status;
+  console.log(userData)
 
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [tasks, setTasks] = useState<Task[]>(initialTasks);

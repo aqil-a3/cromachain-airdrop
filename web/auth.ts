@@ -42,7 +42,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.discordUsername = user.discordUsername;
         token.ethAddress = user.ethAddress;
         token.twitterUsername = user.twitterUsername;
-        token.id = user.id;
+        token.userId = user.userId;
       }
 
       return token;
