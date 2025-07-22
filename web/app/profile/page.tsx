@@ -39,7 +39,7 @@ import {
 } from "@/components/ui/dialog";
 import { initialTasks, getTaskIcon, type Task } from "@/lib/tasks";
 import { updateProfile } from "@/app/actions";
-import { signOut, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { UserProfile } from "@/@types/user";
 
 // Animation variants
@@ -61,7 +61,6 @@ export default function UserProfilePage() {
   const session = useSession();
   const userData = session.data?.user;
   const authStatus = session.status;
-  console.log(userData)
 
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
@@ -218,6 +217,7 @@ export default function UserProfilePage() {
           description: result.message,
         });
         setShowEditProfileDialog(false);
+        signIn("google", { redirectTo: "/profile" });
       } else {
         setProfileUpdateMessage({
           type: "error",
