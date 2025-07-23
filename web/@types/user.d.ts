@@ -1,4 +1,5 @@
 export interface UserProfile {
+  readonly id?: string;
   readonly userId?: string;
   name: string;
   email: string;
