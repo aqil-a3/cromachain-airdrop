@@ -1,5 +1,5 @@
   export interface Task {
-    id: string;
+    readonly id?: string;
     title: string;
     description: string;
     category: "social" | "onchain" | "community" | "bonus";
@@ -16,14 +16,14 @@
   }
 
 export interface TaskDB {
-  id: string;
+  readonly id?: string;
   title: string;
   description: string;
   category: string; // social | onchain | community | bonus
   platform: string;
   reward: number; // in CROMA tokens
   difficulty: string; // Easy | Medium | Hard
-  time_estimate: string;
+  time_estimate: number;
   status: string; // not-started | pending-verification | completed | failed
   locked: boolean;
   icon_name: string;

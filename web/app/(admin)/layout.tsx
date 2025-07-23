@@ -3,6 +3,7 @@ import AdminHeader from "@/components/features/admin/header";
 import AdminProvider from "@/components/features/admin/provider";
 import { AdminSidebar } from "@/components/layouts/sidebar-admin";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/toaster";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import React from "react";
@@ -35,6 +36,7 @@ export default async function AdminLayout({
           <AdminHeader />
           {children}
         </main>
+        <Toaster />
       </SidebarProvider>
     </AdminProvider>
   );

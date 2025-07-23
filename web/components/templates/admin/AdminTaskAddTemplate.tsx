@@ -1,5 +1,6 @@
 "use client";
 
+import { postTask } from "@/components/features/admin/task/actions/postTask";
 import TaskForm from "@/components/features/admin/task/components/form";
 import AdminContainer from "@/components/layouts/container/AdminContainer";
 
@@ -14,13 +15,7 @@ export default function AdminTaskAddTemplate() {
           </p>
         </div>
         <div className="bg-white p-6 rounded-lg shadow-md border">
-          <TaskForm
-            context={{
-              submitHandler(values) {
-                console.log(values);
-              },
-            }}
-          />
+          <TaskForm context={{ submitHandler: postTask }} />
         </div>
       </div>
     </AdminContainer>

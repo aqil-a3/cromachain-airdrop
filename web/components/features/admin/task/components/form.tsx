@@ -45,6 +45,7 @@ export default function TaskForm({ context }: TaskFormProps) {
     resolver: zodResolver(taskSchema),
     defaultValues: defaultValues ?? taskDefaultValues,
   });
+  const isSubmitting = form.formState.isSubmitting;
 
   return (
     <Form {...form}>
@@ -56,7 +57,11 @@ export default function TaskForm({ context }: TaskFormProps) {
             <FormItem>
               <FormLabel>Title</FormLabel>
               <FormControl>
-                <Input placeholder="Task title" {...field} />
+                <Input
+                  disabled={isSubmitting}
+                  placeholder="Task title"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -70,7 +75,11 @@ export default function TaskForm({ context }: TaskFormProps) {
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Textarea placeholder="Task description..." {...field} />
+                <Textarea
+                  disabled={isSubmitting}
+                  placeholder="Task description..."
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -83,7 +92,11 @@ export default function TaskForm({ context }: TaskFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Category</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                disabled={isSubmitting}
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select category" />
@@ -108,7 +121,11 @@ export default function TaskForm({ context }: TaskFormProps) {
             <FormItem>
               <FormLabel>Platform</FormLabel>
               <FormControl>
-                <Input placeholder="e.g. Twitter, Discord" {...field} />
+                <Input
+                  disabled={isSubmitting}
+                  placeholder="e.g. Twitter, Discord"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -123,6 +140,7 @@ export default function TaskForm({ context }: TaskFormProps) {
               <FormLabel>Reward (CROMA)</FormLabel>
               <FormControl>
                 <Input
+                  disabled={isSubmitting}
                   type="number"
                   min={0}
                   value={field.value}
@@ -140,7 +158,11 @@ export default function TaskForm({ context }: TaskFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Difficulty</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                disabled={isSubmitting}
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select difficulty" />
@@ -164,7 +186,11 @@ export default function TaskForm({ context }: TaskFormProps) {
             <FormItem>
               <FormLabel>Time Estimate</FormLabel>
               <FormControl>
-                <Input placeholder="e.g. ~5 minutes" {...field} />
+                <Input
+                  disabled={isSubmitting}
+                  placeholder="e.g. ~5 minutes"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -177,7 +203,11 @@ export default function TaskForm({ context }: TaskFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Status</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                disabled={isSubmitting}
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select status" />
@@ -211,6 +241,7 @@ export default function TaskForm({ context }: TaskFormProps) {
               </div>
               <FormControl>
                 <Switch
+                  disabled={isSubmitting}
                   checked={field.value}
                   onCheckedChange={field.onChange}
                 />
@@ -227,6 +258,7 @@ export default function TaskForm({ context }: TaskFormProps) {
               <FormLabel>Icon Name</FormLabel>
               <FormControl>
                 <Input
+                  disabled={isSubmitting}
                   placeholder="e.g. Twitter, Discord"
                   list="lucide-icons"
                   {...field}
@@ -273,7 +305,11 @@ export default function TaskForm({ context }: TaskFormProps) {
             <FormItem>
               <FormLabel>Action</FormLabel>
               <FormControl>
-                <Input placeholder="e.g. Follow, Retweet" {...field} />
+                <Input
+                  disabled={isSubmitting}
+                  placeholder="e.g. Follow, Retweet"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -287,7 +323,11 @@ export default function TaskForm({ context }: TaskFormProps) {
             <FormItem>
               <FormLabel>Link</FormLabel>
               <FormControl>
-                <Input placeholder="https://..." {...field} />
+                <Input
+                  disabled={isSubmitting}
+                  placeholder="https://..."
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -303,6 +343,7 @@ export default function TaskForm({ context }: TaskFormProps) {
               <FormLabel>Requirements</FormLabel>
               <FormControl>
                 <Textarea
+                  disabled={isSubmitting}
                   placeholder="Separate multiple requirements with commas"
                   value={field.value?.join(", ") || ""}
                   onChange={(e) =>
@@ -320,7 +361,9 @@ export default function TaskForm({ context }: TaskFormProps) {
           )}
         />
 
-        <Button type="submit">Save Task</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Processing..." : "Save Tasks"}
+        </Button>
       </form>
     </Form>
   );
