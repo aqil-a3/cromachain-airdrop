@@ -14,7 +14,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         const { data } = await userTable.select("*").eq("email", email);
 
-        if (!data) throw new Error("Data user tidak ada");
+        if (!data || data.length === 0) throw new Error("Data user tidak ada");
 
         console.log("Data user berhasil diambil");
         console.log(data);
