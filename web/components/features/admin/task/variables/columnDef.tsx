@@ -1,11 +1,59 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Task } from "@/@types/tasks";
 import { Badge } from "@/components/ui/badge";
-import { LucideIcon, icons as LucideIcons } from "lucide-react";
+import {
+  LucideIcon,
+  icons as LucideIcons,
+  MoreHorizontal,
+  Pencil,
+  Trash,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export const taskColumns: ColumnDef<Task>[] = [
+  {
+    accessorKey: "actions",
+    header: "Acttions",
+    cell: ({ row }) => {
+      const id = row.original.id;
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon">
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem asChild>
+              <Link
+                href={`/admin/task/edit/${id}`}
+                className="flex justify-center items-center gap-2"
+              >
+                <Pencil className="h-4 w-4" />
+                Edit
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Button
+                variant={"ghost"}
+                className="w-full cursor-pointer text-red-500"
+              >
+                <Trash className="h-4 w-4" />
+                Delete
+              </Button>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
+  },
   {
     accessorKey: "title",
     header: "Title",
@@ -43,7 +91,13 @@ export const taskColumns: ColumnDef<Task>[] = [
         Medium: "orange",
         Hard: "red",
       } as const;
-      return <Badge className={`bg-${colorMap[diff]}-100 text-${colorMap[diff]}-800`}>{diff}</Badge>;
+      return (
+        <Badge
+          className={`bg-${colorMap[diff]}-100 text-${colorMap[diff]}-800`}
+        >
+          {diff}
+        </Badge>
+      );
     },
   },
   {
@@ -59,8 +113,8 @@ export const taskColumns: ColumnDef<Task>[] = [
       const label = {
         "not-started": "⏳ Not Started",
         "pending-verification": "🔎 Pending",
-        "completed": "✅ Completed",
-        "failed": "❌ Failed",
+        completed: "✅ Completed",
+        failed: "❌ Failed",
       }[status];
       return <span>{label}</span>;
     },
@@ -96,7 +150,12 @@ export const taskColumns: ColumnDef<Task>[] = [
     cell: ({ row }) => {
       const url = row.getValue("link");
       return url ? (
-        <Link href={url} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+        <Link
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 underline"
+        >
           Visit
         </Link>
       ) : (
