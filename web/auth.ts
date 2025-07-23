@@ -9,20 +9,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       async profile(profile) {
         console.log("Profile Google Eksekusi");
         const { email } = profile;
-        console.log("Email Pengguna");
-        console.log(email);
+        console.log("Email Pengguna", email);
 
         const { data } = await userTable.select("*").eq("email", email);
 
-        if (!data || data.length === 0) throw new Error("Data user tidak ada");
+        if (!data || data.length === 0) {
+          console.error("User tidak ditemukan di DB");
+          throw new Error("Data user tidak ada");
+        }
 
-        console.log("Data user berhasil diambil");
-        console.log(data);
-        const user = mapDbUserToClient(data[0]);
-        console.log("Data user berhasil diconvert");
-        console.log(user);
+        const rawUser = data[0];
+        const user = mapDbUserToClient(rawUser);
 
-        return { ...user };
+        console.log("User final:", user);
+
+        return {
+          ...user,
+          id: user.userId || rawUser.id || profile.sub, // fallback
+          name: user.name || profile.name,
+          email: user.email || profile.email,
+          image: profile.picture || null,
+        };
       },
     }),
   ],
