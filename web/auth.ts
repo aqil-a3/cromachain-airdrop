@@ -11,7 +11,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const { email } = profile;
         console.log("Email Pengguna", email);
 
-        const { data } = await userTable.select("*").eq("email", email);
+        const res = await userTable.select("*").eq("email", email);
+        console.log(res);
+        const { data } = res;
 
         if (!data || data.length === 0) {
           console.error("User tidak ditemukan di DB");
