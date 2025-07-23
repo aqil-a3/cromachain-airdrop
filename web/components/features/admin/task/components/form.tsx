@@ -24,7 +24,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { lucideIconNames } from "@/lib/variables";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as LucideIcons from "lucide-react";
 
 export interface TaskFormContext {
@@ -45,6 +45,13 @@ export default function TaskForm({ context }: TaskFormProps) {
     resolver: zodResolver(taskSchema),
     defaultValues: defaultValues ?? taskDefaultValues,
   });
+
+  const [rawRequirements, setRawRequirements] = useState<string>("");
+
+  useEffect(() => {
+    setRawRequirements(form.getValues("requirements")?.join(", ") ?? "");
+  }, [form]);
+
   const isSubmitting = form.formState.isSubmitting;
 
   return (
@@ -334,7 +341,6 @@ export default function TaskForm({ context }: TaskFormProps) {
           )}
         />
 
-        {/* Optional field for requirements (as textarea, comma separated) */}
         <FormField
           control={form.control}
           name="requirements"
@@ -345,15 +351,17 @@ export default function TaskForm({ context }: TaskFormProps) {
                 <Textarea
                   disabled={isSubmitting}
                   placeholder="Separate multiple requirements with commas"
-                  value={field.value?.join(", ") || ""}
-                  onChange={(e) =>
-                    field.onChange(
-                      e.target.value
-                        .split(",")
-                        .map((s) => s.trim())
-                        .filter((s) => s.length > 0)
-                    )
-                  }
+                  value={rawRequirements}
+                  onChange={(e) => {
+                    setRawRequirements(e.target.value);
+                  }}
+                  onBlur={() => {
+                    const parsed = rawRequirements
+                      .split(",")
+                      .map((s) => s.trim())
+                      .filter((s) => s.length > 0);
+                    field.onChange(parsed);
+                  }}
                 />
               </FormControl>
               <FormMessage />

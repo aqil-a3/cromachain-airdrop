@@ -10,7 +10,7 @@ export async function postTask(values: TaskFormSchema) {
 
     alert("Create new tasks is success");
   } catch (error) {
-    alert("Something wrong")
+    alert("Something wrong");
     console.error(error);
   }
 }

@@ -4,6 +4,7 @@ import { userTable } from "./utils/supabase/client";
 import { mapDbUserToClient } from "./lib/map-data/mapDbUserToClient";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  // TODO : Fix this later
   providers: [
     Google({
       async profile(profile) {
@@ -27,7 +28,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         return {
           ...user,
-          id: user.userId || rawUser.id || profile.sub, // fallback
+          id: user.userId || rawUser.id || profile.sub,
           name: user.name || profile.name,
           email: user.email || profile.email,
           image: profile.picture || null,
