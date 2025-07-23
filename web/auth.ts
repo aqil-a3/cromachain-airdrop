@@ -7,6 +7,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Google({
       async profile(profile) {
+        console.log("Profile Google Eksekusi");
         const { email } = profile;
 
         const { data } = await userTable
@@ -14,7 +15,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           .eq("email", email)
           .maybeSingle();
 
+        console.log("Data user berhasil diambil");
+        console.log(data);
         const user = mapDbUserToClient(data);
+        console.log("Data user berhasil diconvert");
+        console.log(user);
 
         return { ...user };
       },
@@ -22,18 +27,25 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     async signIn({ profile }) {
+      console.log("Email sign in diproses");
       const email = profile?.email;
 
+      console.log("Cek data user di db");
       const { data: userDb, error: userError } = await userTable
         .select("*")
         .eq("email", email)
         .maybeSingle();
 
-      console.log(userDb);
-      console.error(userError);
+      console.log("Cek data selesai");
 
-      if (!userDb) return false;
+      if (!userDb || userError) {
+        console.log("terjadi error");
+        console.log(userError);
+        console.log(userDb);
+        return false;
+      }
 
+      console.log("user berhasil login");
       return true;
     },
     jwt(params) {

@@ -3,7 +3,7 @@ import { UserProfile } from "./user";
 
 declare module "next-auth" {
   interface Session {
-    user: UserProfile & DefaultSession["user"];
+    user: UserProfile;
   }
 
   interface User extends UserProfile {}
