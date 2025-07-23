@@ -27,7 +27,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async signIn({ profile }) {
+    async signIn(params) {
+      const { profile } = params;
+      console.log(params);
       console.log("Email sign in diproses");
       const email = profile?.email;
 
