@@ -24,10 +24,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async signIn({ profile }) {
       const email = profile?.email;
 
-      const { data: userDb } = await userTable
+      const { data: userDb, error: userError } = await userTable
         .select("*")
         .eq("email", email)
         .maybeSingle();
+
+      console.log(userDb);
+      console.error(userError);
 
       if (!userDb) return false;
 
