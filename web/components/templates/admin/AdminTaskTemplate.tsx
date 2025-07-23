@@ -1,9 +1,14 @@
+"use client";
+
+import { Task } from "@/@types/tasks";
+import { taskColumns } from "@/components/features/admin/task/variables/columnDef";
 import AdminContainer from "@/components/layouts/container/AdminContainer";
 import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 
-export default function AdminTaskTemplate() {
+export default function AdminTaskTemplate({ tasks }: { tasks: Task[] }) {
   return (
     <AdminContainer>
       {/* Header */}
@@ -17,6 +22,7 @@ export default function AdminTaskTemplate() {
       </div>
 
       {/* Table */}
+      <DataTable columns={taskColumns} data={tasks} />
     </AdminContainer>
   );
 }
