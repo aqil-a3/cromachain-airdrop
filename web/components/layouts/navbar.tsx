@@ -11,8 +11,8 @@ import {
   MessageCircle,
   User,
   BookOpen,
-  ListChecks,
   UserCircle,
+  UserSquare,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
@@ -52,7 +52,6 @@ export function Navbar({
 
   const navLinks = [
     { name: "Claim Airdrop", href: "/claim", icon: Gift, action: null },
-    { name: "Airdrop Tasks", href: "/tasks", icon: ListChecks, action: null },
     { name: "Airdrop Guide", href: "/guide", icon: BookOpen, action: null },
     {
       name: "Community",
@@ -121,6 +120,15 @@ export function Navbar({
                 <UserCircle className="w-4 h-4" />
                 <span>Profile</span>
               </Link>
+              {userData?.role && userData.role === "admin" && (
+                <Link
+                  href="/admin"
+                  className="text-gray-300 hover:text-orange-500 transition-colors flex items-center space-x-2"
+                >
+                  <UserSquare className="w-4 h-4" />
+                  <span>Admin</span>
+                </Link>
+              )}
               <motion.div
                 className="flex items-center space-x-2 text-green-500"
                 initial={{ scale: 0.8 }}

@@ -1,21 +1,5 @@
+import { Task } from "@/@types/tasks"
 import { Twitter, MessageCircle, Repeat, Heart, Share2, Users, Sparkles, Shield, Award } from "lucide-react"
-
-export interface Task {
-  id: string
-  title: string
-  description: string
-  category: "social" | "onchain" | "community" | "bonus"
-  platform: string
-  reward: number // CROMA tokens
-  difficulty: "Easy" | "Medium" | "Hard"
-  timeEstimate: string
-  status: "not-started" | "pending-verification" | "completed" | "failed"
-  locked: boolean
-  iconName: string // Changed from icon to iconName
-  action: string // e.g., "Follow", "Retweet", "Join"
-  link?: string
-  requirements?: string[]
-}
 
 export const initialTasks: Task[] = [
   {

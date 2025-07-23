@@ -6,6 +6,7 @@ export interface UserProfile {
   discordUsername: string;
   twitterUsername: string;
   ethAddress: string;
+  role?: string;
 }
 
 export interface UserProfileDb {
@@ -16,4 +17,5 @@ export interface UserProfileDb {
   discord_username: string;
   twitter_username: string;
   eth_address: string;
+  role: string;
 }

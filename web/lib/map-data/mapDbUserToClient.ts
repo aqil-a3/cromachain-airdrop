@@ -9,5 +9,6 @@ export function mapDbUserToClient(raw: UserProfileDb): UserProfile {
     discordUsername: raw.discord_username,
     ethAddress: raw.eth_address,
     twitterUsername: raw.twitter_username,
+    role: raw.role,
   };
 }

@@ -43,6 +43,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.ethAddress = user.ethAddress;
         token.twitterUsername = user.twitterUsername;
         token.userId = user.userId;
+        token.role = user.role;
       }
 
       return token;

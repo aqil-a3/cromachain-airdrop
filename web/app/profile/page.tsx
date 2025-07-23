@@ -37,10 +37,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { initialTasks, getTaskIcon, type Task } from "@/lib/tasks";
+import { initialTasks, getTaskIcon } from "@/lib/tasks";
 import { updateProfile } from "@/app/actions";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { UserProfile } from "@/@types/user";
+import { Task } from "@/@types/tasks";
 
 // Animation variants
 const fadeInUp = {
