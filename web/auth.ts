@@ -9,6 +9,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       async profile(profile) {
         console.log("Profile Google Eksekusi");
         const { email } = profile;
+        console.log("Email Pengguna");
+        console.log(email);
 
         const { data } = await userTable.select("*").eq("email", email);
 
