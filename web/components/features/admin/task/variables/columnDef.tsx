@@ -6,7 +6,6 @@ import {
   icons as LucideIcons,
   MoreHorizontal,
   Pencil,
-  Trash,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -16,11 +15,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import DeleteDialog from "@/components/molecules/Dialog/DeleteDialog";
+import { deleteTask } from "../actions/deleteTask";
 
 export const taskColumns: ColumnDef<Task>[] = [
   {
     accessorKey: "actions",
-    header: "Acttions",
+    header: "Actions",
     cell: ({ row }) => {
       const id = row.original.id;
       return (
@@ -41,13 +42,16 @@ export const taskColumns: ColumnDef<Task>[] = [
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Button
-                variant={"ghost"}
-                className="w-full cursor-pointer text-red-500"
-              >
-                <Trash className="h-4 w-4" />
-                Delete
-              </Button>
+              <DeleteDialog
+                dataSummary={[
+                  {
+                    label: "Task Name",
+                    value: row.original.title,
+                  },
+                ]}
+                triggerText="Delete"
+                onConfirm={() => deleteTask(id as string)}
+              />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

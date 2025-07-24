@@ -3,10 +3,13 @@ import { mapDbTaskToClient } from "@/lib/map-data/mapDbTaskToClient";
 import { supabase } from "./client";
 import { Task, TaskDB } from "@/@types/tasks";
 
+/** Helper Function for "tasks" Table in Supabase */
+const tableName = "tasks";
+
 export async function addNewTask(formData: TaskDB) {
   formData.id = uuidv4();
 
-  const { error } = await supabase.from("tasks").insert(formData);
+  const { error } = await supabase.from(tableName).insert(formData);
 
   if (error) {
     console.log(error);
@@ -14,9 +17,18 @@ export async function addNewTask(formData: TaskDB) {
   }
 }
 
+export async function deleteTask(id: string) {
+  const { error } = await supabase.from(tableName).delete().eq("id", id);
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 export async function editTask(formData: TaskDB) {
   const { error } = await supabase
-    .from("tasks")
+    .from(tableName)
     .update(formData)
     .eq("id", formData.id);
 
@@ -27,7 +39,7 @@ export async function editTask(formData: TaskDB) {
 }
 
 export async function getTaskById(id: string) {
-  const raw = await supabase.from("tasks").select("*").eq("id", id).single();
+  const raw = await supabase.from(tableName).select("*").eq("id", id).single();
   const { data, error } = raw;
 
   if (error || !data) {
@@ -41,7 +53,7 @@ export async function getTaskById(id: string) {
 }
 
 export async function getAllTask() {
-  const { data, error } = await supabase.from("tasks").select("*");
+  const { data, error } = await supabase.from(tableName).select("*");
 
   if (error || !data) {
     console.error(error);
