@@ -4,7 +4,6 @@ import { userTable } from "./utils/supabase/client";
 import { getUserByEmail } from "./utils/supabase/userTable";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  // TODO : Fix this later
   providers: [
     Google({
       async profile(profile) {

@@ -8,5 +8,6 @@ export function mapClientUserToDb(raw: UserProfile): UserProfileDb {
     discord_username: raw.discordUsername,
     eth_address: raw.ethAddress,
     twitter_username: raw.twitterUsername,
+    role: raw.role ?? "user",
   };
 }
