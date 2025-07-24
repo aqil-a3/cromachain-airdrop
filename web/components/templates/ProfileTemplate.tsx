@@ -58,13 +58,12 @@ const staggerContainer = {
   },
 };
 
-export default function UserProfileTemplate({ initialTasks }:{initialTasks:Task[]}) {
+export default function UserProfileTemplate({ tasks }:{tasks:Task[]}) {
   const session = useSession();
   const userData = session.data?.user;
   const authStatus = session.status;
 
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [referralCode, setReferralCode] = useState<string | null>(null);
   const [showCommunityModal, setShowCommunityModal] = useState(false);
   const [showEditProfileDialog, setShowEditProfileDialog] = useState(false);
@@ -91,17 +90,6 @@ export default function UserProfileTemplate({ initialTasks }:{initialTasks:Task[
       setIsDemoMode(false);
     }
 
-    const storedTaskStatus = localStorage.getItem("userTaskStatus");
-    if (storedTaskStatus) {
-      const parsedStatus = JSON.parse(storedTaskStatus);
-      setTasks((prevTasks) =>
-        prevTasks.map((task) => ({
-          ...task,
-          // @ts-expect-error Error
-          status: parsedStatus[task.id] || task.status,
-        }))
-      );
-    }
   }, [authStatus]);
 
   const totalRewardsEarned = tasks.reduce(

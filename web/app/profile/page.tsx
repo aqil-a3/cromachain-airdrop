@@ -3,5 +3,5 @@ import { getAllTask } from "@/utils/supabase/taskTable";
 
 export default async function ProfilePage() {
   const tasks = await getAllTask();
-  return <UserProfileTemplate initialTasks={tasks} />;
+  return <UserProfileTemplate tasks={tasks} />;
 }
