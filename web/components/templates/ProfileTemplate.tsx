@@ -59,6 +59,7 @@ const staggerContainer = {
 };
 
 export default function UserProfileTemplate({ tasks }:{tasks:Task[]}) {
+  console.log(`tasks from client`, tasks)
   const session = useSession();
   const userData = session.data?.user;
   const authStatus = session.status;
