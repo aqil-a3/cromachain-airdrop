@@ -59,6 +59,25 @@ export default function TaskForm({ context }: TaskFormProps) {
       <form onSubmit={form.handleSubmit(submitHandler)} className="space-y-6">
         <FormField
           control={form.control}
+          name="id"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input
+                  disabled={isSubmitting}
+                  placeholder="Task Id"
+                  readOnly
+                  type="hidden"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
           name="title"
           render={({ field }) => (
             <FormItem>

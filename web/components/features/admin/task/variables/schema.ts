@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const taskSchema = z.object({
+  id: z.string().optional(),
   title: z.string().min(1),
   description: z.string().min(1),
   category: z.enum(["social", "onchain", "community", "bonus"]),

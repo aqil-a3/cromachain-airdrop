@@ -1,21 +1,19 @@
-import { v4 as uuidv4 } from "uuid";
-import { tasksTable } from "@/utils/supabase/client";
 import { NextRequest, NextResponse } from "next/server";
+import { TaskDB } from "@/@types/tasks";
+import { addNewTask, editTask } from "@/utils/supabase/taskTable";
 
 export async function POST(req: NextRequest) {
   const formData = await req.json();
 
-  formData.id = uuidv4();
-
-  const { error } = await tasksTable.insert(formData);
-
-  if (error) {
-    console.error(error);
-    return NextResponse.json(
-      { message: "Something error", error },
-      { status: 500 }
-    );
-  }
+  await addNewTask(formData);
 
   return NextResponse.json({ message: "OK" });
+}
+
+export async function PUT(req: NextRequest) {
+  const formData: TaskDB = await req.json();
+
+  await editTask(formData);
+
+  return NextResponse.json({ message: "ok" });
 }

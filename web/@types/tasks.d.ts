@@ -16,7 +16,7 @@
   }
 
 export interface TaskDB {
-  readonly id?: string;
+  id?: string;
   title: string;
   description: string;
   category: string; // social | onchain | community | bonus
