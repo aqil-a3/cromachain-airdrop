@@ -349,7 +349,7 @@ export default function UserProfileTemplate({ tasks }:{tasks:Task[]}) {
                     <Button
                       variant="outline"
                       className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white bg-transparent"
-                      onClick={() => signOut({ redirectTo: "/" })}
+                      onClick={async () => await signOut({ redirectTo: "/" })}
                     >
                       Logout
                     </Button>
