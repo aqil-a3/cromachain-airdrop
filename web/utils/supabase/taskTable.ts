@@ -12,7 +12,7 @@ export async function addNewTask(formData: TaskDB) {
   const { error } = await supabase.from(tableName).insert(formData);
 
   if (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }

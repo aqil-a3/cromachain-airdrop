@@ -333,11 +333,10 @@ export default function AirdropLanding() {
     if (validateRegistration()) {
       try {
         setIsRegistering(true);
-        const { data } = await axios.post(`/api/user`, userProfile);
+        await axios.post(`/api/user`, userProfile);
 
         alert("Registration Complete! Please login with your google account");
 
-        console.log(data);
       } catch (error) {
         console.error(error);
         if (isAxiosError(error)) {

@@ -1,7 +1,6 @@
 import { TaskUser, TaskUserDb } from "@/@types/task-user";
 
 export function mapDbTaskUserToClient(raw: TaskUserDb): TaskUser {
-  console.log(raw);
   return {
     status: raw.status,
     id: raw.id,
