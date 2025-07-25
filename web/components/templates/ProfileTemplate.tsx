@@ -26,6 +26,7 @@ import {
   Wallet,
   Loader2,
   Info,
+  PlayCircle,
 } from "lucide-react";
 import Link from "next/link";
 import { CustomParticlesBackground } from "@/components/layouts/custom-particles-background";
@@ -42,6 +43,8 @@ import { updateProfile } from "@/app/actions";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { UserProfile } from "@/@types/user";
 import { Task } from "@/@types/tasks";
+import PlayDialog from "../features/protected/profile/playDialog";
+import { TaskUser } from "@/@types/task-user";
 
 // Animation variants
 const fadeInUp = {
@@ -58,8 +61,13 @@ const staggerContainer = {
   },
 };
 
-export default function UserProfileTemplate({ tasks }:{tasks:Task[]}) {
-  console.log(`tasks from client`, tasks)
+export default function UserProfileTemplate({
+  tasks,
+  userTasks,
+}: {
+  tasks: Task[];
+  userTasks: TaskUser[];
+}) {
   const session = useSession();
   const userData = session.data?.user;
   const authStatus = session.status;
@@ -90,7 +98,6 @@ export default function UserProfileTemplate({ tasks }:{tasks:Task[]}) {
       );
       setIsDemoMode(false);
     }
-
   }, [authStatus]);
 
   const totalRewardsEarned = tasks.reduce(
@@ -126,6 +133,8 @@ export default function UserProfileTemplate({ tasks }:{tasks:Task[]}) {
 
   const getTaskStatusColor = (status: Task["status"]) => {
     switch (status) {
+      case "started":
+        return "bg-amber-500/20 text-amber-400 border-amber-500/30";
       case "completed":
         return "bg-green-500/20 text-green-400 border-green-500/30";
       case "pending-verification":
@@ -522,6 +531,12 @@ export default function UserProfileTemplate({ tasks }:{tasks:Task[]}) {
                   <div className="space-y-4">
                     {tasks.map((task) => {
                       const IconComponent = getTaskIcon(task.iconName);
+                      const userTask = userTasks.find(
+                        (t) => t.taskId === task.id
+                      );
+                      const userTaskStatus = userTask?.status as Task["status"];
+                      const taskStatus = userTaskStatus ?? task.status;
+
                       return (
                         <div
                           key={task.id}
@@ -549,11 +564,20 @@ export default function UserProfileTemplate({ tasks }:{tasks:Task[]}) {
                               {task.title}
                             </span>
                           </div>
-                          <Badge className={getTaskStatusColor(task.status)}>
-                            {task.status
-                              .replace(/-/g, " ")
-                              .replace(/\b\w/g, (l) => l.toUpperCase())}
-                          </Badge>
+                          <div className="flex gap-2">
+                            <Badge
+                              className={getTaskStatusColor(
+                                userTaskStatus ?? task.status
+                              )}
+                            >
+                              {taskStatus
+                                .replace(/-/g, " ")
+                                .replace(/\b\w/g, (l) => l.toUpperCase())}
+                            </Badge>
+                            {taskStatus !== "started" && (
+                              <PlayDialog task={task} />
+                            )}
+                          </div>
                         </div>
                       );
                     })}

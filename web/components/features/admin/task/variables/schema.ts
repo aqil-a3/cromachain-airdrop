@@ -9,7 +9,7 @@ export const taskSchema = z.object({
   reward: z.number().nonnegative(),
   difficulty: z.enum(["Easy", "Medium", "Hard"]),
   timeEstimate: z.string().min(1),
-  status: z.enum(["not-started", "pending-verification", "completed", "failed"]),
+  status: z.enum(["not-started", "pending-verification", "completed", "failed", "started"]),
   locked: z.boolean(),
   iconName: z.string().min(1),
   action: z.string().min(1),

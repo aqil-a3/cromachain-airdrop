@@ -119,6 +119,7 @@ export const taskColumns: ColumnDef<Task>[] = [
         "pending-verification": "🔎 Pending",
         completed: "✅ Completed",
         failed: "❌ Failed",
+        started: "▶️ Started",
       }[status];
       return <span>{label}</span>;
     },

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/sidebar";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { User, ClipboardCheck } from "lucide-react";
+import { User, ClipboardCheck, ScanEye } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function AdminSidebar() {
@@ -30,6 +30,11 @@ export function AdminSidebar() {
       label: "Task",
       href: `/admin/task`,
       icon: <ClipboardCheck className="w-4 h-4" />,
+    },
+    {
+      label: "Task Review",
+      href: `/admin/task-review`,
+      icon: <ScanEye className="w-4 h-4" />,
     },
   ];
 
