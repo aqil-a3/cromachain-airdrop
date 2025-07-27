@@ -1138,7 +1138,7 @@ export default function AirdropLanding() {
                 },
                 {
                   icon: <Lightbulb className="w-8 h-8 text-orange-500" />,
-                  title: "Human &#43; Tech",
+                  title: "Human & Tech",
                   description: "Authentic art meets cutting-edge technology",
                 },
                 {
