@@ -45,7 +45,6 @@ import { UserProfile } from "@/@types/user";
 import { Task } from "@/@types/tasks";
 import PlayDialog from "../features/protected/profile/playDialog";
 import { TaskUser } from "@/@types/task-user";
-import SubmitDialog from "../features/protected/profile/submitDialog";
 
 // Animation variants
 const fadeInUp = {
@@ -577,9 +576,6 @@ export default function UserProfileTemplate({
                             </Badge>
                             {taskStatus === "not-started" && (
                               <PlayDialog task={task} />
-                            )}
-                            {taskStatus === "started" && (
-                              <SubmitDialog task={task} />
                             )}
                           </div>
                         </div>
