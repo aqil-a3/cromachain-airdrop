@@ -30,13 +30,16 @@ export default function TaskReviewEditDialog({ row }: { row: Row<TaskUser> }) {
 
   const [newStatus, setNewStatus] = useState(status);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   const handleSave = async () => {
     try {
       const formData: TaskUser = { ...row.original, status: newStatus };
       setIsLoading(true);
 
-      const { data } = await axios.put("/api/user-tasks/status", formData);
+      await axios.put("/api/user-tasks/status", formData);
+      alert("Edit success");
+      setOpenDialog(false);
     } catch (error) {
     } finally {
       setIsLoading(false);
@@ -44,7 +47,7 @@ export default function TaskReviewEditDialog({ row }: { row: Row<TaskUser> }) {
   };
 
   return (
-    <Dialog>
+    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger asChild>
         <Button variant="ghost" className="w-full">
           <Pencil className="h-4 w-4 mr-2" />
@@ -96,7 +99,11 @@ export default function TaskReviewEditDialog({ row }: { row: Row<TaskUser> }) {
           {/* Editable field: Status */}
           <div>
             <Label>Status</Label>
-            <Select disabled={isLoading} value={newStatus} onValueChange={setNewStatus}>
+            <Select
+              disabled={isLoading}
+              value={newStatus}
+              onValueChange={setNewStatus}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>
@@ -115,7 +122,9 @@ export default function TaskReviewEditDialog({ row }: { row: Row<TaskUser> }) {
 
         <div className="flex justify-end gap-2">
           <Button variant="outline">Cancel</Button>
-          <Button disabled={isLoading} onClick={handleSave}>{isLoading ? "Saving..." : "Save"}</Button>
+          <Button disabled={isLoading} onClick={handleSave}>
+            {isLoading ? "Saving..." : "Save"}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

@@ -536,6 +536,7 @@ export default function UserProfileTemplate({
                       );
                       const userTaskStatus = userTask?.status as Task["status"];
                       const taskStatus = userTaskStatus ?? task.status;
+                      const taskReward = task.reward;
 
                       return (
                         <div
@@ -554,15 +555,22 @@ export default function UserProfileTemplate({
                                 <IconComponent className="w-5 h-5" />
                               )}
                             </div>
-                            <span
-                              className={`font-semibold ${
-                                task.status === "completed"
-                                  ? "text-green-400"
-                                  : "text-white"
-                              }`}
-                            >
-                              {task.title}
-                            </span>
+                            <div className="flex flex-col gap-1">
+                              <span
+                                className={`font-semibold ${
+                                  task.status === "completed"
+                                    ? "text-green-400"
+                                    : "text-white"
+                                }`}
+                              >
+                                {task.title}
+                              </span>
+                              <span>
+                                <Badge className="text-orange-500 border-orange-500">
+                                  {task.reward} CRM{" "}
+                                </Badge>
+                              </span>
+                            </div>
                           </div>
                           <div className="flex gap-2">
                             <Badge
