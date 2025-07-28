@@ -7,6 +7,7 @@ export function mapDbTaskUserToClient(raw: TaskUserDb): TaskUser {
     taskId: raw.task_id,
     createdAt: raw.created_at,
     userId: raw.user_id,
+    cromaEarned: raw.croma_earned,
     user: {
       email: raw.user?.email ?? "",
       fullName: raw.user?.full_name ?? "",

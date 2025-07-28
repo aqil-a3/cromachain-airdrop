@@ -10,6 +10,7 @@ import {
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontalIcon, Pencil } from "lucide-react";
 import Link from "next/link";
+import TaskReviewEditDialog from "../components/EditDialog";
 
 export const taskUserColumnDefs: ColumnDef<TaskUser>[] = [
   {
@@ -26,13 +27,7 @@ export const taskUserColumnDefs: ColumnDef<TaskUser>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem asChild>
-              <Link
-                href={`/admin/task-review/edit/${id}`}
-                className="flex justify-center items-center gap-2"
-              >
-                <Pencil className="h-4 w-4" />
-                Edit
-              </Link>
+              <TaskReviewEditDialog row={row} />
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <DeleteDialog
@@ -87,6 +82,11 @@ export const taskUserColumnDefs: ColumnDef<TaskUser>[] = [
           : "text-yellow-600";
       return <span className={color}>{status}</span>;
     },
+  },
+  {
+    accessorKey: "cromaEarned",
+    header: "Croma Earned",
+    cell: ({row}) => `${row.original.cromaEarned} CRM`
   },
   {
     accessorKey: "createdAt",

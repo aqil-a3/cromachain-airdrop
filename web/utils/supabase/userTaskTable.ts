@@ -2,6 +2,7 @@ import { TaskUser } from "@/@types/task-user";
 import { supabase } from "./client";
 import { mapClientTaskUserToDb } from "@/lib/map-data/mapClientTaskUserToDb";
 import { mapDbTaskUserToClient } from "@/lib/map-data/mapDbTaskUserToClient";
+import { gettaskRewardByTaskId } from "./taskTable";
 
 const tableName = "user_tasks";
 
@@ -64,4 +65,25 @@ export async function getUserTasksByUserId(userId: string) {
   const userTasks = data.map((d) => mapDbTaskUserToClient(d));
 
   return userTasks;
+}
+
+export async function updateStatusUserTask(raw: TaskUser) {
+  const dbPayload = mapClientTaskUserToDb(raw);
+  const { reward } = await gettaskRewardByTaskId(dbPayload.task_id);
+
+  if (dbPayload.status === "completed") {
+    dbPayload.croma_earned = reward;
+  } else {
+    dbPayload.croma_earned = 0;
+  }
+
+  const { error } = await supabase
+    .from(tableName)
+    .update({ croma_earned: dbPayload.croma_earned, status: dbPayload.status })
+    .eq("id", dbPayload.id);
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
 }

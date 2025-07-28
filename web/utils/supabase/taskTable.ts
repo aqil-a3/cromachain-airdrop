@@ -68,3 +68,18 @@ export async function getAllTask() {
 
   return taskClient;
 }
+
+export async function gettaskRewardByTaskId(taskId: string) {
+  const { data, error } = await supabase
+    .from(tableName)
+    .select("reward")
+    .eq("id", taskId)
+    .single();
+
+  if (error || !data) {
+    console.error(error);
+    throw error;
+  }
+
+  return data;
+}

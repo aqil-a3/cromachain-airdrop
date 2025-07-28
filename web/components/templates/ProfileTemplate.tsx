@@ -100,11 +100,7 @@ export default function UserProfileTemplate({
     }
   }, [authStatus]);
 
-  const totalRewardsEarned = tasks.reduce(
-    (sum, task) => sum + (task.status === "completed" ? task.reward : 0),
-    0
-  );
-  const completedTasksCount = tasks.filter(
+  const completedTasksCount = userTasks.filter(
     (task) => task.status === "completed"
   ).length;
   const totalTasksCount = tasks.length;
@@ -234,6 +230,10 @@ export default function UserProfileTemplate({
       setIsSavingProfile(false);
     }
   }, [editProfileData]);
+
+  const totalCroma = userTasks
+    .map((task) => task.cromaEarned)
+    .reduce((acc, curr) => acc + curr, 0);
 
   return (
     <div className="min-h-screen text-white overflow-x-hidden flex flex-col">
@@ -483,7 +483,7 @@ export default function UserProfileTemplate({
                           Total CROMA Earned
                         </div>
                         <div className="text-xl font-bold text-orange-500">
-                          {totalRewardsEarned.toLocaleString()}
+                          {totalCroma}
                         </div>
                       </div>
                     </div>
