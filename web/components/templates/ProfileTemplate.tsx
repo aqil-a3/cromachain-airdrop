@@ -45,6 +45,7 @@ import { UserProfile } from "@/@types/user";
 import { Task } from "@/@types/tasks";
 import PlayDialog from "../features/protected/profile/playDialog";
 import { TaskUser } from "@/@types/task-user";
+import TaskDetailDialog from "../features/protected/profile/infoDialog";
 
 // Animation variants
 const fadeInUp = {
@@ -565,10 +566,17 @@ export default function UserProfileTemplate({
                               >
                                 {task.title}
                               </span>
-                              <span>
+                              <span className="flex gap-2">
                                 <Badge className="text-orange-500 border-orange-500">
-                                  {task.reward} CRM{" "}
+                                  {taskReward} CRM
                                 </Badge>
+                                {task.link && (
+                                  <Link href={task.link} target="_blank" rel="noopener noreferrer">
+                                    <Badge className="text-amber-500 border-amber-500">
+                                      Visit ↗
+                                    </Badge>
+                                  </Link>
+                                )}
                               </span>
                             </div>
                           </div>
@@ -585,6 +593,7 @@ export default function UserProfileTemplate({
                             {taskStatus === "not-started" && (
                               <PlayDialog task={task} />
                             )}
+                            <TaskDetailDialog task={task} />
                           </div>
                         </div>
                       );

@@ -30,6 +30,7 @@ export default function PlayDialog({ task }: { task: Task }) {
         status: "started",
         taskId: task.id ?? "",
         userId: user?.userId ?? "",
+        cromaEarned: 0,
       };
       const { data } = await axios.post(`/api/user-tasks`, clientData);
 
