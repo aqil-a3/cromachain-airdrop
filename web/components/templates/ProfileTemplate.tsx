@@ -46,6 +46,7 @@ import { Task } from "@/@types/tasks";
 import PlayDialog from "../features/protected/profile/playDialog";
 import { TaskUser } from "@/@types/task-user";
 import TaskDetailDialog from "../features/protected/profile/infoDialog";
+import EditPasswordDialog from "../features/protected/profile/passwordDialog";
 
 // Animation variants
 const fadeInUp = {
@@ -345,24 +346,27 @@ export default function UserProfileTemplate({
               {/* User Info Card */}
               <motion.div variants={fadeInUp}>
                 <Card className="bg-black/40 backdrop-blur-md border border-orange-500/30 p-6 md:p-8 text-left">
-                  <CardHeader className="flex flex-row items-center justify-between pb-4">
+                  <CardHeader className="flex flex-col md:flex-row items-center justify-between pb-4">
                     <h2 className="text-2xl font-bold text-white">
                       Personal Information
                     </h2>
-                    <Button
-                      variant="outline"
-                      className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white bg-transparent"
-                      onClick={handleEditProfileClick}
-                    >
-                      Edit Profile
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white bg-transparent"
-                      onClick={async () => await signOut({ redirectTo: "/" })}
-                    >
-                      Logout
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white bg-transparent"
+                        onClick={handleEditProfileClick}
+                      >
+                        Edit Profile
+                      </Button>
+                     <EditPasswordDialog />
+                      <Button
+                        variant="outline"
+                        className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white bg-transparent"
+                        onClick={async () => await signOut({ redirectTo: "/" })}
+                      >
+                        Logout
+                      </Button>
+                    </div>
                   </CardHeader>
                   <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300">
                     <div className="flex items-center space-x-2">
@@ -571,7 +575,11 @@ export default function UserProfileTemplate({
                                   {taskReward} CRM
                                 </Badge>
                                 {task.link && (
-                                  <Link href={task.link} target="_blank" rel="noopener noreferrer">
+                                  <Link
+                                    href={task.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
                                     <Badge className="text-amber-500 border-amber-500">
                                       Visit ↗
                                     </Badge>

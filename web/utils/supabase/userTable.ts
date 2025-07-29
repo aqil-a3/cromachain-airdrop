@@ -1,6 +1,7 @@
-import { UserProfileDb } from "@/@types/user";
+import { UserChangePassword, UserProfileDb } from "@/@types/user";
 import { supabase } from "./client";
 import { mapDbUserToClient } from "@/lib/map-data/mapDbUserToClient";
+import * as bcrypt from "bcryptjs";
 
 /** Helper Function for "user" Table in Supabase */
 const tableName = "user";
@@ -20,10 +21,10 @@ export async function deleteSoftUSer(id: string) {
     .update({ deleted_at: new Date().toISOString() })
     .eq("id", id);
 
-    if(error){
-      console.error(error)
-      throw error;
-    }
+  if (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 export async function getUserByEmail(email: string) {
@@ -38,9 +39,8 @@ export async function getUserByEmail(email: string) {
   }
 
   const userDb: UserProfileDb = data[0];
-  const user = mapDbUserToClient(userDb);
 
-  return user;
+  return userDb;
 }
 
 export async function getUserById(id: string) {
@@ -124,4 +124,56 @@ export async function isDupplicateUser(formData: UserProfileDb) {
   }
 
   return null;
+}
+
+export async function changeUserPassword(formData: UserChangePassword) {
+  const { userId, confirmPassword, newPassword, currentPassword } = formData;
+
+  if (confirmPassword !== newPassword) {
+    return {
+      message: "Confirm password doesn't match",
+      status: 409,
+    };
+  }
+
+  const { data, error } = await supabase
+    .from(tableName)
+    .select("password")
+    .eq("id", userId);
+
+  if (error || !data || data.length === 0) {
+    console.error(error);
+    throw new Error("User not found");
+  }
+
+  const dbPassword = data[0].password;
+
+  if (dbPassword) {
+    const isPasswordCorrect = await bcrypt.compare(
+      String(currentPassword),
+      dbPassword
+    );
+    if (!isPasswordCorrect) {
+      return {
+        message: "Current password is incorrect",
+        status: 409,
+      };
+    }
+  }
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  const { error: updateError } = await supabase
+    .from(tableName)
+    .update({ password: hashedPassword })
+    .eq("id", userId);
+
+  if (updateError) {
+    console.error(updateError);
+    throw updateError;
+  }
+
+  return {
+    message: "Password updated successfully",
+    status: 200,
+  };
 }
