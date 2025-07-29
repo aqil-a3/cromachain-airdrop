@@ -6,23 +6,39 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import ResetPasswordForm from "./ResetPasswordForm";
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function ResetPasswordTab() {
-  const [token, setToken] = useState("");
+  const searchParams = useSearchParams();
+  const urlToken = searchParams.get("token");
+  const [token, setToken] = useState(urlToken || "");
   const [tokenSubmitted, setTokenSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     try {
       e.preventDefault();
-      const { data } = await axios.post("apisoon", {
+      setIsLoading(true);
+      const { data } = await axios.post("/api/reset-password/verify-token", {
         token,
       });
 
+      alert(data?.message || "Token valid");
       setTokenSubmitted(data.isSuccess);
+      router.replace(
+        `?token=${token}&email=${data.email}&userId=${data.userId}`
+      );
     } catch (error) {
       console.error(error);
-      alert("Terjadi kesalahan");
+      if (isAxiosError(error)) {
+        const data = error.response?.data;
+        console.log(data);
+        alert(data?.message || "Something went wrong");
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -40,14 +56,15 @@ export default function ResetPasswordTab() {
             </Label>
             <Input
               id="token"
+              disabled={isLoading}
               value={token}
               onChange={(e) => setToken(e.target.value)}
               placeholder="Your reset token"
               className="bg-black text-white border-white/20"
             />
           </div>
-          <Button type="submit" className="w-full">
-            Continue
+          <Button type="submit" disabled={isLoading} className="w-full">
+            {isLoading ? "Processing..." : "Submit"}
           </Button>
         </form>
       ) : (

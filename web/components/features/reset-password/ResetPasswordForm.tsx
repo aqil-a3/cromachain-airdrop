@@ -14,8 +14,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
+import { Label } from "@/components/ui/label";
+import { UserChangePassword } from "@/@types/user";
 
 const formSchema = z
   .object({
@@ -32,7 +34,9 @@ type FormSchema = z.infer<typeof formSchema>;
 export default function ResetPasswordForm() {
   const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
-  const token = searchParams.get("token"); // from URL: /reset-password?token=xxxx
+  const email = searchParams.get("email");
+  const userId = searchParams.get("userId");
+  const router = useRouter();
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -43,14 +47,18 @@ export default function ResetPasswordForm() {
   });
 
   const onSubmit = async (values: FormSchema) => {
+    const { confirmPassword, password } = values;
+    const formData: UserChangePassword = {
+      userId: String(userId),
+      confirmPassword,
+      newPassword: password,
+    };
     try {
       setLoading(true);
-      const res = await axios.post("/api/reset-password/get-token", {
-        token,
-        newPassword: values.password,
-      });
+      await axios.post("/api/user/change-password", formData);
 
       alert("Password reset successfully");
+      router.replace("/");
     } catch (error: any) {
       console.error(error);
       alert(error.response?.data?.message || "Failed to reset password");
@@ -66,6 +74,17 @@ export default function ResetPasswordForm() {
       </h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <div>
+            <Label htmlFor="email">Email </Label>
+            <Input
+              className="bg-black text-white"
+              type="email"
+              id="email"
+              disabled
+              readOnly
+              value={String(email)}
+            />
+          </div>
           <FormField
             control={form.control}
             name="password"
@@ -74,6 +93,7 @@ export default function ResetPasswordForm() {
                 <FormLabel>New Password</FormLabel>
                 <FormControl>
                   <Input
+                    className="bg-black text-white"
                     type="password"
                     placeholder="New password"
                     {...field}
@@ -91,6 +111,7 @@ export default function ResetPasswordForm() {
                 <FormLabel>Confirm Password</FormLabel>
                 <FormControl>
                   <Input
+                    className="bg-black text-white"
                     type="password"
                     placeholder="Confirm password"
                     {...field}

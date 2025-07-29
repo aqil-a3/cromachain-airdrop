@@ -27,6 +27,18 @@ export async function deleteSoftUSer(id: string) {
   }
 }
 
+export async function deleteUserPasswordById(id: string) {
+  const { error } = await supabase
+    .from(tableName)
+    .update({ password: null })
+    .eq("id", id);
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 export async function getUserByEmail(email: string) {
   const { data, error } = await supabase
     .from(tableName)

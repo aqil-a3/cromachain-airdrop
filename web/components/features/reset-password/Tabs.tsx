@@ -1,11 +1,15 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SendLinkTab from "./SendLinkTab";
 import ResetPasswordTab from "./ResetPasswordTab";
+import { useSearchParams } from "next/navigation";
 
 export default function ResetPasswordTabs() {
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+
   return (
     <Tabs
-      defaultValue="send-link"
+      defaultValue={token ? "reset-password" : "send-link"}
       className="w-full max-w-md bg-black/70 p-6 rounded-lg backdrop-blur"
     >
       <TabsList className="bg-gray-800 rounded-md">
