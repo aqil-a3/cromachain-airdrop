@@ -1,1 +1,1 @@
-export const resetPasswordUrl = "http://localhost:3000/reset-password";
+export const resetPasswordUrl = "https://airdrop.cromachain.com//reset-password";
