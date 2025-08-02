@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/sidebar";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { User, ClipboardCheck, ScanEye } from "lucide-react";
+import { User, ClipboardCheck, ScanEye, Radio } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function AdminSidebar() {
@@ -20,6 +20,11 @@ export function AdminSidebar() {
       label: "Home",
       href: `/admin`,
       icon: <User className="w-4 h-4" />,
+    },
+    {
+      label: "Airdrop",
+      href: `/admin/airdrop`,
+      icon: <Radio className="w-4 h-4" />,
     },
     {
       label: "User",
