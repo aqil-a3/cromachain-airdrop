@@ -86,19 +86,39 @@ export async function deleteAirdrop(id: string) {
   }
 }
 
-
 export async function editAirdrop(data: Airdrop) {
   if (!data.id) throw new Error("Missing airdrop ID.");
 
-  if ("is_active" in data && data.is_active === false) {
+  const { data: existing, error: fetchError } = await supabase
+    .from(tableName)
+    .select("is_active")
+    .eq("id", data.id)
+    .single();
+
+  if (fetchError || !existing) {
+    console.error("Failed to fetch current airdrop:", fetchError);
+    throw new Error("Airdrop not found.");
+  }
+
+  const currentIsActive = existing.is_active;
+  const incomingIsActive = data.is_active;
+
+  if (
+    typeof incomingIsActive === "boolean" &&
+    incomingIsActive === false &&
+    currentIsActive === true
+  ) {
     throw new Error(
       "You can't set this airdrop to false manually. Set another airdrop to active (true) instead."
     );
   }
 
   try {
-    // Jika ingin aktifkan airdrop ini, nonaktifkan semua lainnya dulu
-    if (data.is_active === true) {
+    if (
+      typeof incomingIsActive === "boolean" &&
+      incomingIsActive === true &&
+      currentIsActive === false
+    ) {
       const { error: deactivateError } = await supabase
         .from(tableName)
         .update({ is_active: false })
