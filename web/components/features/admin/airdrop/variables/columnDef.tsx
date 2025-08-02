@@ -1,5 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Airdrop } from "@/@types/airdrop"; // pastikan path sesuai
+import { Airdrop } from "@/@types/airdrop";
 import {
   DropdownMenu,
   DropdownMenuContent,

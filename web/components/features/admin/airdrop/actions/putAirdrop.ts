@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 import { AirdropSchemaType } from "../variables/schema";
 
 export async function putAirdrop(values: AirdropSchemaType) {
@@ -7,7 +7,11 @@ export async function putAirdrop(values: AirdropSchemaType) {
 
     alert("Edit airdrop is success");
   } catch (error) {
-    alert("Something wrong");
     console.error(error);
+    if (isAxiosError(error)) {
+      const data = error.response?.data;
+
+      alert(data.message ?? "Something wrong");
+    }
   }
 }
