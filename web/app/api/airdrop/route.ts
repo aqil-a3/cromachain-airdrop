@@ -1,4 +1,4 @@
-import { createNewAirdrop, deleteAirdrop } from "@/utils/supabase/airdropTable";
+import { createNewAirdrop, deleteAirdrop, editAirdrop } from "@/utils/supabase/airdropTable";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -16,6 +16,14 @@ export async function DELETE(req: NextRequest) {
   if (!id) throw new Error("No Id");
 
   await deleteAirdrop(id);
+
+  return NextResponse.json({ message: "ok" });
+}
+
+export async function PUT(req: NextRequest) {
+  const formData = await req.json();
+
+  await editAirdrop(formData);
 
   return NextResponse.json({ message: "ok" });
 }

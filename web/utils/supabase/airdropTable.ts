@@ -25,8 +25,32 @@ export async function getAllAirdrop() {
   return data as Airdrop[];
 }
 
+export async function getAirdropById(id: string) {
+  const raw = await supabase.from(tableName).select("*").eq("id", id).single();
+  const { data, error } = raw;
+
+  if (error || !data) {
+    console.error(error);
+    throw error;
+  }
+
+  return data as Airdrop;
+}
+
 export async function deleteAirdrop(id: string) {
   const { error } = await supabase.from(tableName).delete().eq("id", id);
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function editAirdrop(data: Airdrop) {
+  const { error } = await supabase
+    .from(tableName)
+    .update(data)
+    .eq("id", data.id);
 
   if (error) {
     console.error(error);
