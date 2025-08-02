@@ -52,17 +52,19 @@ export default function AirdropForm({
             control={form.control}
             name="is_active"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="flex items-center justify-between rounded-lg border px-4 py-3">
+                <div className="space-y-0.5">
+                  <FormLabel className="text-base">Is Active</FormLabel>
+                  <FormDescription className="text-sm text-gray-400">
+                    Toggle to make this airdrop publicly active.
+                  </FormDescription>
+                </div>
                 <FormControl>
-                  <div>
-                    <FormLabel>Is Active</FormLabel>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </div>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
                 </FormControl>
-                <FormMessage />
               </FormItem>
             )}
           />

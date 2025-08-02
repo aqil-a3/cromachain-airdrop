@@ -1,7 +1,7 @@
 "use client";
 
-import { UserProfile } from "@/@types/user";
-import { userColumns } from "@/components/features/admin/user/variables/columnDef";
+import { Airdrop } from "@/@types/airdrop";
+import { airdropColumns } from "@/components/features/admin/airdrop/variables/columnDef";
 import AdminContainer from "@/components/layouts/container/AdminContainer";
 import AdminDataHeader, {
   AdminDataHeaderContext,
@@ -14,11 +14,14 @@ const headerConext: AdminDataHeaderContext = {
   addLabel: "Add New Airdrop",
 };
 
-export default function AdminAirdropTemplate() {
+interface AdminAirdropTemplateProps{
+  airdrops:Airdrop[]
+}
+export default function AdminAirdropTemplate({airdrops}:AdminAirdropTemplateProps) {
   return (
     <AdminContainer>
       <AdminDataHeader context={headerConext} />
-      <DataTable columns={userColumns} data={[]} />
+      <DataTable columns={airdropColumns} data={airdrops} />
     </AdminContainer>
   );
 }
