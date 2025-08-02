@@ -25,6 +25,21 @@ export async function getAllAirdrop() {
   return data as Airdrop[];
 }
 
+export async function getActiveAirdrop() {
+  const { data, error } = await supabase
+    .from(tableName)
+    .select("*")
+    .is("is_active", true)
+    .single();
+
+  if (error || !data) {
+    console.error(error);
+    throw error;
+  }
+
+  return data as Airdrop;
+}
+
 export async function getAirdropById(id: string) {
   const raw = await supabase.from(tableName).select("*").eq("id", id).single();
   const { data, error } = raw;

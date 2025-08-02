@@ -1,3 +1,4 @@
+import { Airdrop } from "@/@types/airdrop";
 import {
   fadeInUp,
   staggerContainer,
@@ -7,9 +8,11 @@ import { motion } from "framer-motion";
 
 interface ProgressStatsCard {
   heroInView: boolean;
+  airdrop:Airdrop;
 }
 
-export default function ProgressStatsCard({ heroInView }: ProgressStatsCard) {
+export default function ProgressStatsCard({ heroInView, airdrop }: ProgressStatsCard) {
+  const { total_token, token_claimed, participants } = airdrop;
   return (
     <motion.div
       className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8"
@@ -18,9 +21,9 @@ export default function ProgressStatsCard({ heroInView }: ProgressStatsCard) {
       animate={heroInView ? "animate" : "initial"}
     >
       {[
-        { value: "1,000,000", label: "Total Tokens", color: "orange" },
-        { value: "750,000", label: "Tokens Claimed", color: "red" },
-        { value: "15,432", label: "Participants", color: "orange" },
+        { value: total_token, label: "Total Tokens", color: "orange" },
+        { value: token_claimed, label: "Tokens Claimed", color: "red" },
+        { value: participants, label: "Participants", color: "orange" },
       ].map((stat, index) => (
         <motion.div key={index} variants={fadeInUp}>
           <Card className="bg-black/40 backdrop-blur-md border border-orange-500/30 hover:border-orange-500/50 transition-all duration-300">

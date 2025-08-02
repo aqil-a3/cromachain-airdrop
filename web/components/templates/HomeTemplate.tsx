@@ -60,6 +60,7 @@ import LoginForm from "@/components/login-form";
 import CountdownTimerCard from "@/components/features/home/CountdownTimer";
 import ProgressStatsCard from "../features/home/ProgressStatsCard";
 import ProgressBarCard from "../features/home/ProgressBarCard";
+import { Airdrop } from "@/@types/airdrop";
 
 interface Task {
   id: string;
@@ -101,7 +102,11 @@ const slideInRight = {
   transition: { duration: 0.6, ease: "easeOut" },
 };
 
-export default function HomeTemplate() {
+interface HomeTemplateProps{
+  airdrop:Airdrop
+}
+
+export default function HomeTemplate({ airdrop }:HomeTemplateProps) {
   const [tasks, setTasks] = useState<Task[]>([
     {
       id: "twitter-follow",
@@ -417,13 +422,13 @@ export default function HomeTemplate() {
             tokens and become part of our revolutionary ecosystem.
           </motion.p>
 
-          <CountdownTimerCard />
+          <CountdownTimerCard airdrop={airdrop} />
 
           {/* Progress Stats */}
-          <ProgressStatsCard heroInView={heroInView} />
+          <ProgressStatsCard heroInView={heroInView} airdrop={airdrop} />
 
           {/* Progress Bar */}
-          <ProgressBarCard />
+          <ProgressBarCard airdrop={airdrop} />
 
           {/* Registration/Login Dialogs (now controlled by Navbar) */}
           {/* Registration Dialog (for new users) */}

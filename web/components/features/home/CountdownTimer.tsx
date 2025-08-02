@@ -1,3 +1,6 @@
+"use client";
+
+import { Airdrop } from "@/@types/airdrop";
 import {
   fadeInUp,
   scaleIn,
@@ -7,38 +10,39 @@ import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { Clock } from "lucide-react";
 import { useEffect, useState } from "react";
-export default function CountdownTimerCard() {
+
+function getTimeLeft(target: Date) {
+  const total = target.getTime() - Date.now();
+
+  if (total <= 0) {
+    return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+  }
+
+  const seconds = Math.floor((total / 1000) % 60);
+  const minutes = Math.floor((total / 1000 / 60) % 60);
+  const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
+  const days = Math.floor(total / (1000 * 60 * 60 * 24));
+
+  return { days, hours, minutes, seconds };
+}
+
+export default function CountdownTimerCard({ airdrop }: { airdrop: Airdrop }) {
   const [timeLeft, setTimeLeft] = useState({
-    days: 7,
-    hours: 12,
-    minutes: 34,
-    seconds: 56,
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
   });
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev.seconds > 0) {
-          return { ...prev, seconds: prev.seconds - 1 };
-        } else if (prev.minutes > 0) {
-          return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
-        } else if (prev.hours > 0) {
-          return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 };
-        } else if (prev.days > 0) {
-          return {
-            ...prev,
-            days: prev.days - 1,
-            hours: 23,
-            minutes: 59,
-            seconds: 59,
-          };
-        }
-        return prev;
-      });
-    }, 1000);
+    const target = new Date(airdrop.time_left);
+    const updateTime = () => setTimeLeft(getTimeLeft(target));
 
-    return () => clearInterval(timer);
-  }, []);
+    updateTime(); // initial
+    const interval = setInterval(updateTime, 1000);
+
+    return () => clearInterval(interval);
+  }, [airdrop.time_left]);
 
   return (
     <motion.div variants={fadeInUp}>
@@ -54,7 +58,7 @@ export default function CountdownTimerCard() {
               animate={{ rotate: [0, 360] }}
               transition={{
                 duration: 2,
-                repeat: Number.POSITIVE_INFINITY,
+                repeat: Infinity,
                 ease: "linear",
               }}
             >
@@ -64,6 +68,7 @@ export default function CountdownTimerCard() {
               Airdrop Ends In:
             </span>
           </motion.div>
+
           <motion.div
             className="grid grid-cols-4 gap-4 text-center"
             variants={staggerContainer}
@@ -84,7 +89,7 @@ export default function CountdownTimerCard() {
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.3 }}
                 >
-                  {item.value}
+                  {String(item.value).padStart(2, "0")}
                 </motion.div>
                 <div className="text-sm text-gray-400">{item.label}</div>
               </motion.div>
