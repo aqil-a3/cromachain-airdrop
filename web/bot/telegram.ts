@@ -8,11 +8,11 @@ dotenv.config();
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_API_KEY!);
 
-// const serverEndpoint =
-//   process.env.NODE_ENV === "development"
-//     ? "http://localhost:3000"
-//     : "https://airdrop.cromachain.com";
-export const serverEndpoint = "http://localhost:3000";
+export const serverEndpoint =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3000"
+    : "https://airdrop.cromachain.com";
+// export const serverEndpoint = "http://localhost:3000";
 export const channelUsername = "@test2514group";
 
 export const reply_markup: InlineKeyboardMarkup = {
