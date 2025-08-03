@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "bot": "tsx bot/launch.ts"
+    "bot": "tsx bot/launch.ts",
+    "bot:dev": "nodemon --watch bot --ext ts --exec tsx bot/launch.ts"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",
