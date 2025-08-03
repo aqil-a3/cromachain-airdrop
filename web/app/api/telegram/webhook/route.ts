@@ -41,7 +41,7 @@ bot.start(async (ctx) => {
       });
 
       ctx.reply(
-        "✅ Kamu berhasil join ke channel. Tugas kamu sudah diverifikasi otomatis."
+        "✅ Kamu berhasil joinijoijijijoi ke channel. Tugas kamu sudah diverifikasi otomatis."
       );
     } else {
       ctx.reply(
