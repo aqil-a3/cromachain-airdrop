@@ -56,5 +56,5 @@ export async function getTokenDataByToken(token: string) {
 
   if (!data || data.length === 0) return null;
 
-  return data[0] as PasswordResetToken;
+  return data[0];
 }

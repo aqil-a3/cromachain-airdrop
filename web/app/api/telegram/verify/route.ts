@@ -7,12 +7,12 @@ import {
   getTokenDataByToken,
   updateTokenToUsed,
 } from "@/utils/supabase/telegramVericationToken";
-import { getUserById } from "@/utils/supabase/userTable";
+import { getUserByTelegramUsername } from "@/utils/supabase/userTable";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const user = await getTokenDataByToken(body.token as string);
-  const cromaUser = await getUserById(user?.user_id as string);
+  const cromaUser = await getUserByTelegramUsername(user?.telegram_username as string);
 
   try {
     await updateTokenToUsed(body.token);

@@ -250,6 +250,8 @@ export default function UserProfileTemplate({
     .map((task) => task.cromaEarned)
     .reduce((acc, curr) => acc + curr, 0);
 
+    console.log(userTasks)
+
   return (
     <div className="min-h-screen text-white overflow-x-hidden flex flex-col">
       {/* Background Gradients */}
