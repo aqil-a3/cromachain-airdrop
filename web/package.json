@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "bot": "tsx bot/telegram.ts"
+    "bot": "tsx bot/launch.ts"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",
