@@ -47,6 +47,7 @@ import PlayDialog from "../features/protected/profile/playDialog";
 import { TaskUser } from "@/@types/task-user";
 import TaskDetailDialog from "../features/protected/profile/infoDialog";
 import EditPasswordDialog from "../features/protected/profile/passwordDialog";
+import { useRouter, useSearchParams } from "next/navigation";
 
 // Animation variants
 const fadeInUp = {
@@ -89,8 +90,20 @@ export default function UserProfileTemplate({
   } | null>(null);
   const [isDemoMode, setIsDemoMode] = useState(false);
 
+  const searchParams = useSearchParams();
+  const reason = searchParams.get("reason");
+  const router = useRouter();
+
   const profileRef = useRef(null);
   const profileInView = useInView(profileRef, { once: true, margin: "-100px" });
+
+  useEffect(() => {
+    if (reason === "join_discord_success") {
+      alert("Success to join discrod!");
+      router.replace("/profile");
+      return;
+    }
+  }, []);
 
   useEffect(() => {
     if (authStatus === "authenticated") {
@@ -358,7 +371,7 @@ export default function UserProfileTemplate({
                       >
                         Edit Profile
                       </Button>
-                     <EditPasswordDialog />
+                      <EditPasswordDialog />
                       <Button
                         variant="outline"
                         className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white bg-transparent"

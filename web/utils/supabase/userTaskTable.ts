@@ -54,7 +54,7 @@ export async function createNewUserTasks(raw: TaskUser) {
 export async function getUserTasksByUserId(userId: string) {
   const { data, error } = await supabase
     .from(tableName)
-    .select("*")
+    .select("*, user: user_id(email, full_name), task: task_id(title, category)")
     .eq("user_id", userId);
 
   if (!data || error) {

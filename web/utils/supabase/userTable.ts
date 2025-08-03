@@ -72,6 +72,27 @@ export async function getUserById(id: string) {
   return user;
 }
 
+export async function getUserByDiscordUsername(discordUsername: string) {
+  const { data, error } = await supabase
+    .from(tableName)
+    .select("*")
+    .eq("discord_username", discordUsername);
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  if(!data || data.length === 0){
+    return null
+  }
+
+  const userDb: UserProfileDb = data[0];
+  const user = mapDbUserToClient(userDb);
+
+  return user;
+}
+
 export async function getAllActiveUser() {
   const { data, error } = await supabase
     .from(tableName)
