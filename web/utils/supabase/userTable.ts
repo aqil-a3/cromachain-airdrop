@@ -93,6 +93,27 @@ export async function getUserByDiscordUsername(discordUsername: string) {
   return user;
 }
 
+export async function getUserByTelegramUsername(telegramUsername: string) {
+  const { data, error } = await supabase
+    .from(tableName)
+    .select("*")
+    .eq("telegram_username", telegramUsername);
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  if(!data || data.length === 0){
+    return null
+  }
+
+  const userDb: UserProfileDb = data[0];
+  const user = mapDbUserToClient(userDb);
+
+  return user;
+}
+
 export async function getAllActiveUser() {
   const { data, error } = await supabase
     .from(tableName)

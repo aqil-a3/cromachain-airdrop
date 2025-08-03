@@ -5,7 +5,10 @@ import { PasswordResetToken } from "@/@types/auth";
 
 const tableName = "telegram_verification_token";
 
-export async function createNewTelegramToken(userId: string) {
+export async function createNewTelegramToken(
+  userId: string,
+  telegramUsername: string
+) {
   const token = randomBytes(32).toString("hex");
 
   const expired_at = dayjs().add(10, "minutes").toISOString();
@@ -15,6 +18,7 @@ export async function createNewTelegramToken(userId: string) {
     token,
     used: false,
     expired_at,
+    telegram_username: telegramUsername,
   };
 
   const { error } = await supabase.from(tableName).insert(payload);
