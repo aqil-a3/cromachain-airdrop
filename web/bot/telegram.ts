@@ -13,7 +13,7 @@ export const serverEndpoint =
     ? "http://localhost:3000"
     : "https://airdrop.cromachain.com";
 // export const serverEndpoint = "http://localhost:3000";
-export const channelUsername = "@test2514group";
+export const channelUsername = "@Cromaartofficial";
 
 export const reply_markup: InlineKeyboardMarkup = {
   inline_keyboard: [
