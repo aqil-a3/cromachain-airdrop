@@ -20,7 +20,7 @@ export default function AdminHeader() {
     <header className="flex items-center justify-between px-6 py-3 border-b bg-gradient-to-r from-yellow-700 to-slate-700 shadow-sm">
       <div className="flex items-center gap-4">
         <SidebarTrigger className="p-2 rounded-md hover:bg-slate-700 text-white transition-colors duration-200" />
-        <h1 className="text-xl font-semibold text-white tracking-wide">
+        <h1 className="hidden md:block text-xl font-semibold text-white tracking-wide">
           Cromachain Airdrop Admin
         </h1>
       </div>

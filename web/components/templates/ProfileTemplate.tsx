@@ -250,7 +250,7 @@ export default function UserProfileTemplate({
     .map((task) => task.cromaEarned)
     .reduce((acc, curr) => acc + curr, 0);
 
-    console.log(userTasks)
+  console.log(userTasks);
 
   return (
     <div className="min-h-screen text-white overflow-x-hidden flex flex-col">
@@ -284,7 +284,7 @@ export default function UserProfileTemplate({
           animate={profileInView ? "animate" : "initial"}
         >
           <motion.h1
-            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+            className="text-2xl md:text-5xl lg:text-6xl font-bold mb-6"
             variants={fadeInUp}
           >
             <span className="bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 bg-clip-text text-transparent">
@@ -360,12 +360,12 @@ export default function UserProfileTemplate({
 
               {/* User Info Card */}
               <motion.div variants={fadeInUp}>
-                <Card className="bg-black/40 backdrop-blur-md border border-orange-500/30 p-6 md:p-8 text-left">
+                <Card className="bg-black/40 backdrop-blur-md border border-orange-500/30 p-4 md:p-8 text-left">
                   <CardHeader className="flex flex-col md:flex-row items-center justify-between pb-4">
                     <h2 className="text-2xl font-bold text-white">
                       Personal Information
                     </h2>
-                    <div className="flex gap-2">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                       <Button
                         variant="outline"
                         className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white bg-transparent"
@@ -373,10 +373,12 @@ export default function UserProfileTemplate({
                       >
                         Edit Profile
                       </Button>
+
                       <EditPasswordDialog />
+
                       <Button
                         variant="outline"
-                        className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white bg-transparent"
+                        className="border-orange-500 col-span-2 md:col-span-1 text-orange-500 hover:bg-orange-500 hover:text-white bg-transparent"
                         onClick={async () => await signOut({ redirectTo: "/" })}
                       >
                         Logout
@@ -519,7 +521,7 @@ export default function UserProfileTemplate({
                       Your Referral Code
                     </h2>
                     <div className="flex items-center justify-between bg-gray-900/50 rounded-lg p-4">
-                      <span className="text-green-500 font-mono text-lg break-all">
+                      <span className="text-green-500 font-mono text-lg break-all line-clamp-1">
                         {`https://cromachain.com/airdrop?ref=${referralCode}`}
                       </span>
                       <motion.div
@@ -561,7 +563,7 @@ export default function UserProfileTemplate({
                       return (
                         <div
                           key={task.id}
-                          className="flex items-center justify-between p-3 rounded-lg bg-gray-900/30"
+                          className="flex flex-col md:flex-row items-start gap-4 md:items-center justify-between p-3 rounded-lg bg-gray-900/30"
                         >
                           <div className="flex items-center space-x-3">
                             <div
@@ -628,110 +630,6 @@ export default function UserProfileTemplate({
           )}
         </motion.div>
       </section>
-
-      {/* Footer */}
-      <footer className="py-12 px-4 border-t border-orange-500/30">
-        <div className="container mx-auto">
-          <motion.div
-            className="grid md:grid-cols-3 gap-8"
-            variants={staggerContainer}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true }}
-          >
-            <motion.div variants={fadeInUp}>
-              <div className="flex items-center space-x-2 mb-4">
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{
-                    duration: 20,
-                    repeat: Number.POSITIVE_INFINITY,
-                    ease: "linear",
-                  }}
-                >
-                  <Flame className="w-6 h-6 text-orange-500" />
-                </motion.div>
-                <span className="text-xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
-                  CromaChain
-                </span>
-              </div>
-              <p className="text-gray-400">
-                Revolutionizing blockchain technology for the future.
-              </p>
-            </motion.div>
-
-            <motion.div variants={fadeInUp}>
-              <h3 className="text-white font-semibold mb-4">Navigation</h3>
-              <div className="space-y-2">
-                {[
-                  { name: "Claim", href: "/claim", icon: Gift },
-                  { name: "Tasks", href: "/tasks", icon: Target },
-                  { name: "Guide", href: "/guide", icon: BookOpen },
-                  {
-                    name: "Community",
-                    href: "/#community",
-                    icon: MessageCircle,
-                  },
-                ].map((item, index) => (
-                  <motion.div
-                    key={item.name}
-                    whileHover={{ x: 5 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Link
-                      href={item.href}
-                      className="flex items-center text-gray-400 hover:text-orange-500 transition-colors"
-                    >
-                      <item.icon className="w-4 h-4 mr-2" />
-                      {item.name}
-                    </Link>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-
-            <motion.div variants={fadeInUp}>
-              <h3 className="text-white font-semibold mb-4">Our Ecosystem</h3>
-              <div className="space-y-2">
-                {[
-                  { name: "CromaArt", url: "https://cromaart.io" },
-                  { name: "CromaChain", url: "https://cromachain.com" },
-                  { name: "TrixWallet", url: "https://trixwallet.com" },
-                  { name: "TrixNews", url: "https://trixnews.com" },
-                ].map((link, index) => (
-                  <motion.div
-                    key={link.name}
-                    whileHover={{ x: 5 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Link
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center text-gray-400 hover:text-orange-500 transition-colors"
-                    >
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      {link.name}
-                    </Link>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          </motion.div>
-
-          <motion.div
-            className="border-t border-orange-500/30 mt-8 pt-8 text-center"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-          >
-            <p className="text-gray-400">
-              © {new Date().getFullYear()} CromaChain. All rights reserved.
-            </p>
-          </motion.div>
-        </div>
-      </footer>
 
       {/* Edit Profile Dialog */}
       <Dialog

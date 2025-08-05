@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import { Suspense } from "react";
+import Footer from "@/components/layouts/footer";
 
 export const metadata: Metadata = {
   title: {
@@ -25,6 +26,7 @@ export default function RootLayout({
         <Suspense>
           <SessionProvider>
             {children}
+            <Footer />
 
             <Toaster />
           </SessionProvider>

@@ -224,6 +224,16 @@ export function Navbar({
                     <UserCircle className="w-5 h-5" />
                     <span>Profile</span>
                   </Link>
+                  {session.data.user.role === "admin" && (
+                    <Link
+                      href="/admin"
+                      className="text-gray-300 hover:text-orange-500 transition-colors flex items-center space-x-2 text-lg"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <UserSquare className="w-5 h-5" />
+                      <span>Admin</span>
+                    </Link>
+                  )}
                   <motion.div
                     className="flex items-center space-x-2 text-green-500 text-lg mt-4"
                     initial={{ scale: 0.8 }}
@@ -235,7 +245,7 @@ export function Navbar({
                   </motion.div>
                 </>
               ) : (
-                <div className="flex flex-col items-center space-y-3 mt-4">
+                <div className="flex gap-4 justify-center items-center space-y-3 mt-4">
                   <button
                     onClick={() => {
                       onRegisterClick();
