@@ -245,7 +245,7 @@ export function Navbar({
                   </motion.div>
                 </>
               ) : (
-                <div className="flex gap-4 justify-center items-center space-y-3 mt-4">
+                <div className="flex gap-4 justify-center items-center">
                   <button
                     onClick={() => {
                       onRegisterClick();
