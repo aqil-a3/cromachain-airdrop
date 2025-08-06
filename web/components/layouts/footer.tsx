@@ -11,6 +11,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -25,16 +26,7 @@ export default function Footer() {
         >
           <motion.div variants={fadeInUp} className="col-span-2 md:col-span-1">
             <div className="flex items-center space-x-2 mb-4">
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{
-                  duration: 20,
-                  repeat: Number.POSITIVE_INFINITY,
-                  ease: "linear",
-                }}
-              >
-                <Flame className="w-6 h-6 text-orange-500" />
-              </motion.div>
+              <Image src={"/logo.png"} alt="Logo" width={32} height={32} />
               <span className="text-xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
                 CromaChain
               </span>

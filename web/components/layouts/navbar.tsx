@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 interface NavbarProps {
   onRegisterClick: () => void;
@@ -73,16 +74,7 @@ export function Navbar({
       <div className="container mx-auto flex items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{
-              duration: 20,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "linear",
-            }}
-          >
-            <Flame className="w-7 h-7 text-orange-500" />
-          </motion.div>
+          <Image src={"/logo.png"} alt="Logo" width={32} height={32} />
           <span className="text-xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
             CromaChain
           </span>
