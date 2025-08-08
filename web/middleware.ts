@@ -7,11 +7,12 @@ const IS_PRODUCTION = process.env.NODE_ENV === "production";
 const IS_MAINTENANCE = true;
 
 export function middleware(request: NextRequest) {
-  if (
-    IS_PRODUCTION &&
-    IS_MAINTENANCE &&
-    !request.nextUrl.pathname.startsWith("/maintenance")
-  ) {
+  const { pathname } = request.nextUrl;
+
+  const isApiRoute = pathname.startsWith("/api");
+  const isMaintenancePage = pathname.startsWith("/maintenance");
+
+  if (IS_PRODUCTION && IS_MAINTENANCE && !isApiRoute && !isMaintenancePage) {
     const maintenanceUrl = request.nextUrl.clone();
     maintenanceUrl.pathname = "/maintenance";
     return NextResponse.redirect(maintenanceUrl);
@@ -19,3 +20,7 @@ export function middleware(request: NextRequest) {
 
   return NextResponse.next();
 }
+
+export const config = {
+  matcher: ["/((?!_next|favicon.ico|api).*)"],
+};
