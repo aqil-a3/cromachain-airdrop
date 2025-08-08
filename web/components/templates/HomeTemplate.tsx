@@ -61,6 +61,7 @@ import CountdownTimerCard from "@/components/features/home/CountdownTimer";
 import ProgressStatsCard from "../features/home/ProgressStatsCard";
 import ProgressBarCard from "../features/home/ProgressBarCard";
 import { Airdrop } from "@/@types/airdrop";
+import RegistrationDialog from "../molecules/Dialog/RegistrationDialog";
 
 interface Task {
   id: string;
@@ -102,11 +103,11 @@ const slideInRight = {
   transition: { duration: 0.6, ease: "easeOut" },
 };
 
-interface HomeTemplateProps{
-  airdrop:Airdrop
+interface HomeTemplateProps {
+  airdrop: Airdrop;
 }
 
-export default function HomeTemplate({ airdrop }:HomeTemplateProps) {
+export default function HomeTemplate({ airdrop }: HomeTemplateProps) {
   const [tasks, setTasks] = useState<Task[]>([
     {
       id: "twitter-follow",
@@ -157,9 +158,6 @@ export default function HomeTemplate({ airdrop }:HomeTemplateProps) {
   const communityRef = useRef(null);
   const tasksRef = useRef(null);
   const howToClaimRef = useRef(null); // New ref for Airdrop Guide section
-
-  // Scroll progress
-  const { scrollYProgress } = useScroll();
 
   // In view hooks
   const heroInView = useInView(heroRef, { once: true, margin: "-100px" });
@@ -432,142 +430,10 @@ export default function HomeTemplate({ airdrop }:HomeTemplateProps) {
 
           {/* Registration/Login Dialogs (now controlled by Navbar) */}
           {/* Registration Dialog (for new users) */}
-          <Dialog open={showRegistration} onOpenChange={setShowRegistration}>
-            <DialogContent className="bg-black/90 border border-orange-500/30 text-white max-w-2xl">
-              <DialogHeader>
-                <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
-                  Complete Your Registration
-                </DialogTitle>
-                <DialogDescription className="text-gray-300">
-                  Fill in your social media accounts and wallet address to
-                  participate in the airdrop.
-                </DialogDescription>
-              </DialogHeader>
-
-              <Alert className="bg-yellow-900/20 border-yellow-500/30 mb-6">
-                <AlertTriangle className="h-4 w-4 text-yellow-500" />
-                <AlertDescription className="text-yellow-200">
-                  <strong>Important:</strong> Make sure to use the exact
-                  usernames from your social media accounts. When the airdrop is
-                  distributed, our AI will audit whether these accounts actually
-                  completed the tasks. Using different names may cause issues
-                  during the claim process.
-                </AlertDescription>
-              </Alert>
-
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="name" className="text-white">
-                      Full Name
-                    </Label>
-                    <Input
-                      id="name"
-                      value={userProfile.name}
-                      onChange={(e) =>
-                        handleInputChange("name", e.target.value)
-                      }
-                      className="bg-gray-900/50 border-orange-500/30 text-white"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="email" className="text-white">
-                      Email
-                    </Label>
-                    <Input
-                      id="email"
-                      value={userProfile.email}
-                      onChange={(e) =>
-                        handleInputChange("email", e.target.value)
-                      }
-                      className="bg-gray-900/50 border-orange-500/30 text-white"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <Label htmlFor="telegram" className="text-white">
-                    Telegram Username *
-                  </Label>
-                  <Input
-                    id="telegram"
-                    placeholder="@yourusername"
-                    value={userProfile.telegramUsername}
-                    onChange={(e) =>
-                      handleInputChange("telegramUsername", e.target.value)
-                    }
-                    className="bg-gray-900/50 border-orange-500/30 text-white focus:border-orange-500"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="discord" className="text-white">
-                    Discord Username *
-                  </Label>
-                  <Input
-                    id="discord"
-                    placeholder="username#1234"
-                    value={userProfile.discordUsername}
-                    onChange={(e) =>
-                      handleInputChange("discordUsername", e.target.value)
-                    }
-                    className="bg-gray-900/50 border-orange-500/30 text-white focus:border-orange-500"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="twitter" className="text-white">
-                    Twitter/X Username *
-                  </Label>
-                  <Input
-                    id="twitter"
-                    placeholder="@yourusername"
-                    value={userProfile.twitterUsername}
-                    onChange={(e) =>
-                      handleInputChange("twitterUsername", e.target.value)
-                    }
-                    className="bg-gray-900/50 border-orange-500/30 text-white focus:border-orange-500"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="ethAddress" className="text-white">
-                    Ethereum Address *
-                  </Label>
-                  <Input
-                    id="ethAddress"
-                    placeholder="0x..."
-                    value={userProfile.ethAddress}
-                    onChange={(e) =>
-                      handleInputChange("ethAddress", e.target.value)
-                    }
-                    className="bg-gray-900/50 border-orange-500/30 text-white focus:border-orange-500"
-                  />
-                </div>
-
-                {registrationErrors.length > 0 && (
-                  <Alert className="bg-red-900/20 border-red-500/30">
-                    <AlertTriangle className="h-4 w-4 text-red-500" />
-                    <AlertDescription className="text-red-200">
-                      <ul className="list-disc list-inside">
-                        {registrationErrors.map((error, index) => (
-                          <li key={index}>{error}</li>
-                        ))}
-                      </ul>
-                    </AlertDescription>
-                  </Alert>
-                )}
-
-                <Button
-                  onClick={completeRegistration}
-                  disabled={isRegistering}
-                  className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white py-3 text-lg font-semibold rounded-xl"
-                >
-                  {isRegistering ? "Processing" : "Complete Registration"}
-                </Button>
-              </div>
-            </DialogContent>
-          </Dialog>
+          <RegistrationDialog
+            setShowRegistration={setShowRegistration}
+            showRegistration={showRegistration}
+          />
 
           {/* Simple Sign-In Dialog (for existing users) */}
           <Dialog open={showSignInDialog} onOpenChange={setShowSignInDialog}>

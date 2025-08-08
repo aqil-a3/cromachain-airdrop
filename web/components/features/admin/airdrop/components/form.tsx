@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { airdropSchema, AirdropSchemaType } from "../variables/schema";
+import { airdropSchema, AirdropSchemaType } from "../../../../../schemas/airdropSchema";
 import {
   Form,
   FormControl,

@@ -1,5 +1,5 @@
 import { mapClientTaskToDbTask } from "@/lib/map-data/mapClientTaskToDb";
-import { TaskFormSchema } from "../variables/schema";
+import { TaskFormSchema } from "../../../../../schemas/taskSchema";
 import axios from "axios";
 
 export async function postTask(values: TaskFormSchema) {

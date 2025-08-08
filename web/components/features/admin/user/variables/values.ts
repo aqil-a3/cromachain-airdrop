@@ -1,9 +1,11 @@
-import { UserProfile } from "@/@types/user";
+import { UserSchemaType } from "@/schemas/userSchema";
 
-export const userDefaultValues: UserProfile = {
+export const userDefaultValues: UserSchemaType = {
   role: "user",
   discordUsername: "",
   email: "",
+  password: "",
+  confirmPassword: "",
   ethAddress: "",
   name: "",
   telegramUsername: "",

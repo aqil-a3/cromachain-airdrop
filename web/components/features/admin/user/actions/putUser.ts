@@ -1,4 +1,4 @@
-import { UserSchemaType } from "../variables/schema";
+import { UserSchemaType } from "../../../../../schemas/userSchema";
 import axios, { isAxiosError } from "axios";
 
 export async function putUser(values: UserSchemaType) {

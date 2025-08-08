@@ -1,5 +1,5 @@
 import { Airdrop } from "@/@types/airdrop";
-import { AirdropSchemaType } from "../variables/schema";
+import { AirdropSchemaType } from "../../../../../schemas/airdropSchema";
 import axios from "axios";
 
 export async function postAirdrop(values: AirdropSchemaType) {

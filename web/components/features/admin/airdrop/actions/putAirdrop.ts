@@ -1,5 +1,5 @@
 import axios, { isAxiosError } from "axios";
-import { AirdropSchemaType } from "../variables/schema";
+import { AirdropSchemaType } from "../../../../../schemas/airdropSchema";
 
 export async function putAirdrop(values: AirdropSchemaType) {
   try {

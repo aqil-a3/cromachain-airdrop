@@ -2,7 +2,7 @@
 import { Airdrop } from "@/@types/airdrop";
 import { putAirdrop } from "@/components/features/admin/airdrop/actions/putAirdrop";
 import AirdropForm from "@/components/features/admin/airdrop/components/form";
-import { AirdropSchemaType } from "@/components/features/admin/airdrop/variables/schema";
+import { AirdropSchemaType } from "@/schemas/airdropSchema";
 import AdminContainer from "@/components/layouts/container/AdminContainer";
 
 interface AdminAirdropEditTemplateProps {

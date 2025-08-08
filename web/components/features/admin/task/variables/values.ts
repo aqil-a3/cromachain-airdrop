@@ -1,4 +1,4 @@
-import { TaskFormSchema } from "./schema";
+import { TaskFormSchema } from "../../../../../schemas/taskSchema";
 
 export const taskDefaultValues: TaskFormSchema = {
   title: "",

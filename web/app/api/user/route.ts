@@ -1,5 +1,5 @@
-import { UserProfile, UserProfileDb } from "@/@types/user";
 import { mapClientUserToDb } from "@/lib/map-data/mapClientUserToDb";
+import { userSchema, UserSchemaType } from "@/schemas/userSchema";
 import { userTable } from "@/utils/supabase/client";
 import {
   createNewUser,
@@ -9,8 +9,20 @@ import {
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const raw: UserProfile = await req.json();
-  const data = mapClientUserToDb(raw);
+  const raw: UserSchemaType = await req.json();
+  let parsedRaw = {} as UserSchemaType;
+
+  try {
+    parsedRaw = userSchema.parse(raw);
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { message: "Format form is not valid" },
+      { status: 400 }
+    );
+  }
+
+  const data = await mapClientUserToDb(parsedRaw);
 
   const isDupplicate = await isDupplicateUser(data);
 
@@ -24,7 +36,7 @@ export async function POST(req: NextRequest) {
   await createNewUser(data);
 
   return NextResponse.json(
-    { message: "User berhasil ditambah" },
+    { message: "User registration is success" },
     { status: 200 }
   );
 }

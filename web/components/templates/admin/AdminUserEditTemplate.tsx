@@ -1,7 +1,7 @@
 "use client";
 import { UserProfile } from "@/@types/user";
 import { putUser } from "@/components/features/admin/user/actions/putUser";
-import UserForm from "@/components/features/admin/user/components/form";
+import UserForm from "@/components/molecules/Form/UserForm";
 import AdminContainer from "@/components/layouts/container/AdminContainer";
 
 interface AdminTaskEditTemplateProps {

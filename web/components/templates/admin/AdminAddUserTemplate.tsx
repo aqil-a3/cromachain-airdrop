@@ -1,7 +1,7 @@
 "use client";
 
 import { postUser } from "@/components/features/admin/user/actions/postUser";
-import UserForm from "@/components/features/admin/user/components/form";
+import UserForm from "@/components/molecules/Form/UserForm";
 import AdminContainer from "@/components/layouts/container/AdminContainer";
 
 export default function AdminAddUserTemplate() {
@@ -16,11 +16,7 @@ export default function AdminAddUserTemplate() {
         </div>
         <div className="bg-white p-6 rounded-lg shadow-md border">
           <UserForm
-            context={{
-              async onSubmit(data) {
-                return await postUser(data);
-              },
-            }}
+          onSubmit={async (data) => await postUser(data)}
           />
         </div>
       </div>
