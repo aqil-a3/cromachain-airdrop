@@ -11,5 +11,7 @@ export function mapDbUserToClient(raw: UserProfileDb): UserProfile {
     ethAddress: raw.eth_address,
     twitterUsername: raw.twitter_username,
     role: raw.role,
+    referralCode: raw.referral_code,
+    referredBy: raw.referred_by,
   };
 }

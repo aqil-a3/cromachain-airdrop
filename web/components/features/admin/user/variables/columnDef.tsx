@@ -100,4 +100,16 @@ export const userColumns: ColumnDef<UserProfile>[] = [
       );
     },
   },
+  {
+    accessorKey: "referredBy",
+    header: "Referred By",
+    cell: ({ row }) => row.original.referredBy ?? "-",
+  },
+  {
+    accessorKey: "referralCount",
+    header: "Referred Count",
+    cell: ({ row }) => {
+      return row.original.referralCount;
+    },
+  },
 ];

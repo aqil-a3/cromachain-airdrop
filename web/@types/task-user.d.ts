@@ -6,6 +6,7 @@ export interface TaskUserDb {
   status: string;
   reward_earned: number;
   reward_type: string;
+  is_bonus?: boolean;
   user?: {
     email: string;
     full_name: string;
@@ -24,6 +25,7 @@ export interface TaskUser {
   status: string;
   rewardEarned: number;
   rewardType: string;
+  isBonus?: boolean;
   user?: {
     email: string;
     fullName: string;

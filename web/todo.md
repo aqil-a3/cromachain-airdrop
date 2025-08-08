@@ -39,10 +39,10 @@ Pengguna tidak dapat mengundang teman dan tidak dapat menyelesaikan misi referra
 
 ✅Tidak semua data peserta ditampilkan secara lengkap di dashboard, meskipun kemungkinan sudah tercatat di database.
 
-Di dashboard admin tidak ditampilkan daftar pengguna yang telah berhasil mengundang peserta lain, sehingga tidak dapat dipantau siapa mengundang siapa.
+50% Di dashboard admin tidak ditampilkan daftar pengguna yang telah berhasil mengundang peserta lain, sehingga tidak dapat dipantau siapa mengundang siapa.
 
 
-7. Permasalahan pada Fitur Claim Airdrop
+✅7. Permasalahan pada Fitur Claim Airdrop
 
 Fitur claim/check eligibility sudah tersedia meskipun belum waktunya.
 

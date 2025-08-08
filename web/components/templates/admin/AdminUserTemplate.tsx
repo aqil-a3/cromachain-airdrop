@@ -39,6 +39,7 @@ export default function AdminUserTemplate({ users }: { users: UserProfile[] }) {
       throw error;
     }
   };
+
   return (
     <AdminContainer className="space-y-4">
       <AdminDataHeader context={headerConext} />

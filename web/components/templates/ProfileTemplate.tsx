@@ -48,6 +48,7 @@ import { TaskUser } from "@/@types/task-user";
 import TaskDetailDialog from "../features/protected/profile/infoDialog";
 import EditPasswordDialog from "../features/protected/profile/passwordDialog";
 import { useRouter, useSearchParams } from "next/navigation";
+import ReferralCard from "../features/admin/user/components/ReferralCard";
 
 // Animation variants
 const fadeInUp = {
@@ -134,14 +135,6 @@ export default function UserProfileTemplate({
     setShowCommunityModal(true);
   }, []);
 
-  const copyReferralLink = () => {
-    if (referralCode) {
-      const referralLink = `https://cromachain.com/airdrop?ref=${referralCode}`;
-      navigator.clipboard.writeText(referralLink);
-      alert("Referral link copied to clipboard!");
-    }
-  };
-
   const getTaskStatusColor = (status: Task["status"]) => {
     switch (status) {
       case "started":
@@ -218,6 +211,7 @@ export default function UserProfileTemplate({
     try {
       const result = await updateProfile(editProfileData);
       if (result.success && result.updatedProfile) {
+        // @ts-expect-error Fix soon
         setUserProfile(result.updatedProfile);
         localStorage.setItem(
           "userProfile",
@@ -511,36 +505,7 @@ export default function UserProfileTemplate({
                 </Card>
               </motion.div>
 
-              {/* Referral Code */}
-              {referralCode && (
-                <motion.div variants={fadeInUp}>
-                  <Card className="bg-black/40 backdrop-blur-md border border-green-500/30 p-6 md:p-8 text-left">
-                    <h2 className="text-2xl font-bold text-white mb-4">
-                      Your Referral Code
-                    </h2>
-                    <div className="flex items-center justify-between bg-gray-900/50 rounded-lg p-4">
-                      <span className="text-green-500 font-mono text-lg break-all line-clamp-1">
-                        {`https://cromachain.com/airdrop?ref=${referralCode}`}
-                      </span>
-                      <motion.div
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                      >
-                        <Button
-                          onClick={copyReferralLink}
-                          variant="outline"
-                          className="border-green-500 text-green-500 hover:bg-green-500 hover:text-white bg-transparent ml-4"
-                        >
-                          <Copy className="w-4 h-4" />
-                        </Button>
-                      </motion.div>
-                    </div>
-                    <p className="text-gray-400 mt-4">
-                      Share this link to earn bonus CROMA tokens!
-                    </p>
-                  </Card>
-                </motion.div>
-              )}
+              <ReferralCard userData={userData as UserProfile} />
 
               {/* Task List */}
               <motion.div variants={fadeInUp}>

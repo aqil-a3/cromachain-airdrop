@@ -9,6 +9,9 @@ export interface UserProfile {
   twitterUsername: string;
   ethAddress: string;
   role?: string;
+  referralCode: string;
+  referredBy: string;
+  referralCount?: number;
 }
 
 export interface UserProfileDb {
@@ -21,6 +24,8 @@ export interface UserProfileDb {
   twitter_username: string;
   eth_address: string;
   role: string;
+  referral_code: string;
+  referred_by: string;
 }
 
 export interface UserChangePassword {

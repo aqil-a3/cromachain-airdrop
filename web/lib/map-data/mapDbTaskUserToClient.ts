@@ -9,6 +9,7 @@ export function mapDbTaskUserToClient(raw: TaskUserDb): TaskUser {
     userId: raw.user_id,
     rewardEarned: raw.reward_earned,
     rewardType: raw.reward_type,
+    isBonus: raw.is_bonus,
     user: {
       email: raw.user?.email ?? "",
       fullName: raw.user?.full_name ?? "",

@@ -1,5 +1,6 @@
 import { UserChangePassword, UserProfileDb } from "@/@types/user";
 import { supabase } from "./client";
+import { nanoid } from "nanoid";
 import { mapDbUserToClient } from "@/lib/map-data/mapDbUserToClient";
 import * as bcrypt from "bcryptjs";
 
@@ -13,6 +14,21 @@ export async function createNewUser(data: UserProfileDb) {
     console.error(error);
     throw error;
   }
+}
+
+export async function createNewReferralCode(userId: string) {
+  const referral_code = `CROMA-${nanoid(12).toUpperCase()}`;
+  const { error } = await supabase
+    .from(tableName)
+    .update({ referral_code })
+    .eq("id", userId);
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return referral_code;
 }
 
 export async function deleteSoftUSer(id: string) {
@@ -83,8 +99,8 @@ export async function getUserByDiscordUsername(discordUsername: string) {
     throw error;
   }
 
-  if(!data || data.length === 0){
-    return null
+  if (!data || data.length === 0) {
+    return null;
   }
 
   const userDb: UserProfileDb = data[0];
@@ -104,8 +120,8 @@ export async function getUserByTelegramUsername(telegramUsername: string) {
     throw error;
   }
 
-  if(!data || data.length === 0){
-    return null
+  if (!data || data.length === 0) {
+    return null;
   }
 
   const userDb: UserProfileDb = data[0];
@@ -126,8 +142,19 @@ export async function getAllActiveUser() {
   }
 
   const users = data.map((d) => mapDbUserToClient(d));
+  const userWithReferralCode = users.map((user) => {
+    const referralCode = user.referralCode;
+    const referralCount = users.filter((u) => {
+      u.referredBy === referralCode;
+    }).length;
 
-  return users;
+    return {
+      ...user,
+      referralCount,
+    };
+  });
+
+  return userWithReferralCode;
 }
 
 export async function isDupplicateUser(formData: UserProfileDb) {
@@ -178,6 +205,22 @@ export async function isDupplicateUser(formData: UserProfileDb) {
   }
 
   return null;
+}
+
+export async function isHaveReferralCode(userId: string) {
+  const { data, error } = await supabase
+    .from(tableName)
+    .select("referral_code")
+    .eq("id", userId);
+
+  if (!data || error) {
+    console.error(error);
+    throw error;
+  }
+
+  const referralCode: string = data[0].referral_code;
+
+  return referralCode;
 }
 
 export async function changeUserPassword(formData: UserChangePassword) {
