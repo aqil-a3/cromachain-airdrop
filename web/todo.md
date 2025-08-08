@@ -21,7 +21,7 @@ Tidak terdapat judul airdrop dan deskripsi pada halaman utama.
 Halaman tidak menampilkan identitas campaign aktif, yang dibutuhkan untuk rotasi airdrop setiap 7 hari.
 
 
-4. Permasalahan pada Sistem Reward
+✅4. Permasalahan pada Sistem Reward
 
 Jenis reward tidak dapat diubah atau dikonfigurasi, misalnya penggantian antara $CRM, USDT, atau token lainnya.
 
@@ -35,9 +35,9 @@ Pengguna tidak dapat mengundang teman dan tidak dapat menyelesaikan misi referra
 
 6. Permasalahan pada Data dan Dashboard Admin
 
-Data peserta tidak dapat diunduh dalam bentuk CSV.
+✅Data peserta tidak dapat diunduh dalam bentuk CSV.
 
-Tidak semua data peserta ditampilkan secara lengkap di dashboard, meskipun kemungkinan sudah tercatat di database.
+✅Tidak semua data peserta ditampilkan secara lengkap di dashboard, meskipun kemungkinan sudah tercatat di database.
 
 Di dashboard admin tidak ditampilkan daftar pengguna yang telah berhasil mengundang peserta lain, sehingga tidak dapat dipantau siapa mengundang siapa.
 
