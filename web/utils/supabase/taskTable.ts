@@ -72,7 +72,7 @@ export async function getAllTask() {
 export async function gettaskRewardByTaskId(taskId: string) {
   const { data, error } = await supabase
     .from(tableName)
-    .select("reward")
+    .select("reward, reward_type")
     .eq("id", taskId)
     .single();
 

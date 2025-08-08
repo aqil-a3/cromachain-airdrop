@@ -25,7 +25,7 @@ import { Pencil } from "lucide-react";
 import { useState } from "react";
 
 export default function TaskReviewEditDialog({ row }: { row: Row<TaskUser> }) {
-  const { cromaEarned, status, taskId, userId, createdAt, task, user } =
+  const { rewardEarned, status, taskId, userId, createdAt, task, user } =
     row.original;
 
   const [newStatus, setNewStatus] = useState(status);
@@ -92,7 +92,7 @@ export default function TaskReviewEditDialog({ row }: { row: Row<TaskUser> }) {
             </div>
             <div>
               <Label>CROMA Earned</Label>
-              <Input value={cromaEarned} disabled />
+              <Input value={rewardEarned} disabled />
             </div>
           </div>
 

@@ -4,7 +4,8 @@ export interface TaskUserDb {
   user_id: string;
   task_id: string;
   status: string;
-  croma_earned: number;
+  reward_earned: number;
+  reward_type: string;
   user?: {
     email: string;
     full_name: string;
@@ -21,7 +22,8 @@ export interface TaskUser {
   userId: string;
   taskId: string;
   status: string;
-  cromaEarned: number;
+  rewardEarned: number;
+  rewardType: string;
   user?: {
     email: string;
     fullName: string;

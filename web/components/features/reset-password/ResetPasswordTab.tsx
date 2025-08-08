@@ -34,7 +34,6 @@ export default function ResetPasswordTab() {
       console.error(error);
       if (isAxiosError(error)) {
         const data = error.response?.data;
-        console.log(data);
         alert(data?.message || "Something went wrong");
       }
     } finally {

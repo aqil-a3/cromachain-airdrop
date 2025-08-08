@@ -247,10 +247,8 @@ export default function UserProfileTemplate({
   }, [editProfileData]);
 
   const totalCroma = userTasks
-    .map((task) => task.cromaEarned)
+    .map((task) => task.rewardEarned)
     .reduce((acc, curr) => acc + curr, 0);
-
-  console.log(userTasks);
 
   return (
     <div className="min-h-screen text-white overflow-x-hidden flex flex-col">

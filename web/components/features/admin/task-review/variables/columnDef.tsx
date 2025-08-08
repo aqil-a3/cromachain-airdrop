@@ -84,9 +84,9 @@ export const taskUserColumnDefs: ColumnDef<TaskUser>[] = [
     },
   },
   {
-    accessorKey: "cromaEarned",
+    accessorKey: "rewardEarned",
     header: "Croma Earned",
-    cell: ({row}) => `${row.original.cromaEarned} CRM`
+    cell: ({row}) => `${row.original.rewardEarned} CRM`
   },
   {
     accessorKey: "createdAt",

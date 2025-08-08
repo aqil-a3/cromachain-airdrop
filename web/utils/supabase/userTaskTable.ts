@@ -72,14 +72,14 @@ export async function updateStatusUserTask(raw: TaskUser) {
   const { reward } = await gettaskRewardByTaskId(dbPayload.task_id);
 
   if (dbPayload.status === "completed") {
-    dbPayload.croma_earned = reward;
+    dbPayload.reward_earned = reward;
   } else {
-    dbPayload.croma_earned = 0;
+    dbPayload.reward_earned = 0;
   }
 
   const { error } = await supabase
     .from(tableName)
-    .update({ croma_earned: dbPayload.croma_earned, status: dbPayload.status })
+    .update({ reward_earned: dbPayload.reward_earned, status: dbPayload.status })
     .eq("id", dbPayload.id);
 
   if (error) {
