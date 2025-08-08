@@ -69,12 +69,14 @@ export async function getUserTasksByUserId(userId: string) {
 
 export async function updateStatusUserTask(raw: TaskUser) {
   const dbPayload = mapClientTaskUserToDb(raw);
-  const { reward } = await gettaskRewardByTaskId(dbPayload.task_id);
+  const { reward,reward_type } = await gettaskRewardByTaskId(dbPayload.task_id);
 
   if (dbPayload.status === "completed") {
     dbPayload.reward_earned = reward;
+    dbPayload.reward_type = reward_type;
   } else {
     dbPayload.reward_earned = 0;
+    dbPayload.reward_type = "";
   }
 
   const { error } = await supabase
