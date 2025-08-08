@@ -1,4 +1,4 @@
-import { convertToCSV } from "@/utils/papaparse/exportToCsv";
+import { convertToCSV } from "@/utils/paparse/exportToCsv";
 import { getAllActiveUser } from "@/utils/supabase/userTable";
 import { NextResponse } from "next/server";
 
