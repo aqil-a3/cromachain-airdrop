@@ -180,6 +180,20 @@ export default function TaskForm({ context }: TaskFormProps) {
 
         <FormField
           control={form.control}
+          name="rewardType"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Reward Type</FormLabel>
+              <FormControl>
+                <Input disabled={isSubmitting} type="text" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
           name="difficulty"
           render={({ field }) => (
             <FormItem>

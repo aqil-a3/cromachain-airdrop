@@ -22,12 +22,8 @@ export default function AdminUserEditTemplate({
         </div>
         <div className="bg-white p-6 rounded-lg shadow-md border">
           <UserForm
-            context={{
-              defaultValue: user,
-              async onSubmit(data) {
-                return await putUser(data);
-              },
-            }}
+            onSubmit={async (data) => await putUser(data)}
+            defaultValue={user}
           />
         </div>
       </div>

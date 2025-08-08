@@ -8,6 +8,7 @@ export function mapClientTaskToDbTask(raw: Task): TaskDB {
     category: raw.category,
     platform: raw.platform,
     reward: raw.reward,
+    reward_type: raw.rewardType,
     difficulty: raw.difficulty,
     time_estimate: Number(raw.timeEstimate),
     status: raw.status,

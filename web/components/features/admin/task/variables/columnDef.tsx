@@ -80,10 +80,8 @@ export const taskColumns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: "reward",
-    header: "Reward (CROMA)",
-    cell: ({ row }) => {
-      return <span>{row.getValue("reward")} 🪙</span>;
-    },
+    header: "Reward",
+    cell: ({ row }) => `${row.original.reward} ${row.original.rewardType}`,
   },
   {
     accessorKey: "difficulty",
@@ -97,7 +95,7 @@ export const taskColumns: ColumnDef<Task>[] = [
       } as const;
       return (
         <Badge
-          className={`bg-${colorMap[diff]}-100 text-${colorMap[diff]}-800`}
+          className={`border border-${colorMap[diff]}-100 text-${colorMap[diff]}-800`}
         >
           {diff}
         </Badge>

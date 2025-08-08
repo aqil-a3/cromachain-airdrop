@@ -1,6 +1,6 @@
 🧾 Laporan Permasalahan Website: airdrop.cromachain.com
 
-1. Permasalahan pada Proses Pendaftaran dan Login
+✅1. Permasalahan pada Proses Pendaftaran dan Login
 
 Di halaman daftar (register) tidak terdapat kolom untuk kata sandi, namun saat login, sistem meminta kata sandi.
 
@@ -14,7 +14,7 @@ Banyak peserta mengalami kesulitan melewati verifikasi Telegram dan Discord.
 Diduga karena sistem membaca username tanpa format @ atau username yang tidak sesuai dengan akun asli pengguna.
 
 
-3. Permasalahan pada Halaman Beranda (Homepage)
+✅3. Permasalahan pada Halaman Beranda (Homepage)
 
 Tidak terdapat judul airdrop dan deskripsi pada halaman utama.
 

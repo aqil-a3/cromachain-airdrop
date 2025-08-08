@@ -8,6 +8,7 @@ export function mapDbTaskToClient(db: TaskDB): Task {
     category: db.category as Task["category"],
     platform: db.platform,
     reward: db.reward,
+    rewardType: db.reward_type,
     difficulty: db.difficulty as Task["difficulty"],
     timeEstimate: String(db.time_estimate),
     status: db.status as Task["status"],

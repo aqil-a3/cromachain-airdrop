@@ -6,7 +6,7 @@ import {
   scaleIn,
   staggerContainer,
 } from "@/components/templates/HomeTemplate";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { Clock } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -47,7 +47,8 @@ export default function CountdownTimerCard({ airdrop }: { airdrop: Airdrop }) {
   return (
     <motion.div variants={fadeInUp}>
       <Card className="bg-black/40 backdrop-blur-md border border-orange-500/30 max-w-2xl mx-auto mb-8">
-        <CardContent className="p-6">
+        <CardContent className="p-6 space-y-4">
+          <CardTitle className="text-orange-500 font-semibold">{airdrop.title}</CardTitle>
           <motion.div
             className="flex items-center justify-center space-x-2 mb-4"
             initial={{ scale: 0.8 }}

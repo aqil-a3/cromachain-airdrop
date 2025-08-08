@@ -4,7 +4,8 @@ export interface Task {
   description: string;
   category: "social" | "onchain" | "community" | "bonus";
   platform: string;
-  reward: number; // CROMA tokens
+  reward: number; 
+  rewardType: string; 
   difficulty: "Easy" | "Medium" | "Hard";
   timeEstimate: string;
   status:
@@ -27,6 +28,7 @@ export interface TaskDB {
   category: string; // social | onchain | community | bonus
   platform: string;
   reward: number; // in CROMA tokens
+  reward_type: string; // in CROMA tokens
   difficulty: string; // Easy | Medium | Hard
   time_estimate: number;
   status: string; // not-started | pending-verification | completed | failed

@@ -7,6 +7,7 @@ export const taskSchema = z.object({
   category: z.enum(["social", "onchain", "community", "bonus"]),
   platform: z.string().min(1),
   reward: z.number().nonnegative(),
+  rewardType: z.string().min(1),
   difficulty: z.enum(["Easy", "Medium", "Hard"]),
   timeEstimate: z.string().min(1),
   status: z.enum(["not-started", "pending-verification", "completed", "failed", "started"]),

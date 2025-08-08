@@ -7,6 +7,7 @@ export const taskDefaultValues: TaskFormSchema = {
   platform: "",
   reward: 0,
   difficulty: "Easy",
+  rewardType:"CRM",
   timeEstimate: "",
   status: "not-started",
   locked: false,

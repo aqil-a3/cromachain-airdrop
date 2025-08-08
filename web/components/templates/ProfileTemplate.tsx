@@ -559,6 +559,7 @@ export default function UserProfileTemplate({
                       const userTaskStatus = userTask?.status as Task["status"];
                       const taskStatus = userTaskStatus ?? task.status;
                       const taskReward = task.reward;
+                      const rewardType = task.rewardType;
 
                       return (
                         <div
@@ -589,7 +590,7 @@ export default function UserProfileTemplate({
                               </span>
                               <span className="flex gap-2">
                                 <Badge className="text-orange-500 border-orange-500">
-                                  {taskReward} CRM
+                                  {taskReward} {rewardType}
                                 </Badge>
                                 {task.link && (
                                   <Link
