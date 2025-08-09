@@ -11,6 +11,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, Pencil } from "lucide-react";
 import Link from "next/link";
 import { deleteUser } from "../actions/deleteUser";
+import ReferredByCell from "../components/ReferredByCell";
+import ReferredCountCell from "../components/ReferredCountCell";
 
 export const userColumns: ColumnDef<UserProfile>[] = [
   {
@@ -103,13 +105,11 @@ export const userColumns: ColumnDef<UserProfile>[] = [
   {
     accessorKey: "referredBy",
     header: "Referred By",
-    cell: ({ row }) => row.original.referredBy ?? "-",
+    cell: ({ row }) => <ReferredByCell userId={row.original.id!} /> ,
   },
   {
     accessorKey: "referralCount",
     header: "Referred Count",
-    cell: ({ row }) => {
-      return row.original.referralCount;
-    },
+    cell: ({ row }) => <ReferredCountCell referralCode={row.original.referralCode}  /> ,
   },
 ];

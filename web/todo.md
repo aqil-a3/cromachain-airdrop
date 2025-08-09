@@ -26,7 +26,7 @@ Halaman tidak menampilkan identitas campaign aktif, yang dibutuhkan untuk rotasi
 Jenis reward tidak dapat diubah atau dikonfigurasi, misalnya penggantian antara $CRM, USDT, atau token lainnya.
 
 
-5. Permasalahan pada Sistem Referral
+✅5. Permasalahan pada Sistem Referral
 
 Link referral pengguna tidak berfungsi sebagaimana mestinya.
 
@@ -39,7 +39,7 @@ Pengguna tidak dapat mengundang teman dan tidak dapat menyelesaikan misi referra
 
 ✅Tidak semua data peserta ditampilkan secara lengkap di dashboard, meskipun kemungkinan sudah tercatat di database.
 
-50% Di dashboard admin tidak ditampilkan daftar pengguna yang telah berhasil mengundang peserta lain, sehingga tidak dapat dipantau siapa mengundang siapa.
+ Di dashboard admin tidak ditampilkan daftar pengguna yang telah berhasil mengundang peserta lain, sehingga tidak dapat dipantau siapa mengundang siapa.
 
 
 ✅7. Permasalahan pada Fitur Claim Airdrop

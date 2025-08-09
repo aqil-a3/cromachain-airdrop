@@ -65,9 +65,26 @@ export async function getUserReferralsPointByReferrerId(referrerId: string) {
     throw error;
   }
 
-  const points:number = data
+  const points: number = data
     .map((d) => d.points ?? 0)
     .reduce((acc, curr) => acc + curr, 0);
 
   return points;
+}
+
+export async function getAllUserReferrals() {
+  const { data, error } = await supabase
+    .from(tableName)
+    .select("*, referrer_id(email, id), referred_id(email, id)");
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  if (!data || data.length === 0) {
+    return [];
+  }
+
+  return data;
 }
