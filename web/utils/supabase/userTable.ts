@@ -7,13 +7,18 @@ import * as bcrypt from "bcryptjs";
 /** Helper Function for "user" Table in Supabase */
 const tableName = "user";
 
-export async function createNewUser(data: UserProfileDb) {
-  const { error } = await supabase.from(tableName).insert(data);
+export async function createNewUser(payload: UserProfileDb) {
+  const { data, error } = await supabase
+    .from(tableName)
+    .insert(payload)
+    .select();
 
-  if (error) {
+  if (!data || error) {
     console.error(error);
     throw error;
   }
+
+  return data[0] as UserProfileDb;
 }
 
 export async function createNewReferralCode(userId: string) {
@@ -221,6 +226,22 @@ export async function isHaveReferralCode(userId: string) {
   const referralCode: string = data[0].referral_code;
 
   return referralCode;
+}
+
+export async function isValidReferralCode(referralCode: string) {
+  const { error, data } = await supabase
+    .from(tableName)
+    .select("id")
+    .eq("referral_code", referralCode);
+
+  if (!data || error) {
+    console.error(error);
+    throw error;
+  }
+
+  if (data.length === 0) return "";
+
+  return data[0].id as string;
 }
 
 export async function changeUserPassword(formData: UserChangePassword) {

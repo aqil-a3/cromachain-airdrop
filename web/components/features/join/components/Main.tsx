@@ -2,6 +2,7 @@ import UserForm from "@/components/molecules/Form/UserForm";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useSearchParams } from "next/navigation";
+import { registerUserWithReferral } from "../actions/registerUserWithReferral";
 
 export default function MainJoin() {
   const searchParams = useSearchParams();
@@ -21,7 +22,7 @@ export default function MainJoin() {
             value={ref ?? ""}
             className="w-full bg-black text-white"
           />
-          <UserForm onSubmit={(value) => console.log(value)} />
+          <UserForm onSubmit={(value) => registerUserWithReferral(value, ref)} />
         </div>
       </div>
     </main>

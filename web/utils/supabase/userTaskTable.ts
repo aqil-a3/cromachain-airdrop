@@ -54,7 +54,9 @@ export async function createNewUserTasks(raw: TaskUser) {
 export async function getUserTasksByUserId(userId: string) {
   const { data, error } = await supabase
     .from(tableName)
-    .select("*, user: user_id(email, full_name), task: task_id(title, category)")
+    .select(
+      "*, user: user_id(email, full_name), task: task_id(title, category)"
+    )
     .eq("user_id", userId);
 
   if (!data || error) {
@@ -69,7 +71,9 @@ export async function getUserTasksByUserId(userId: string) {
 
 export async function updateStatusUserTask(raw: TaskUser) {
   const dbPayload = mapClientTaskUserToDb(raw);
-  const { reward,reward_type } = await gettaskRewardByTaskId(dbPayload.task_id);
+  const { reward, reward_type } = await gettaskRewardByTaskId(
+    dbPayload.task_id
+  );
 
   if (dbPayload.status === "completed") {
     dbPayload.reward_earned = reward;
@@ -81,11 +85,37 @@ export async function updateStatusUserTask(raw: TaskUser) {
 
   const { error } = await supabase
     .from(tableName)
-    .update({ reward_earned: dbPayload.reward_earned, status: dbPayload.status })
+    .update({
+      reward_earned: dbPayload.reward_earned,
+      status: dbPayload.status,
+    })
     .eq("id", dbPayload.id);
 
   if (error) {
     console.error(error);
     throw error;
   }
+}
+
+export async function getUserTaksCRMPointsByUserId(userId: string) {
+  const { data, error } = await supabase
+    .from(tableName)
+    .select("reward_earned")
+    .eq("user_id", userId)
+    .eq("reward_type", "CRM");
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  if(!data || data.length === 0){
+    return 0;
+  }
+
+  const points: number = data
+    .map((d) => d.reward_earned || 0)
+    .reduce((acc, curr) => acc + curr, 0);
+
+  return points;
 }
