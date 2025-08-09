@@ -7,7 +7,7 @@ Di halaman daftar (register) tidak terdapat kolom untuk kata sandi, namun saat l
 Beberapa peserta tidak melihat kolom input email saat mendaftar.
 
 
-2. Permasalahan pada Verifikasi Telegram dan Discord
+✅2. Permasalahan pada Verifikasi Telegram dan Discord
 
 Banyak peserta mengalami kesulitan melewati verifikasi Telegram dan Discord.
 

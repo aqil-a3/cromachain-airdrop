@@ -211,7 +211,6 @@ export default function UserProfileTemplate({
     try {
       const result = await updateProfile(editProfileData);
       if (result.success && result.updatedProfile) {
-        // @ts-expect-error Fix soon
         setUserProfile(result.updatedProfile);
         localStorage.setItem(
           "userProfile",

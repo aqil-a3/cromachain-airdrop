@@ -1,3 +1,4 @@
+import UserForm from "@/components/molecules/Form/UserForm";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useSearchParams } from "next/navigation";
@@ -20,8 +21,8 @@ export default function MainJoin() {
             value={ref ?? ""}
             className="w-full bg-black text-white"
           />
+          <UserForm onSubmit={(value) => console.log(value)} />
         </div>
-        <p className="text-yellow-500 border border-dashed border-yellow-500 rounded-md p-4 text-center my-4">This still under maintenance!</p>
       </div>
     </main>
   );

@@ -45,7 +45,7 @@ export async function PUT(req: NextRequest) {
   const raw = await req.json();
   const userId = raw.userId ?? raw.id;
 
-  const formData = mapClientUserToDb(raw);
+  const formData = await mapClientUserToDb(raw);
 
   const { data, error } = await userTable
     .update(formData)
