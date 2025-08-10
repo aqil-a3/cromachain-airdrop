@@ -13,6 +13,7 @@ import Link from "next/link";
 import { deleteUser } from "../actions/deleteUser";
 import ReferredByCell from "../components/ReferredByCell";
 import ReferredCountCell from "../components/ReferredCountCell";
+import UserPointsCell from "../components/UserPointsCell";
 
 export const userColumns: ColumnDef<UserProfile>[] = [
   {
@@ -87,6 +88,11 @@ export const userColumns: ColumnDef<UserProfile>[] = [
     },
   },
   {
+    accessorKey: "points",
+    header: "Points",
+    cell: ({ row }) => <UserPointsCell userId={row.original.id as string} /> ,
+  },
+  {
     accessorKey: "role",
     header: "Role",
     cell: ({ row }) => {
@@ -105,11 +111,13 @@ export const userColumns: ColumnDef<UserProfile>[] = [
   {
     accessorKey: "referredBy",
     header: "Referred By",
-    cell: ({ row }) => <ReferredByCell userId={row.original.id!} /> ,
+    cell: ({ row }) => <ReferredByCell userId={row.original.id!} />,
   },
   {
     accessorKey: "referralCount",
     header: "Referred Count",
-    cell: ({ row }) => <ReferredCountCell referralCode={row.original.referralCode}  /> ,
+    cell: ({ row }) => (
+      <ReferredCountCell referralCode={row.original.referralCode} />
+    ),
   },
 ];

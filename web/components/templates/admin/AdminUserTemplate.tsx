@@ -1,6 +1,7 @@
 "use client";
 
 import { UserProfile } from "@/@types/user";
+import { UserPoints } from "@/@types/user-points";
 import { UserReferrals } from "@/@types/user_referrals";
 import UserDataProvider from "@/components/features/admin/user/provider";
 import { userColumns } from "@/components/features/admin/user/variables/columnDef";
@@ -23,9 +24,11 @@ const headerConext: AdminDataHeaderContext = {
 export default function AdminUserTemplate({
   users,
   userReferrals,
+  userPoints,
 }: {
   users: UserProfile[];
   userReferrals: UserReferrals[];
+  userPoints: UserPoints[];
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const csvHandler = async () => {
@@ -54,7 +57,11 @@ export default function AdminUserTemplate({
   };
 
   return (
-    <UserDataProvider users={users} userReferrals={userReferrals}>
+    <UserDataProvider
+      users={users}
+      userReferrals={userReferrals}
+      userPoints={userPoints}
+    >
       <AdminContainer className="space-y-4">
         <AdminDataHeader context={headerConext} />
         <Button
