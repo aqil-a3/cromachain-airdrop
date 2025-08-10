@@ -33,13 +33,13 @@ Link referral pengguna tidak berfungsi sebagaimana mestinya.
 Pengguna tidak dapat mengundang teman dan tidak dapat menyelesaikan misi referral atau mengklaim bonus referral.
 
 
-6. Permasalahan pada Data dan Dashboard Admin
+✅ 6. Permasalahan pada Data dan Dashboard Admin
 
-✅Data peserta tidak dapat diunduh dalam bentuk CSV.
+Data peserta tidak dapat diunduh dalam bentuk CSV.
 
-✅Tidak semua data peserta ditampilkan secara lengkap di dashboard, meskipun kemungkinan sudah tercatat di database.
+Tidak semua data peserta ditampilkan secara lengkap di dashboard, meskipun kemungkinan sudah tercatat di database.
 
- Di dashboard admin tidak ditampilkan daftar pengguna yang telah berhasil mengundang peserta lain, sehingga tidak dapat dipantau siapa mengundang siapa.
+Di dashboard admin tidak ditampilkan daftar pengguna yang telah berhasil mengundang peserta lain, sehingga tidak dapat dipantau siapa mengundang siapa.
 
 
 ✅7. Permasalahan pada Fitur Claim Airdrop

@@ -180,7 +180,7 @@ export default function UserForm({ onSubmit, defaultValue }: UserSchemaProps) {
                 <Input
                   className="text-black"
                   disabled={isSubmitting}
-                  placeholder="@username"
+                  placeholder="username"
                   {...field}
                 />
               </FormControl>
@@ -199,7 +199,7 @@ export default function UserForm({ onSubmit, defaultValue }: UserSchemaProps) {
                 <Input
                   className="text-black"
                   disabled={isSubmitting}
-                  placeholder="@discordUser"
+                  placeholder="discordUser"
                   {...field}
                 />
               </FormControl>
@@ -218,7 +218,7 @@ export default function UserForm({ onSubmit, defaultValue }: UserSchemaProps) {
                 <Input
                   className="text-black"
                   disabled={isSubmitting}
-                  placeholder="@twitterUser"
+                  placeholder="twitterUser"
                   {...field}
                 />
               </FormControl>
