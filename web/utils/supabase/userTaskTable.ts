@@ -88,6 +88,7 @@ export async function updateStatusUserTask(raw: TaskUser) {
     .update({
       reward_earned: dbPayload.reward_earned,
       status: dbPayload.status,
+      reward_type: dbPayload.reward_type,
     })
     .eq("id", dbPayload.id);
 
@@ -109,7 +110,7 @@ export async function getUserTaksCRMPointsByUserId(userId: string) {
     throw error;
   }
 
-  if(!data || data.length === 0){
+  if (!data || data.length === 0) {
     return 0;
   }
 
