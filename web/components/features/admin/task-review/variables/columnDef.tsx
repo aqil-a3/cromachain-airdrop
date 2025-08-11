@@ -9,12 +9,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontalIcon, Pencil } from "lucide-react";
-import Link from "next/link";
 import TaskReviewEditDialog from "../components/EditDialog";
 
 export const taskUserColumnDefs: ColumnDef<TaskUser>[] = [
   {
     accessorKey: "actions",
+    id: "actions",
     header: "Actions",
     cell: ({ row }) => {
       const id = row.original.id;
@@ -51,26 +51,32 @@ export const taskUserColumnDefs: ColumnDef<TaskUser>[] = [
   },
   {
     accessorKey: "id",
+    id: "id",
     header: "ID",
   },
   {
     accessorKey: "user.fullName",
+    id: "user.fullName",
     header: "Name",
   },
   {
     accessorKey: "user.email",
+    id: "user.email",
     header: "Email",
   },
   {
     accessorKey: "task.title",
+    id: "task.title",
     header: "Task",
   },
   {
     accessorKey: "task.category",
+    id: "task.category",
     header: "Category",
   },
   {
     accessorKey: "status",
+    id: "status",
     header: "Status",
     cell: ({ row }) => {
       const status = row.getValue("status") as string;
@@ -78,18 +84,20 @@ export const taskUserColumnDefs: ColumnDef<TaskUser>[] = [
         status === "completed"
           ? "text-green-600"
           : status === "failed"
-          ? "text-red-600"
-          : "text-yellow-600";
+            ? "text-red-600"
+            : "text-yellow-600";
       return <span className={color}>{status}</span>;
     },
   },
   {
     accessorKey: "rewardEarned",
+    id: "rewardEarned",
     header: "Croma Earned",
-    cell: ({row}) => `${row.original.rewardEarned} CRM`
+    cell: ({ row }) => `${row.original.rewardEarned} CRM`,
   },
   {
     accessorKey: "createdAt",
+    id: "createdAt",
     header: "Started At",
     cell: ({ row }) => {
       const date = row.getValue("createdAt");

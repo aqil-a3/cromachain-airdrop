@@ -18,11 +18,16 @@ export default function AdminTaskReviewTemplate({ tasks }: { tasks: Task[] }) {
 }
 
 const InnerTemplate = () => {
-  const { taskUsers } = useTaskReviewData();
+  const { taskUsers, columnFilters, setColumnFilters } = useTaskReviewData();
   return (
     <AdminContainer>
       <FilterSelect />
-      <DataTable columns={taskUserColumnDefs} data={taskUsers} />
+      <DataTable
+        columns={taskUserColumnDefs}
+        data={taskUsers}
+        columnFilters={columnFilters}
+        onColumnFiltersChange={setColumnFilters}
+      />
     </AdminContainer>
   );
 };

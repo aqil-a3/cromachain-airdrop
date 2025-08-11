@@ -10,6 +10,8 @@ import { useTaskReviewData } from "../provider";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
+import { FaFilter } from "react-icons/fa6";
+import FilterDialog from "./FilterDialog";
 
 export default function FilterSelect() {
   const { tasks, setTaskUsers } = useTaskReviewData();
@@ -52,6 +54,7 @@ export default function FilterSelect() {
       >
         {isLoading ? "Retrieving..." : "Retrieve Data"}
       </Button>
+      <FilterDialog />
     </div>
   );
 }

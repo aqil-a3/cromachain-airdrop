@@ -1,5 +1,6 @@
 import { TaskUser } from "@/@types/task-user";
 import { Task } from "@/@types/tasks";
+import { ColumnFiltersState } from "@tanstack/react-table";
 import React, {
   createContext,
   Dispatch,
@@ -12,6 +13,8 @@ interface TaskReviewContextState {
   tasks: Task[];
   taskUsers: TaskUser[];
   setTaskUsers: Dispatch<SetStateAction<TaskUser[]>>;
+  columnFilters: ColumnFiltersState;
+  setColumnFilters: Dispatch<SetStateAction<ColumnFiltersState>>;
 }
 
 const TaskReviewContext = createContext<TaskReviewContextState>(
@@ -28,10 +31,13 @@ export default function TaskReviewProvider({
   children,
 }: TaskReviewProviderProps) {
   const [taskUsers, setTaskUsers] = useState<TaskUser[]>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const value: TaskReviewContextState = {
     tasks,
     setTaskUsers,
     taskUsers,
+    columnFilters,
+    setColumnFilters,
   };
   return (
     <TaskReviewContext.Provider value={value}>
