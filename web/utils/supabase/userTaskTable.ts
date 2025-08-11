@@ -41,6 +41,24 @@ export async function getUserTasksByTaskId(taskId: string) {
   return userTasks;
 }
 
+export async function getBulksUserTaskById(taskId: number[]) {
+  const { data, error } = await supabase
+    .from(tableName)
+    .select(
+      "*, user: user_id(email, full_name), task: task_id(title, category)"
+    )
+    .in("id", taskId);
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  const userTasks = data.map((d) => mapDbTaskUserToClient(d));
+
+  return userTasks;
+}
+
 export async function createNewUserTasks(raw: TaskUser) {
   const data = mapClientTaskUserToDb(raw);
 

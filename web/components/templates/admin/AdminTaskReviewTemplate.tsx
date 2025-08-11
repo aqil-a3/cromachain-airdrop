@@ -2,6 +2,7 @@
 
 import { Task } from "@/@types/tasks";
 import FilterSelect from "@/components/features/admin/task-review/components/filter-select";
+import InfoSection from "@/components/features/admin/task-review/components/InfoSection";
 import TaskReviewProvider, {
   useTaskReviewData,
 } from "@/components/features/admin/task-review/provider";
@@ -18,15 +19,27 @@ export default function AdminTaskReviewTemplate({ tasks }: { tasks: Task[] }) {
 }
 
 const InnerTemplate = () => {
-  const { taskUsers, columnFilters, setColumnFilters } = useTaskReviewData();
+  const {
+    taskUsers,
+    columnFilters,
+    setColumnFilters,
+    rowSelection,
+    setRowSelection,
+  } = useTaskReviewData();
+
   return (
     <AdminContainer>
       <FilterSelect />
+      <InfoSection />
       <DataTable
         columns={taskUserColumnDefs}
         data={taskUsers}
         columnFilters={columnFilters}
         onColumnFiltersChange={setColumnFilters}
+        enableMultiRowSelection
+        enableRowSelection
+        rowSelection={rowSelection}
+        onRowSelectionChange={setRowSelection}
       />
     </AdminContainer>
   );

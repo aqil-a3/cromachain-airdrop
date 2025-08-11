@@ -6,6 +6,8 @@ import {
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
+    RowSelectionState,
+    Table as TableCore,
     useReactTable,
 } from "@tanstack/react-table";
 
@@ -18,6 +20,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import React from "react";
+import { cn } from "@/lib/utils";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -26,13 +29,24 @@ interface DataTableProps<TData, TValue> {
     onColumnFiltersChange?: React.Dispatch<
         React.SetStateAction<ColumnFiltersState>
     >;
+    rowSelection?: RowSelectionState;
+    onRowSelectionChange?: React.Dispatch<
+        React.SetStateAction<RowSelectionState>
+    >;
+    enableRowSelection?: boolean;
+    enableMultiRowSelection?: boolean;
+    HeaderComponent?: (table: TableCore<TData>) => React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
     columnFilters,
+    rowSelection,
+    onRowSelectionChange,
     onColumnFiltersChange,
+    enableMultiRowSelection,
+    enableRowSelection,
 }: DataTableProps<TData, TValue>) {
     const table = useReactTable({
         data,
@@ -41,8 +55,12 @@ export function DataTable<TData, TValue>({
         getFilteredRowModel: getFilteredRowModel(),
         state: {
             columnFilters,
+            rowSelection,
         },
         onColumnFiltersChange,
+        onRowSelectionChange,
+        enableRowSelection,
+        enableMultiRowSelection,
     });
 
     return (
@@ -69,25 +87,33 @@ export function DataTable<TData, TValue>({
                 </TableHeader>
                 <TableBody>
                     {table.getRowModel().rows?.length ? (
-                        table.getRowModel().rows.map((row) => (
-                            <TableRow
-                                key={row.id}
-                                data-state={row.getIsSelected() && "selected"}
-                                className="hover:bg-slate-800 transition-colors"
-                            >
-                                {row.getVisibleCells().map((cell) => (
-                                    <TableCell
-                                        key={cell.id}
-                                        className="px-4 py-2 text-sm text-slate-100"
-                                    >
-                                        {flexRender(
-                                            cell.column.columnDef.cell,
-                                            cell.getContext(),
-                                        )}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        ))
+                        table.getRowModel().rows.map((row) => {
+                            const isSelected =
+                                row.getIsSelected() && "selected";
+
+                            return (
+                                <TableRow
+                                    key={row.id}
+                                    data-state={isSelected}
+                                    className={cn(
+                                        "hover:bg-slate-800 transition-colors",
+                                        isSelected && "!bg-slate-600",
+                                    )}
+                                >
+                                    {row.getVisibleCells().map((cell) => (
+                                        <TableCell
+                                            key={cell.id}
+                                            className="px-4 py-2 text-sm text-slate-100"
+                                        >
+                                            {flexRender(
+                                                cell.column.columnDef.cell,
+                                                cell.getContext(),
+                                            )}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            );
+                        })
                     ) : (
                         <TableRow>
                             <TableCell

@@ -10,8 +10,36 @@ import {
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontalIcon, Pencil } from "lucide-react";
 import TaskReviewEditDialog from "../components/EditDialog";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export const taskUserColumnDefs: ColumnDef<TaskUser>[] = [
+  {
+    id: "select-col",
+    header: ({ table }) => {
+      const isAllSelected = table.getIsAllRowsSelected();
+      const isSomeSelected = table.getIsSomeRowsSelected();
+
+      return (
+        <Checkbox
+          checked={
+            isAllSelected ? true : isSomeSelected ? "indeterminate" : false
+          }
+          onCheckedChange={(value) => table.toggleAllRowsSelected(!!value)}
+          aria-label="Select all"
+          className="bg-white"
+        />
+      );
+    },
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+        className="bg-white"
+      />
+    ),
+  },
+
   {
     accessorKey: "actions",
     id: "actions",
