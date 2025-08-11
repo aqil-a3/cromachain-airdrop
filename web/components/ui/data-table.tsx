@@ -88,8 +88,11 @@ export function DataTable<TData, TValue>({
                 <TableBody>
                     {table.getRowModel().rows?.length ? (
                         table.getRowModel().rows.map((row) => {
-                            const isSelected =
-                                row.getIsSelected() && "selected";
+                            const selectConfig = table.options
+                                .enableRowSelection
+                                ? row.getIsSelected()
+                                : false;
+                            const isSelected = selectConfig && "selected";
 
                             return (
                                 <TableRow
