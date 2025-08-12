@@ -30,12 +30,14 @@ const columnOptions: ValueLabel[] = taskUserColumnDefs
     value: tur.id as string,
     label: tur.header as string,
   }))
-  .filter((tur) => tur.label !== "Actions");
+  .filter((tur) => tur.label !== "Actions" && tur.value !=="select-col");
 
 export default function FilterDialog() {
   const { columnFilters, setColumnFilters } = useTaskReviewData();
   const [filter, setFilter] = useState<ColumnFiltersState>(columnFilters);
   const totalRules = columnFilters.length;
+
+  console.log(columnOptions)
 
   const addHandler = () => {
     setFilter([
