@@ -676,7 +676,7 @@ export default function HomeTemplate({ airdrop }: HomeTemplateProps) {
                     </div>
                   </div>
                   <Link
-                    href="https://app.galxe.com/quest/XmXcMRwf85UwLjEm5MuSaz/GCZfitfwb2"
+                    href="https://app.galxe.com/quest/XmXcMRwf85UwLjEm5MuSaz"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
