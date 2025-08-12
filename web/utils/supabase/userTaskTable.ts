@@ -1,8 +1,9 @@
-import { TaskUser } from "@/@types/task-user";
+import { TaskUser, TaskUserDb } from "@/@types/task-user";
 import { supabase } from "./client";
 import { mapClientTaskUserToDb } from "@/lib/map-data/mapClientTaskUserToDb";
 import { mapDbTaskUserToClient } from "@/lib/map-data/mapDbTaskUserToClient";
-import { gettaskRewardByTaskId } from "./taskTable";
+import { gettaskRewardByTaskId, gettaskRewardByTaskIdBulks } from "./taskTable";
+import { TaskStatus } from "@/@types/tasks";
 
 const tableName = "user_tasks";
 
@@ -113,6 +114,48 @@ export async function updateStatusUserTask(raw: TaskUser) {
   if (error) {
     console.error(error);
     throw error;
+  }
+}
+
+export async function updateStatusUserTasksBulks(
+  raw: TaskUser[],
+  status: TaskStatus
+) {
+  const dbPayload = raw.map(mapClientTaskUserToDb);
+  const turId = dbPayload.map((payload) => payload.id!);
+
+  if (turId.length === 0) return;
+
+  const taskId = dbPayload.map((payload) => payload.task_id);
+  const data = await gettaskRewardByTaskIdBulks(taskId);
+  let newPayload: TaskUserDb[] = [];
+
+  if (status === "completed") {
+    newPayload = dbPayload.map((payload) => {
+      const selectedTask = data.find((task) => task.id === payload.task_id);
+      return {
+        ...payload,
+        reward_earned: selectedTask?.reward ?? 0,
+        reward_type: selectedTask?.reward_type ?? "CRM",
+      };
+    });
+  } else {
+    newPayload = dbPayload.map((payload) => ({
+      ...payload,
+      reward_earned: 0,
+      reward_type: "",
+    }));
+  }
+
+  for (const payload of newPayload) {
+    const { id, ...rest } = payload;
+    if (!id) continue;
+    const { error } = await supabase.from(tableName).update(rest).eq("id", id);
+
+    if (error) {
+      console.error("Failed update id", id, error);
+      throw error;
+    }
   }
 }
 

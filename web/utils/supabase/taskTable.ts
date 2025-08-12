@@ -83,3 +83,17 @@ export async function gettaskRewardByTaskId(taskId: string) {
 
   return data;
 }
+
+export async function gettaskRewardByTaskIdBulks(taskId: string[]) {
+  const { data, error } = await supabase
+    .from(tableName)
+    .select("reward, reward_type, id")
+    .in("id", taskId);
+
+  if (error || !data) {
+    console.error(error);
+    throw error;
+  }
+
+  return data;
+}
