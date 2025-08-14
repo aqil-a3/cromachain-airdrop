@@ -23,7 +23,7 @@ export default async function LeaderboardPage() {
 
       return {
         createdAt: String(user.createdAt),
-        email: user.email,
+        smartContract: user.ethAddress,
         fullName: user.name,
         id: user.id!,
         invitationCount,
@@ -33,5 +33,10 @@ export default async function LeaderboardPage() {
 
   const data: LeaderboardUser[] = raw.map((d, i) => ({ ...d, ranking: i + 1 }));
 
-  return <LeaderboardTemplate leaderboarData={data} totalParticipants={totalParticipants} />;
+  return (
+    <LeaderboardTemplate
+      leaderboarData={data}
+      totalParticipants={totalParticipants}
+    />
+  );
 }

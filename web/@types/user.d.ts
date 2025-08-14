@@ -41,7 +41,7 @@ export interface LeaderboardUser {
   id: string;
   ranking: number;
   fullName: string;
-  email: string;
+  smartContract: string;
   invitationCount: number;
   createdAt: string;
 }

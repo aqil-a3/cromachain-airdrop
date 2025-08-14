@@ -4,8 +4,8 @@ import dayjs from "dayjs";
 
 export const leaderboardColumns: ColumnDef<LeaderboardUser>[] = [
   {
-    accessorKey:"ranking",
-    header:"Top #",
+    accessorKey: "ranking",
+    header: "Top #",
   },
   {
     accessorKey: "fullName",
@@ -13,9 +13,17 @@ export const leaderboardColumns: ColumnDef<LeaderboardUser>[] = [
     header: "Name",
   },
   {
-    accessorKey: "email",
-    id: "email",
-    header: "Email",
+    accessorKey: "smartContract",
+    id: "smartContract",
+    header: "Smart Contract",
+    cell: ({ row }) => {
+      const address = row.original.smartContract;
+      return (
+        <span className="font-mono text-sm">
+          {address.slice(0, 6)}...{address.slice(-4)}
+        </span>
+      );
+    },
   },
   {
     accessorKey: "invitationCount",

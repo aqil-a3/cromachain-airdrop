@@ -51,6 +51,7 @@ export default function Top1To3Card({ data }: Props) {
         const progress = (d.invitationCount / maxInvites) * 100;
         const sprinkleColor = sprinkleColors[d.ranking];
         const crownColor = crownColors[d.ranking];
+        const smartContract = `${d.smartContract.slice(0, 6)}...${d.smartContract.slice(-4)}`;
 
         return (
           <motion.div
@@ -109,7 +110,7 @@ export default function Top1To3Card({ data }: Props) {
                 <div className="text-4xl">{rankStyle.medal}</div>
                 <CardTitle className="mt-2">{d.fullName}</CardTitle>
                 <CardDescription className="text-white/80">
-                  {d.email}
+                  {smartContract}
                 </CardDescription>
               </CardHeader>
 

@@ -13,7 +13,7 @@ interface ReferralCardProps {
 
 export default function ReferralCard({ userData }: ReferralCardProps) {
   const [referralCode, setReferralCode] = useState<string>(
-    userData.referralCode
+    userData.referralCode ?? ""
   );
   const referralLink = `https://airdrop.cromachain.com/join?ref=${referralCode}`;
 
