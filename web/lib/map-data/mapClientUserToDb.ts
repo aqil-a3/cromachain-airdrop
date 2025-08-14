@@ -17,5 +17,6 @@ export async function mapClientUserToDb(
     role: raw.role ?? "user",
     referral_code: raw.referralCode,
     referred_by: raw.referredBy,
+    created_at: raw.createdAt,
   };
 }

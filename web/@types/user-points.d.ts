@@ -10,3 +10,8 @@ export interface UserReferralsPoint {
 }
 
 export interface UserPoints extends UserTasksPoint {}
+
+export interface TotalUserPoints {
+  user_id: string;
+  total_points: number;
+}

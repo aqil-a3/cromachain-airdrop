@@ -17,6 +17,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { MdOutlineLeaderboard  } from "react-icons/md";
+
 
 interface NavbarProps {
   onRegisterClick: () => void;
@@ -52,6 +54,7 @@ export function Navbar({
   }, []);
 
   const navLinks = [
+    { name: "Leaderboard", href: "/leaderboard", icon: MdOutlineLeaderboard, action: null },
     { name: "Claim Airdrop", href: "/claim", icon: Gift, action: null },
     { name: "Airdrop Guide", href: "/guide", icon: BookOpen, action: null },
     {

@@ -88,6 +88,24 @@ export async function getUserTasksByUserId(userId: string) {
   return userTasks;
 }
 
+export async function getUnlockedUserTasksByUserId(userId: string) {
+  const { data, error } = await supabase
+    .from(tableName)
+    .select(
+      "*, user: user_id(email, full_name), task: task_id(title, category, locked)"
+    )
+    .eq("user_id", userId);
+
+  if (!data || error) {
+    console.error(error);
+    throw error;
+  }
+
+  const userTasks = data.filter((d) => !d.task.locked).map((d) => mapDbTaskUserToClient(d));
+
+  return userTasks;
+}
+
 export async function updateStatusUserTask(raw: TaskUser) {
   const dbPayload = mapClientTaskUserToDb(raw);
   const { reward, reward_type } = await gettaskRewardByTaskId(

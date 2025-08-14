@@ -68,11 +68,11 @@ const staggerContainer = {
 export default function UserProfileTemplate({
   tasks,
   userTasks,
-  pointReferrals,
+  userPoints,
 }: {
   tasks: Task[];
   userTasks: TaskUser[];
-  pointReferrals: number;
+  userPoints: number;
 }) {
   const session = useSession();
   const userData = session.data?.user;
@@ -241,10 +241,7 @@ export default function UserProfileTemplate({
     }
   }, [editProfileData]);
 
-  const totalCroma =
-    userTasks
-      .map((task) => task.rewardEarned)
-      .reduce((acc, curr) => acc + curr, 0) + pointReferrals;
+  const totalCroma = userPoints;
 
   return (
     <div className="min-h-screen text-white overflow-x-hidden flex flex-col">
@@ -469,29 +466,36 @@ export default function UserProfileTemplate({
                     Your Progress
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <div className="flex justify-between text-sm text-gray-400 mb-2">
-                        <span>Tasks Completed</span>
-                        <span>
-                          {completedTasksCount}/{totalTasksCount}
-                        </span>
+                    {tasks.length === 0 ? (
+                      <p className="text-white">
+                        You have no tasks for now. Please wait for the next
+                        task.
+                      </p>
+                    ) : (
+                      <div>
+                        <div className="flex justify-between text-sm text-gray-400 mb-2">
+                          <span>Tasks Completed</span>
+                          <span>
+                            {completedTasksCount}/{totalTasksCount}
+                          </span>
+                        </div>
+                        <Progress
+                          value={progressPercentage}
+                          className="h-3 bg-gray-800"
+                        >
+                          <motion.div
+                            className="h-full bg-gradient-to-r from-orange-500 to-red-500 rounded-full"
+                            initial={{ width: 0 }}
+                            animate={{ width: `${progressPercentage}%` }}
+                            transition={{
+                              delay: 0.2,
+                              duration: 1.5,
+                              ease: "easeOut",
+                            }}
+                          />
+                        </Progress>
                       </div>
-                      <Progress
-                        value={progressPercentage}
-                        className="h-3 bg-gray-800"
-                      >
-                        <motion.div
-                          className="h-full bg-gradient-to-r from-orange-500 to-red-500 rounded-full"
-                          initial={{ width: 0 }}
-                          animate={{ width: `${progressPercentage}%` }}
-                          transition={{
-                            delay: 0.2,
-                            duration: 1.5,
-                            ease: "easeOut",
-                          }}
-                        />
-                      </Progress>
-                    </div>
+                    )}
                     <div className="flex items-center justify-center space-x-2 bg-orange-500/10 border border-orange-500/30 rounded-lg p-4">
                       <Coins className="w-6 h-6 text-orange-500" />
                       <div>
@@ -516,79 +520,87 @@ export default function UserProfileTemplate({
                     Your Tasks
                   </h2>
                   <div className="space-y-4">
-                    {tasks.map((task) => {
-                      const IconComponent = getTaskIcon(task.iconName);
-                      const userTask = userTasks.find(
-                        (t) => t.taskId === task.id
-                      );
-                      const userTaskStatus = userTask?.status as Task["status"];
-                      const taskStatus = userTaskStatus ?? task.status;
-                      const taskReward = task.reward;
-                      const rewardType = task.rewardType;
+                    {tasks.length === 0 ? (
+                      <p className="text-white">
+                        You have no tasks for now. Please wait for the next
+                        task.
+                      </p>
+                    ) : (
+                      tasks.map((task) => {
+                        const IconComponent = getTaskIcon(task.iconName);
+                        const userTask = userTasks.find(
+                          (t) => t.taskId === task.id
+                        );
+                        const userTaskStatus =
+                          userTask?.status as Task["status"];
+                        const taskStatus = userTaskStatus ?? task.status;
+                        const taskReward = task.reward;
+                        const rewardType = task.rewardType;
 
-                      return (
-                        <div
-                          key={task.id}
-                          className="flex flex-col md:flex-row items-start gap-4 md:items-center justify-between p-3 rounded-lg bg-gray-900/30"
-                        >
-                          <div className="flex items-center space-x-3">
-                            <div
-                              className={`p-2 rounded-full ${getTaskStatusColor(
-                                task.status
-                              )}`}
-                            >
-                              {task.status === "completed" ? (
-                                <CheckCircle2 className="w-5 h-5 text-green-500" />
-                              ) : (
-                                <IconComponent className="w-5 h-5" />
-                              )}
-                            </div>
-                            <div className="flex flex-col gap-1">
-                              <span
-                                className={`font-semibold ${
-                                  task.status === "completed"
-                                    ? "text-green-400"
-                                    : "text-white"
-                                }`}
+                        return (
+                          <div
+                            key={task.id}
+                            className="flex flex-col md:flex-row items-start gap-4 md:items-center justify-between p-3 rounded-lg bg-gray-900/30"
+                          >
+                            <div className="flex items-center space-x-3">
+                              <div
+                                className={`p-2 rounded-full ${getTaskStatusColor(
+                                  task.status
+                                )}`}
                               >
-                                {task.title}
-                              </span>
-                              <span className="flex gap-2">
-                                <Badge className="text-orange-500 border-orange-500">
-                                  {taskReward} {rewardType}
-                                </Badge>
-                                {task.link && (
-                                  <Link
-                                    href={task.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    <Badge className="text-amber-500 border-amber-500">
-                                      Visit ↗
-                                    </Badge>
-                                  </Link>
+                                {task.status === "completed" ? (
+                                  <CheckCircle2 className="w-5 h-5 text-green-500" />
+                                ) : (
+                                  <IconComponent className="w-5 h-5" />
                                 )}
-                              </span>
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                <span
+                                  className={`font-semibold ${
+                                    task.status === "completed"
+                                      ? "text-green-400"
+                                      : "text-white"
+                                  }`}
+                                >
+                                  {task.title}
+                                </span>
+                                <span className="flex gap-2">
+                                  <Badge className="text-orange-500 border-orange-500">
+                                    {taskReward} {rewardType}
+                                  </Badge>
+                                  {task.link && (
+                                    <Link
+                                      href={task.link}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      <Badge className="text-amber-500 border-amber-500">
+                                        Visit ↗
+                                      </Badge>
+                                    </Link>
+                                  )}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="flex gap-2">
+                              <Badge
+                                className={getTaskStatusColor(
+                                  userTaskStatus ?? task.status
+                                )}
+                              >
+                                {taskStatus
+                                  .replace(/-/g, " ")
+                                  .replace(/\b\w/g, (l) => l.toUpperCase())}
+                              </Badge>
+                              {taskStatus === "not-started" && (
+                                <PlayDialog task={task} />
+                              )}
+                              <TaskDetailDialog task={task} />
                             </div>
                           </div>
-                          <div className="flex gap-2">
-                            <Badge
-                              className={getTaskStatusColor(
-                                userTaskStatus ?? task.status
-                              )}
-                            >
-                              {taskStatus
-                                .replace(/-/g, " ")
-                                .replace(/\b\w/g, (l) => l.toUpperCase())}
-                            </Badge>
-                            {taskStatus === "not-started" && (
-                              <PlayDialog task={task} />
-                            )}
-                            <TaskDetailDialog task={task} />
-                          </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })
+                    )}
                   </div>
                 </Card>
               </motion.div>

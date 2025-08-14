@@ -69,6 +69,23 @@ export async function getAllTask() {
   return taskClient;
 }
 
+export async function getUnlockedTasks() {
+  const { data, error } = await supabase.from(tableName).select("*").eq("locked", false);
+
+  if (error || !data) {
+    console.error(error);
+    throw error;
+  }
+  const tasksData: TaskDB[] = data;
+  const taskClient: Task[] = [];
+
+  for (const task of tasksData) {
+    taskClient.push(mapDbTaskToClient(task));
+  }
+
+  return taskClient;
+}
+
 export async function gettaskRewardByTaskId(taskId: string) {
   const { data, error } = await supabase
     .from(tableName)

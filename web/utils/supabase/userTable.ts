@@ -93,6 +93,23 @@ export async function getUserById(id: string) {
   return user;
 }
 
+export async function getUserByIdBulks(ids: string[]) {
+  const { data, error } = await supabase
+    .from(tableName)
+    .select("*")
+    .in("id", ids);
+
+  if (!data || error) {
+    console.error(error);
+    throw error;
+  }
+
+  const userDb: UserProfileDb[] = data;
+  const user = userDb.map(mapDbUserToClient);
+
+  return user;
+}
+
 export async function getUserByDiscordUsername(discordUsername: string) {
   const { data, error } = await supabase
     .from(tableName)
