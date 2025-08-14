@@ -36,8 +36,7 @@ export default function CountdownTimerCard({ airdrop }: { airdrop: Airdrop }) {
   const [isExpired, setIsExpired] = useState(false);
 
   useEffect(() => {
-    // const target = new Date(airdrop.time_left);
-    const target = new Date(Date.now() + 5000);
+    const target = new Date(airdrop.time_left);
     
     const updateTime = () => {
       const newTime = getTimeLeft(target);
