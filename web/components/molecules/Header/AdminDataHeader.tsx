@@ -1,11 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
+import React from "react";
 
 export interface AdminDataHeaderContext {
   title: string;
   addLink?: string;
   addLabel?: string;
+  AddComponent?: React.ReactNode;
 }
 
 interface AdminDataHeaderProps {
@@ -13,7 +15,7 @@ interface AdminDataHeaderProps {
 }
 
 export default function AdminDataHeader({ context }: AdminDataHeaderProps) {
-  const { title, addLabel, addLink } = context;
+  const { title, addLabel, addLink, AddComponent } = context;
 
   if (!addLabel) context.addLabel = "Tambah Data";
 
@@ -27,6 +29,7 @@ export default function AdminDataHeader({ context }: AdminDataHeaderProps) {
           </Button>
         </Link>
       )}
+      {AddComponent && AddComponent}
     </div>
   );
 }
