@@ -9,8 +9,8 @@ export default function MainJoin() {
   const ref = searchParams.get("ref");
 
   return (
-    <main className="w-4/5 flex items-center justify-center">
-      <div className="bg-black/90 p-4 w-2/3">
+    <main className="w-full md:w-4/5 flex items-center justify-center">
+      <div className="bg-black/90 p-4 w-full md:w-2/3">
         <h1 className="font-bold underline text-white text-2xl text-center">
           Join With Referral
         </h1>
