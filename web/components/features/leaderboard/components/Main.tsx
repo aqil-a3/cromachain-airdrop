@@ -1,3 +1,4 @@
+import { useHydrated } from "@/hooks/use-hyrdated";
 import { useLeaderboardData } from "../provider";
 import { leaderboardColumns } from "../variables/leaderboardColumns";
 import { DataTable } from "./DataTable";
@@ -5,8 +6,11 @@ import Top1To3Card from "./Top1To3";
 
 export default function MainLeaderboard() {
   const { leaderboardData, totalParticipants } = useLeaderboardData();
+  const isHydrated = useHydrated();
   const top4To10 = leaderboardData.slice(3, 10);
   const top1To3 = leaderboardData.slice(0, 3);
+
+  if (!isHydrated) return null;
 
   return (
     <main className="py-16 px-6 lg:px-12 space-y-12">

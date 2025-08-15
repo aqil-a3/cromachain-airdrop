@@ -5,7 +5,11 @@ import { Separator } from "@/components/ui/separator";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
-export default function UserLeaderboardForm({isLoading,setSiteSettings,siteSettings}:ValueEditProps){
+export default function UserLeaderboardForm({
+  isLoading,
+  setSiteSettings,
+  siteSettings,
+}: ValueEditProps) {
   const [leaderboard, setLeaderBoard] = useState<LeaderboardUser>(
     siteSettings.value as LeaderboardUser
   );
@@ -15,15 +19,20 @@ export default function UserLeaderboardForm({isLoading,setSiteSettings,siteSetti
       ...prev,
       value: leaderboard,
     }));
-  }, [leaderboard]);
+  }, [leaderboard, setSiteSettings]);
 
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const target = e.target as HTMLInputElement;
-    const data = target.dataset.leaderboard as keyof LeaderboardUser;
+    const target = e.target;
+    const field = target.dataset.leaderboard as keyof LeaderboardUser;
+    let val: string | number = target.value;
+
+    if (field === "invitationCount") {
+      val = target.value === "" ? "" : Number(target.value);
+    }
 
     setLeaderBoard((prev) => ({
       ...prev,
-      [data]: target.value,
+      [field]: val,
     }));
   };
 
@@ -42,9 +51,11 @@ export default function UserLeaderboardForm({isLoading,setSiteSettings,siteSetti
           onChange={changeHandler}
         />
       </div>
+
       <div className="space-y-4 px-4">
         <Label htmlFor="createdAt">Join At</Label>
         <Input
+          type="date"
           disabled={isLoading}
           id="createdAt"
           data-leaderboard="createdAt"
@@ -52,9 +63,11 @@ export default function UserLeaderboardForm({isLoading,setSiteSettings,siteSetti
           onChange={changeHandler}
         />
       </div>
+
       <div className="space-y-4 px-4">
         <Label htmlFor="invitationCount">Invitation Count</Label>
         <Input
+          type="number"
           disabled={isLoading}
           id="invitationCount"
           data-leaderboard="invitationCount"
@@ -62,6 +75,7 @@ export default function UserLeaderboardForm({isLoading,setSiteSettings,siteSetti
           onChange={changeHandler}
         />
       </div>
+
       <div className="space-y-4 px-4">
         <Label htmlFor="smartContract">Smart Contract</Label>
         <Input
@@ -74,5 +88,4 @@ export default function UserLeaderboardForm({isLoading,setSiteSettings,siteSetti
       </div>
     </div>
   );
-};
-
+}

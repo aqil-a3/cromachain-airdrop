@@ -37,8 +37,6 @@ export default function FilterDialog() {
   const [filter, setFilter] = useState<ColumnFiltersState>(columnFilters);
   const totalRules = columnFilters.length;
 
-  console.log(columnOptions)
-
   const addHandler = () => {
     setFilter([
       ...filter,

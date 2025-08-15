@@ -16,6 +16,23 @@ export async function getAllSiteSettings() {
   return data as SiteSettings[];
 }
 
+export async function getFictionUserLeaderboard() {
+  const key = ["first_rank_leaderboard", "second_rank_leaderboard"];
+
+  const { error, data } = await supabase
+    .from(tableName)
+    .select("*")
+    .in("key", key)
+    .order("created_at", { ascending: true });
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return data as SiteSettings[];
+}
+
 export async function updateSiteSetting(payload: SiteSettings) {
   const { error } = await supabase
     .from(tableName)

@@ -46,7 +46,7 @@ export default function Top1To3Card({ data }: Props) {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-20 md:gap-4 items-end !mt-20">
-      {data.map((d) => {
+      {data.map((d, i) => {
         const rankStyle = rankStyles[d.ranking] || {};
         const progress = (d.invitationCount / maxInvites) * 100;
         const sprinkleColor = sprinkleColors[d.ranking];
@@ -55,7 +55,7 @@ export default function Top1To3Card({ data }: Props) {
 
         return (
           <motion.div
-            key={d.id}
+            key={i + 1}
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{

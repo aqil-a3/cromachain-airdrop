@@ -2,6 +2,7 @@ import { LeaderboardUser } from "@/@types/user";
 import LeaderboardTemplate from "@/components/templates/LeaderboardTemplate";
 import { getTopReferrers } from "@/utils/supabase/rpc/rpc-referrals";
 import { getTotalParticipants } from "@/utils/supabase/rpc/rpc-users";
+import { getFictionUserLeaderboard } from "@/utils/supabase/sitesettingsTable";
 import { getUserByIdBulks } from "@/utils/supabase/userTable";
 
 type LeaderboardNoRank = Omit<LeaderboardUser, "ranking">;
@@ -10,10 +11,31 @@ export default async function LeaderboardPage() {
   const topRefererrs = await getTopReferrers(10);
   const userIds = topRefererrs.map((top) => top.user_id);
 
-  const [userProfiles, totalParticipants] = await Promise.all([
-    getUserByIdBulks(userIds),
-    getTotalParticipants(),
-  ]);
+  const [userProfiles, totalParticipants, fictionParticipants] =
+    await Promise.all([
+      getUserByIdBulks(userIds),
+      getTotalParticipants(),
+      getFictionUserLeaderboard(),
+    ]);
+
+  const fictionParticipantsClean: LeaderboardNoRank[] = fictionParticipants
+    .map((fiction) => {
+      const value = fiction.value as LeaderboardUser;
+      const isInvalid =
+        Object.values(value).filter(
+          (v) => v !== "" && v !== null && v !== undefined
+        ).length !== 4;
+
+      if (isInvalid) return undefined;
+
+      return {
+        createdAt: value.createdAt,
+        fullName: value.fullName,
+        smartContract: value.smartContract,
+        invitationCount: value.invitationCount,
+      };
+    })
+    .filter((item): item is LeaderboardNoRank => item !== undefined);
 
   const raw: LeaderboardNoRank[] = userProfiles
     .map((user) => {
@@ -31,7 +53,9 @@ export default async function LeaderboardPage() {
     })
     .sort((a, b) => b.invitationCount - a.invitationCount);
 
-  const data: LeaderboardUser[] = raw.map((d, i) => ({ ...d, ranking: i + 1 }));
+  const combinedUsers = [...fictionParticipantsClean, ...raw].slice(0,10)
+
+  const data: LeaderboardUser[] = combinedUsers.map((d, i) => ({ ...d, ranking: i + 1 }));
 
   return (
     <LeaderboardTemplate

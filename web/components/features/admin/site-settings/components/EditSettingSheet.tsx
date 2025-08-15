@@ -17,6 +17,7 @@ import axios from "axios";
 import { Loader } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import ValueEdit from "./ValueEdit";
+import { useRouter } from "next/navigation";
 
 interface Props {
   row: Row<SiteSettings>;
@@ -27,6 +28,7 @@ interface Props {
 export default function EditSettingSheet({ row, open, onOpenChange }: Props) {
   const [siteSettings, setSiteSettings] = useState<SiteSettings>(row.original);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const router = useRouter();
 
   const saveHandler = async () => {
     try {
@@ -35,6 +37,7 @@ export default function EditSettingSheet({ row, open, onOpenChange }: Props) {
       await axios.post("/api/site-settings", siteSettings);
       alert("Site setting successfully edited");
       onOpenChange(false);
+      location.reload();
     } catch (error) {
       console.error(error);
     } finally {
