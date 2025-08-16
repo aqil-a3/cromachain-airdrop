@@ -7,6 +7,8 @@ import { getUserByIdBulks } from "@/utils/supabase/userTable";
 
 type LeaderboardNoRank = Omit<LeaderboardUser, "ranking">;
 
+export const dynamic = "force-dynamic";
+
 export default async function LeaderboardPage() {
   const topRefererrs = await getTopReferrers(10);
   const userIds = topRefererrs.map((top) => top.user_id);
