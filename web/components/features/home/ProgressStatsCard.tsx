@@ -9,10 +9,11 @@ import { motion } from "framer-motion";
 interface ProgressStatsCard {
   heroInView: boolean;
   airdrop:Airdrop;
+  totalParticipants:number
 }
 
-export default function ProgressStatsCard({ heroInView, airdrop }: ProgressStatsCard) {
-  const { total_token, token_claimed, participants } = airdrop;
+export default function ProgressStatsCard({ heroInView, airdrop, totalParticipants }: ProgressStatsCard) {
+  const { total_token, token_claimed } = airdrop;
   return (
     <motion.div
       className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8"
@@ -23,7 +24,7 @@ export default function ProgressStatsCard({ heroInView, airdrop }: ProgressStats
       {[
         { value: total_token, label: "Total Tokens", color: "orange" },
         { value: token_claimed, label: "Tokens Claimed", color: "red" },
-        { value: participants, label: "Participants", color: "orange" },
+        { value: totalParticipants, label: "Participants", color: "orange" },
       ].map((stat, index) => (
         <motion.div key={index} variants={fadeInUp}>
           <Card className="bg-black/40 backdrop-blur-md border border-orange-500/30 hover:border-orange-500/50 transition-all duration-300">

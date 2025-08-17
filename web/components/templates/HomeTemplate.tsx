@@ -105,9 +105,10 @@ const slideInRight = {
 
 interface HomeTemplateProps {
   airdrop: Airdrop;
+  totalParticipants:number;
 }
 
-export default function HomeTemplate({ airdrop }: HomeTemplateProps) {
+export default function HomeTemplate({ airdrop, totalParticipants }: HomeTemplateProps) {
   const [tasks, setTasks] = useState<Task[]>([
     {
       id: "twitter-follow",
@@ -423,7 +424,7 @@ export default function HomeTemplate({ airdrop }: HomeTemplateProps) {
           <CountdownTimerCard airdrop={airdrop} />
 
           {/* Progress Stats */}
-          <ProgressStatsCard heroInView={heroInView} airdrop={airdrop} />
+          <ProgressStatsCard heroInView={heroInView} airdrop={airdrop} totalParticipants={totalParticipants} />
 
           {/* Progress Bar */}
           <ProgressBarCard airdrop={airdrop} />
