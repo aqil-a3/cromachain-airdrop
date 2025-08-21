@@ -93,13 +93,13 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   confirmVerificationCode,
   getVerificationCode,
 } from "./api/getVerificationCode";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function MainVerifyEmail() {
   const [isSent, setIsSent] = useState(false);
@@ -107,6 +107,8 @@ export default function MainVerifyEmail() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [resendCooldown, setResendCooldown] = useState(0);
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
   const router = useRouter();
 
   const handleSendVerification = async () => {
@@ -120,7 +122,7 @@ export default function MainVerifyEmail() {
     }
     setMessage(message);
     setIsSent(true);
-    setResendCooldown(30); // 30s cooldown
+    setResendCooldown(30);
     startCooldown();
   };
 
@@ -162,6 +164,14 @@ export default function MainVerifyEmail() {
       if (counter <= 0) clearInterval(interval);
     }, 1000);
   };
+
+  useEffect(() => {
+    if (token) {
+      setIsSent(true);
+      setCode(token);
+      setMessage("Enter your verification token to verify your email is valid");
+    }
+  }, [token]);
 
   return (
     <div className="w-full max-w-md bg-black/70 p-6 rounded-lg backdrop-blur text-center text-white space-y-4">
@@ -205,9 +215,7 @@ export default function MainVerifyEmail() {
               className="flex-1 bg-gray-700 hover:bg-gray-600 text-white"
               type="button"
             >
-              {resendCooldown > 0
-                ? `Resend (${resendCooldown}s)`
-                : "Resend"}
+              {resendCooldown > 0 ? `Resend (${resendCooldown}s)` : "Resend"}
             </Button>
             <Button
               onClick={handleSubmit}
