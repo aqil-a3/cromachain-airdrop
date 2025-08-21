@@ -14,6 +14,7 @@ interface ProgressStatsCard {
 
 export default function ProgressStatsCard({ heroInView, airdrop, totalParticipants }: ProgressStatsCard) {
   const { total_token, token_claimed } = airdrop;
+  
   return (
     <motion.div
       className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8"

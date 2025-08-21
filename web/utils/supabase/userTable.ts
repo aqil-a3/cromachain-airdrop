@@ -153,28 +153,43 @@ export async function getUserByTelegramUsername(telegramUsername: string) {
 }
 
 export async function getAllActiveUser() {
-  const { data, error } = await supabase
-    .from(tableName)
-    .select("*")
-    .is("deleted_at", null);
+  const batchSize = 1000;
+  let allData: any[] = [];
+  let from = 0;
+  let to = batchSize - 1;
 
-  if (error || !data) {
-    console.error(error);
-    throw error;
+  while (true) {
+    const { data, error } = await supabase
+      .from(tableName)
+      .select("*")
+      .is("deleted_at", null)
+      .range(from, to);
+
+    if (error) throw error;
+    if (!data || data.length === 0) break;
+
+    allData = [...allData, ...data];
+
+    if (data.length < batchSize) break;
+    from += batchSize;
+    to += batchSize;
   }
 
-  const users = data.map((d) => mapDbUserToClient(d));
+  const users = allData.map((d) => mapDbUserToClient(d));
+
   const userWithReferralCode = users.map((user) => {
     const referralCode = user.referralCode;
-    const referralCount = users.filter((u) => {
-      u.referredBy === referralCode;
-    }).length;
+    const referralCount = users.filter(
+      (u) => u.referredBy === referralCode
+    ).length;
 
     return {
       ...user,
       referralCount,
     };
   });
+
+  console.log("Final count:", allData.length);
 
   return userWithReferralCode;
 }
