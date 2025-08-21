@@ -14,5 +14,6 @@ export function mapDbUserToClient(raw: UserProfileDb): UserProfile {
     referralCode: raw.referral_code,
     referredBy: raw.referred_by,
     createdAt: raw.created_at,
+    verifiedAt: raw.verified_at
   };
 }

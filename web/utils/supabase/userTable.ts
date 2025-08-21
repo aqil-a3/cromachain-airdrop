@@ -325,3 +325,15 @@ export async function changeUserPassword(formData: UserChangePassword) {
     status: 200,
   };
 }
+
+export async function patchUserEmailVerifiedById(userId: string) {
+  const { error } = await supabase
+    .from(tableName)
+    .update({ verified_at: new Date().toISOString() })
+    .eq("id", userId);
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+}

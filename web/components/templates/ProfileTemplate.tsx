@@ -49,6 +49,7 @@ import TaskDetailDialog from "../features/protected/profile/infoDialog";
 import EditPasswordDialog from "../features/protected/profile/passwordDialog";
 import { useRouter, useSearchParams } from "next/navigation";
 import ReferralCard from "../features/admin/user/components/ReferralCard";
+import VerificationCard from "../features/admin/user/components/VerificationCard";
 
 // Animation variants
 const fadeInUp = {
@@ -65,20 +66,24 @@ const staggerContainer = {
   },
 };
 
+interface Props {
+  tasks: Task[];
+  userTasks: TaskUser[];
+  userPoints: number;
+  user: UserProfile;
+}
+
 export default function UserProfileTemplate({
   tasks,
   userTasks,
   userPoints,
-}: {
-  tasks: Task[];
-  userTasks: TaskUser[];
-  userPoints: number;
-}) {
+  user,
+}: Props) {
   const session = useSession();
   const userData = session.data?.user;
   const authStatus = session.status;
 
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(user);
   const [referralCode, setReferralCode] = useState<string | null>(null);
   const [showCommunityModal, setShowCommunityModal] = useState(false);
   const [showEditProfileDialog, setShowEditProfileDialog] = useState(false);
@@ -458,6 +463,8 @@ export default function UserProfileTemplate({
                   </CardContent>
                 </Card>
               </motion.div>
+
+              <VerificationCard user={user} />
 
               {/* Progress & Rewards Summary */}
               <motion.div variants={fadeInUp}>

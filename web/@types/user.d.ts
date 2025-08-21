@@ -13,6 +13,7 @@ export interface UserProfile {
   referredBy?: string;
   createdAt?: string;
   referralCount?: number;
+  verifiedAt?: string;
 }
 
 export interface UserProfileDb {
@@ -28,6 +29,7 @@ export interface UserProfileDb {
   created_at?: string;
   referral_code?: string;
   referred_by?: string;
+  verified_at?: string;
 }
 
 export interface UserChangePassword {
