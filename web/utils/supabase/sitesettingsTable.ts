@@ -17,7 +17,7 @@ export async function getAllSiteSettings() {
 }
 
 export async function getFictionUserLeaderboard() {
-  const key = ["first_rank_leaderboard", "second_rank_leaderboard"];
+  const key = ["first_rank_leaderboard", "second_rank_leaderboard", "third_rank_leaderboard"];
 
   const { error, data } = await supabase
     .from(tableName)

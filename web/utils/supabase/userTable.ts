@@ -189,8 +189,6 @@ export async function getAllActiveUser() {
     };
   });
 
-  console.log("Final count:", allData.length);
-
   return userWithReferralCode;
 }
 

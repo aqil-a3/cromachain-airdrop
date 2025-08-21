@@ -55,14 +55,22 @@ export default async function LeaderboardPage() {
     })
     .sort((a, b) => b.invitationCount - a.invitationCount);
 
-  const combinedUsers = [...fictionParticipantsClean, ...raw].slice(0,10)
+  const combinedUsers = [...fictionParticipantsClean, ...raw].slice(0, 10);
 
-  const data: LeaderboardUser[] = combinedUsers.map((d, i) => ({ ...d, ranking: i + 1 }));
+  const data: LeaderboardUser[] = combinedUsers.map((d, i) => ({
+    ...d,
+    ranking: i + 1,
+  }));
+
+  const fictionParticipantsCount = fictionParticipants.map((fiction) => {
+    const value = fiction.value as LeaderboardUser;
+    return value.invitationCount;
+  }).reduce((acc, curr) => acc+curr, 0);
 
   return (
     <LeaderboardTemplate
       leaderboarData={data}
-      totalParticipants={totalParticipants}
+      totalParticipants={totalParticipants + fictionParticipantsCount}
     />
   );
 }

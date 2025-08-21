@@ -10,6 +10,7 @@ export type ValueEditProps = {
 const editors: Record<string, React.FC<ValueEditProps>> = {
   first_rank_leaderboard: UserLeaderboardForm,
   second_rank_leaderboard: UserLeaderboardForm,
+  third_rank_leaderboard: UserLeaderboardForm,
 };
 
 export default function ValueEdit({ ...props }: ValueEditProps) {
