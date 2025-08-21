@@ -12,6 +12,12 @@ export async function calculateReferrerPoint(userId: string) {
   return gainedPoints;
 }
 
+/**
+ *
+ * @param referred_id User ID dari yang diundang
+ * @param referrer_id User ID dari yang ngundang
+ * @param referral_code Referral Code dari yang ngundang
+ */
 export async function createNewUserReferrals(
   referred_id: string,
   referrer_id: string,

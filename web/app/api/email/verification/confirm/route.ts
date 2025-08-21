@@ -2,14 +2,17 @@ import { BasicHttpResponse } from "@/@types/http";
 import { isValidToken } from "@/utils/supabase/emailVerificatonCode";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
+type PostResponse = Promise<NextResponse<BasicHttpResponse>>;
+export async function POST(req: NextRequest): PostResponse {
   const body = await req.json();
   const code: string = body.code;
   const { message, status } = await isValidToken(code);
 
-  const response: BasicHttpResponse = {
-    message,
-    success: status === 200,
-  };
-  return NextResponse.json(response, { status });
+  return NextResponse.json(
+    {
+      message,
+      success: true,
+    },
+    { status }
+  );
 }

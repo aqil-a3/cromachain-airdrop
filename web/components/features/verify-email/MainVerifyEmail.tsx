@@ -1,96 +1,3 @@
-// "use client";
-
-// import { useState } from "react";
-// import { Button } from "@/components/ui/button";
-// import {
-//   confirmVerificationCode,
-//   getVerificationCode,
-// } from "./api/getVerificationCode";
-// import { useRouter } from "next/navigation";
-
-// export default function MainVerifyEmail() {
-//   const [isSent, setIsSent] = useState(false);
-//   const [code, setCode] = useState("");
-//   const router = useRouter();
-
-//   const handleSendVerification = async () => {
-//     const { message, success } = await getVerificationCode();
-//     if (!success) {
-//       alert(message ?? "Something wrong");
-//       return;
-//     }
-//     alert(message);
-//     setIsSent(true);
-//   };
-
-//   const handleResend = async () => {
-//     const { message, success } = await getVerificationCode();
-//     if (!success) {
-//       alert(message ?? "Something wrong");
-//       return;
-//     }
-//     alert(message);
-//   };
-
-//   const handleSubmit = async () => {
-//     const { message, success } = await confirmVerificationCode(code);
-//     if (!success) {
-//       alert(message ?? "Something Wrong");
-//       return;
-//     }
-
-//     alert(message);
-//     router.replace("/");
-//   };
-
-//   return (
-//     <div className="w-full max-w-md bg-black/70 p-6 rounded-lg backdrop-blur text-center text-white space-y-4">
-//       <h1 className="font-bold text-3xl">Email Verification</h1>
-//       {!isSent ? (
-//         <>
-//           <em>
-//             We will send a verification code to your email. Make sure your email
-//             is active!
-//           </em>
-//           <Button
-//             onClick={handleSendVerification}
-//             className="w-full bg-orange-500 hover:bg-orange-600 text-white"
-//           >
-//             Send Verification Email
-//           </Button>
-//         </>
-//       ) : (
-//         <div className="space-y-4">
-//           <input
-//             type="text"
-//             placeholder="Enter verification code"
-//             value={code}
-//             onChange={(e) => setCode(e.target.value)}
-//             className="w-full px-3 py-2 rounded-lg text-black"
-//           />
-
-//           <div className="flex justify-between gap-2">
-//             <Button
-//               onClick={handleResend}
-//               className="flex-1 bg-gray-700 hover:bg-gray-600 text-white"
-//               type="button"
-//             >
-//               Resend
-//             </Button>
-//             <Button
-//               onClick={handleSubmit}
-//               className="flex-1 bg-orange-500 hover:bg-orange-600 text-white"
-//               type="button"
-//             >
-//               Submit
-//             </Button>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -120,6 +27,7 @@ export default function MainVerifyEmail() {
       setMessage(message ?? "Something went wrong");
       return;
     }
+    
     setMessage(message);
     setIsSent(true);
     setResendCooldown(30);

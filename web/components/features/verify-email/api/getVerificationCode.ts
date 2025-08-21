@@ -10,6 +10,14 @@ export async function getVerificationCode(): Promise<BasicHttpResponse> {
     return data;
   } catch (error) {
     console.error(error);
+    if (isAxiosError(error)) {
+      const data = error.response?.data;
+
+      return {
+        message: data.message,
+        success: false,
+      };
+    }
     return {
       message: "Something wrong",
       success: false,

@@ -1,8 +1,6 @@
 import { mapClientUserToDb } from "@/lib/map-data/mapClientUserToDb";
 import { UserSchemaType } from "@/schemas/userSchema";
-import {
-  createNewUserReferrals,
-} from "@/utils/supabase/userReferralsTable";
+import { createNewUserReferrals } from "@/utils/supabase/userReferralsTable";
 import {
   createNewUser,
   isDupplicateUser,
@@ -40,12 +38,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: isDuplicate.message }, { status: 409 });
   }
 
-  const { id } = await createNewUser(data);
-  const { referrer_id, referred_id } = await createNewUserReferrals(
-    id!,
-    referrerId,
-    referralCode
-  );
+  await createNewUser(data);
 
-  return NextResponse.json({ message: "Registration success!", referred_id, referrer_id });
+  return NextResponse.json({ message: "Registration success!" });
 }

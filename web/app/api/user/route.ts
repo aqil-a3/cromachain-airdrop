@@ -1,6 +1,8 @@
+import { BasicHttpResponse } from "@/@types/http";
 import { mapClientUserToDb } from "@/lib/map-data/mapClientUserToDb";
 import { userSchema, UserSchemaType } from "@/schemas/userSchema";
 import { userTable } from "@/utils/supabase/client";
+import { createNewEmailVerification } from "@/utils/supabase/emailVerificatonCode";
 import {
   createNewUser,
   deleteSoftUSer,
@@ -8,7 +10,8 @@ import {
 } from "@/utils/supabase/userTable";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
+type PostResponse = Promise<NextResponse<BasicHttpResponse>>;
+export async function POST(req: NextRequest): PostResponse {
   const raw: UserSchemaType = await req.json();
   let parsedRaw = {} as UserSchemaType;
 
@@ -17,7 +20,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { message: "Format form is not valid" },
+      { message: "Format form is not valid", success: false },
       { status: 400 }
     );
   }
@@ -28,15 +31,19 @@ export async function POST(req: NextRequest) {
 
   if (isDupplicate) {
     return NextResponse.json(
-      { message: isDupplicate.message },
+      { message: isDupplicate.message, success: false },
       { status: 409 }
     );
   }
 
-  await createNewUser(data);
+  const user = await createNewUser(data);
+  await createNewEmailVerification(user);
 
   return NextResponse.json(
-    { message: "User registration is success" },
+    {
+      message: `Last step! We've sent an email verification to your email! ${user.email}.`,
+      success: true,
+    },
     { status: 200 }
   );
 }

@@ -152,6 +152,27 @@ export async function getUserByTelegramUsername(telegramUsername: string) {
   return user;
 }
 
+export async function getUserByReferrerCode(referrerCode: string) {
+  const { data, error } = await supabase
+    .from(tableName)
+    .select("*")
+    .eq("referral_code", referrerCode);
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  if (!data || data.length === 0) {
+    return null;
+  }
+
+  const userDb: UserProfileDb = data[0];
+  const user = mapDbUserToClient(userDb);
+
+  return user;
+}
+
 export async function getAllActiveUser() {
   const batchSize = 1000;
   let allData: any[] = [];

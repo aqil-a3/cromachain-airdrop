@@ -7,7 +7,9 @@ export const dynamic = "force-dynamic";
 export default async function VerificationEmailPage() {
   const session = await auth();
 
-  const { verifiedAt } = await getUserById(session?.user.userId!);
-  if (verifiedAt) redirect("/");
+  if (session) {
+    const { verifiedAt } = await getUserById(session.user.userId!);
+    if (verifiedAt) redirect("/");
+  }
   return <VerificationEmailTemplate />;
 }

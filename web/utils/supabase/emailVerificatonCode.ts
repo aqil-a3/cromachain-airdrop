@@ -5,7 +5,12 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { supabase } from "./client";
 import { sendEmailVerificationCode } from "@/lib/resend/sendVerificationEmail";
-import { patchUserEmailVerifiedById } from "./userTable";
+import {
+  getUserById,
+  getUserByReferrerCode,
+  patchUserEmailVerifiedById,
+} from "./userTable";
+import { createNewUserReferrals } from "./userReferralsTable";
 
 dayjs.extend(utc);
 
@@ -47,69 +52,90 @@ export async function isValidToken(token: string) {
   const { data, error } = await supabase
     .from(tableName)
     .select("*, user: user_id(email)")
-    .eq("token", token);
+    .eq("token", token)
+    .maybeSingle();
 
-  if (!data || error) {
+  if (error) {
     console.error(error);
-    throw error;
+    return {
+      message: "Internal error",
+      isSuccess: false,
+      status: 500,
+      userId: "",
+    };
   }
 
-  const tokenData: PasswordResetToken = data[0];
-  const email = data[0]?.user?.email as string | undefined;
-  if (!tokenData)
+  if (!data) {
     return {
       message: "Token is invalid!",
-      email,
       isSuccess: false,
       status: 400,
       userId: "",
     };
+  }
 
-  const { expired_at, used, user_id } = tokenData;
-
+  const { expired_at, used, user_id, user } = data;
+  const email = user?.email;
   const now = dayjs.utc();
-  const expiredDate = dayjs.utc(expired_at);
 
-  if (now > expiredDate) {
+  if (dayjs.utc(expired_at).isBefore(now)) {
     return {
       message: "Token has expired!",
       email,
       isSuccess: false,
-      status: 400,
+      status: 410,
       userId: "",
     };
   }
 
   if (used) {
     return {
-      message: "Token has used!",
+      message: "Token already used!",
       email,
       isSuccess: false,
-      status: 400,
+      status: 409,
       userId: "",
     };
   }
 
-  await updateTokenToUsed(token);
+  // Mark as used atomically
+  const { error: updateError } = await supabase
+    .from(tableName)
+    .update({ used: true })
+    .eq("token", token)
+    .eq("used", false);
+
+  if (updateError) {
+    console.error(updateError);
+    return {
+      message: "Failed to update token",
+      isSuccess: false,
+      status: 500,
+      userId: "",
+    };
+  }
+
+  // Verify email
   await patchUserEmailVerifiedById(user_id);
 
+  // Handle referral
+  const { referredBy } = await getUserById(user_id);
+  if (referredBy) {
+    const referrer = await getUserByReferrerCode(referredBy);
+    if (referrer) {
+      await createNewUserReferrals(
+        user_id,
+        referrer.id!,
+        referrer.referralCode!
+      );
+    }
+  }
+
   return {
-    message: "Token is valid! Your email is valid!",
+    message: "Email verified successfully!",
     email,
     isSuccess: true,
     status: 200,
     userId: user_id,
   };
-}
-
-export async function updateTokenToUsed(token: string) {
-  const { error } = await supabase
-    .from(tableName)
-    .update({ used: true })
-    .eq("token", token);
-
-  if (error) {
-    console.error(error);
-    throw error;
-  }
 }
