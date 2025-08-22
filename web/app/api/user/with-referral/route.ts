@@ -1,9 +1,12 @@
 import { mapClientUserToDb } from "@/lib/map-data/mapClientUserToDb";
 import { UserSchemaType } from "@/schemas/userSchema";
-import { createNewUserReferrals } from "@/utils/supabase/userReferralsTable";
+import {
+  createNewUserReferrals,
+} from "@/utils/supabase/userReferralsTable";
 import {
   createNewUser,
   isDupplicateUser,
+  isLimittedReferral,
   isValidReferralCode,
 } from "@/utils/supabase/userTable";
 import { NextRequest, NextResponse } from "next/server";
@@ -28,6 +31,10 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   }
+
+  const isLimitted = await isLimittedReferral(referralCode);
+  if (!isLimitted.success)
+    return NextResponse.json({ message: isLimitted.message }, { status: 400 });
 
   const data = await mapClientUserToDb(clientData);
   data.referred_by = referralCode;

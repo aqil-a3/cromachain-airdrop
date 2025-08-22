@@ -17,7 +17,11 @@ export async function getAllSiteSettings() {
 }
 
 export async function getFictionUserLeaderboard() {
-  const key = ["first_rank_leaderboard", "second_rank_leaderboard", "third_rank_leaderboard"];
+  const key = [
+    "first_rank_leaderboard",
+    "second_rank_leaderboard",
+    "third_rank_leaderboard",
+  ];
 
   const { error, data } = await supabase
     .from(tableName)
@@ -31,6 +35,23 @@ export async function getFictionUserLeaderboard() {
   }
 
   return data as SiteSettings[];
+}
+
+export async function getReferralLimitPerDay() {
+  const { data, error } = await supabase
+    .from(tableName)
+    .select("*")
+    .eq("key", "user_referrals_limit_per_day")
+    .single();
+
+  if (error || !data) {
+    console.error(error);
+    throw error;
+  }
+
+  const resData: SiteSettings<number> = data;
+
+  return Number(resData.value);
 }
 
 export async function updateSiteSetting(payload: SiteSettings) {

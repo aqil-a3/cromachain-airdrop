@@ -1,6 +1,9 @@
 import { UserReferrals } from "@/@types/user_referrals";
 import { getUserTaksCRMPointsByUserId } from "./userTaskTable";
 import { supabase } from "./client";
+import { BasicHttpResponse } from "@/@types/http";
+import { getUserByReferrerCode } from "./userTable";
+import { getReferralLimitPerDay } from "./sitesettingsTable";
 
 const tableName = "user_referrals";
 

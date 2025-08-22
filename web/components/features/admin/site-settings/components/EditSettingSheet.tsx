@@ -28,7 +28,6 @@ interface Props {
 export default function EditSettingSheet({ row, open, onOpenChange }: Props) {
   const [siteSettings, setSiteSettings] = useState<SiteSettings>(row.original);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const router = useRouter();
 
   const saveHandler = async () => {
     try {

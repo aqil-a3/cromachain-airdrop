@@ -3,6 +3,8 @@ import { supabase } from "./client";
 import { nanoid } from "nanoid";
 import { mapDbUserToClient } from "@/lib/map-data/mapDbUserToClient";
 import * as bcrypt from "bcryptjs";
+import { BasicHttpResponse } from "@/@types/http";
+import { getReferralLimitPerDay } from "./sitesettingsTable";
 
 /** Helper Function for "user" Table in Supabase */
 const tableName = "user";
@@ -261,6 +263,47 @@ export async function isDupplicateUser(formData: UserProfileDb) {
   }
 
   return null;
+}
+
+export async function isLimittedReferral(
+  referralCode: string
+): Promise<BasicHttpResponse> {
+  const user = await getUserByReferrerCode(referralCode);
+  if (!user) {
+    return {
+      success: false,
+      message: "User referral not found",
+    };
+  }
+
+  const startOfDay = new Date();
+  startOfDay.setUTCHours(0, 0, 0, 0);
+
+  const limitPerDay = await getReferralLimitPerDay();
+
+  const { count, error } = await supabase
+    .from(tableName)
+    .select("*", { count: "exact", head: true })
+    .eq("referred_by", referralCode)
+    .gte("created_at", startOfDay.toISOString());
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  const currentLimit = Number(count);
+
+  if (currentLimit >= limitPerDay)
+    return {
+      success: false,
+      message: `This referral code has reached its daily limit (${limitPerDay}). You can register without a referral, or try again tomorrow.`,
+    };
+
+  return {
+    message: "Continue",
+    success: true,
+  };
 }
 
 export async function isHaveReferralCode(userId: string) {
