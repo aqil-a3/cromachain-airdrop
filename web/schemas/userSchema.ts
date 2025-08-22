@@ -32,6 +32,7 @@ export const userSchema = z
       .string()
       .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address"),
     role: z.string(),
+    isHuman: z.boolean(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",

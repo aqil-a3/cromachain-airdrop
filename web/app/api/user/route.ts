@@ -25,6 +25,15 @@ export async function POST(req: NextRequest): PostResponse {
     );
   }
 
+  if (!parsedRaw.isHuman)
+    return NextResponse.json(
+      {
+        message: "Sorry, this action can't be continued because you're bot",
+        success: false,
+      },
+      { status: 400 }
+    );
+
   const data = await mapClientUserToDb(parsedRaw);
 
   const isDupplicate = await isDupplicateUser(data);

@@ -19,8 +19,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Eye, EyeClosed } from "lucide-react";
+import CaptchaCheckBox from "../Input/Captcha";
 
 interface UserSchemaProps {
   defaultValue?: UserProfile;
@@ -29,23 +30,25 @@ interface UserSchemaProps {
 
 export default function UserForm({ onSubmit, defaultValue }: UserSchemaProps) {
   const pathname = usePathname();
+  const isAdmin = pathname.includes("/admin");
+
   const [hidePassword, setHidePassword] = useState<boolean>(true);
   const [hideConfirmPassword, setHideConfirmPassword] = useState<boolean>(true);
-
+  const [isHuman, setIsHuman] = useState<boolean>(false);
   const form = useForm<UserSchemaType>({
     resolver: zodResolver(userSchema),
     defaultValues: defaultValue ?? userDefaultValues,
   });
 
+  useEffect(() => {
+    form.setValue("isHuman", isHuman);
+  }, [isHuman]);
+
   const isSubmitting = form.formState.isSubmitting;
-  const isAdmin = pathname.includes("/admin");
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
           name="id"
@@ -122,7 +125,7 @@ export default function UserForm({ onSubmit, defaultValue }: UserSchemaProps) {
                       className="absolute top-0 left-0 text-black"
                       onClick={() => setHidePassword(!hidePassword)}
                     >
-                      {hidePassword ? <Eye /> : <EyeClosed /> }
+                      {hidePassword ? <Eye /> : <EyeClosed />}
                     </Button>
                     <Input
                       type={hidePassword ? "password" : "text"}
@@ -151,9 +154,11 @@ export default function UserForm({ onSubmit, defaultValue }: UserSchemaProps) {
                       variant={"ghost"}
                       size={"icon"}
                       className="absolute top-0 left-0 text-black"
-                      onClick={() => setHideConfirmPassword(!hideConfirmPassword)}
+                      onClick={() =>
+                        setHideConfirmPassword(!hideConfirmPassword)
+                      }
                     >
-                      {hideConfirmPassword ? <Eye /> : <EyeClosed /> }
+                      {hideConfirmPassword ? <Eye /> : <EyeClosed />}
                     </Button>
                     <Input
                       type={hideConfirmPassword ? "password" : "text"}
@@ -270,7 +275,13 @@ export default function UserForm({ onSubmit, defaultValue }: UserSchemaProps) {
           />
         )}
 
-        <Button disabled={isSubmitting} type="submit" className="w-full">
+        <CaptchaCheckBox setIsHuman={setIsHuman} />
+
+        <Button
+          disabled={isSubmitting || !isHuman}
+          type="submit"
+          className="w-full"
+        >
           {isSubmitting ? "Processing..." : "Save User"}
         </Button>
       </form>

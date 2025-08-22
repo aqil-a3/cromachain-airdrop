@@ -6,3 +6,4 @@ export interface BasicHttpResponse {
 export interface ResponseWithData<T = unknown> extends BasicHttpResponse {
   data: T;
 }
+
