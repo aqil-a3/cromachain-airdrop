@@ -56,8 +56,8 @@ export default async function LeaderboardPage() {
     .sort((a, b) => b.invitationCount - a.invitationCount);
 
   const combinedUsers = [...fictionParticipantsClean, ...raw]
-    .slice(0, 10)
-    .sort((a, b) => b.invitationCount - a.invitationCount);
+    .sort((a, b) => b.invitationCount - a.invitationCount)
+    .slice(0, 10);
 
   const data: LeaderboardUser[] = combinedUsers.map((d, i) => ({
     ...d,
