@@ -30,6 +30,7 @@ export interface UserProfileDb {
   referral_code?: string;
   referred_by?: string;
   verified_at?: string;
+  deleted_at?: string;
 }
 
 export interface UserChangePassword {

@@ -10,7 +10,7 @@ type LeaderboardNoRank = Omit<LeaderboardUser, "ranking">;
 export const dynamic = "force-dynamic";
 
 export default async function LeaderboardPage() {
-  const topRefererrs = await getTopReferrers(10);
+  const topRefererrs = await getTopReferrers(100);
   const userIds = topRefererrs.map((top) => top.user_id);
 
   const [userProfiles, totalParticipants, fictionParticipants] =
@@ -55,17 +55,21 @@ export default async function LeaderboardPage() {
     })
     .sort((a, b) => b.invitationCount - a.invitationCount);
 
-  const combinedUsers = [...fictionParticipantsClean, ...raw].slice(0, 10);
+  const combinedUsers = [...fictionParticipantsClean, ...raw]
+    .slice(0, 10)
+    .sort((a, b) => b.invitationCount - a.invitationCount);
 
   const data: LeaderboardUser[] = combinedUsers.map((d, i) => ({
     ...d,
     ranking: i + 1,
   }));
 
-  const fictionParticipantsCount = fictionParticipants.map((fiction) => {
-    const value = fiction.value as LeaderboardUser;
-    return value.invitationCount;
-  }).reduce((acc, curr) => acc+curr, 0);
+  const fictionParticipantsCount = fictionParticipants
+    .map((fiction) => {
+      const value = fiction.value as LeaderboardUser;
+      return value.invitationCount;
+    })
+    .reduce((acc, curr) => acc + curr, 0);
 
   return (
     <LeaderboardTemplate

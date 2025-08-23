@@ -99,7 +99,8 @@ export async function getUserByIdBulks(ids: string[]) {
   const { data, error } = await supabase
     .from(tableName)
     .select("*")
-    .in("id", ids);
+    .in("id", ids)
+    .is("deleted_at", null);
 
   if (!data || error) {
     console.error(error);

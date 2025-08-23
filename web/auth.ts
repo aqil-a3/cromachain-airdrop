@@ -21,6 +21,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const { email } = profile;
 
         const userDb = await getUserByEmail(email);
+        if (userDb.deleted_at) throw new Error("User Banned");
+
         const user = mapDbUserToClient(userDb);
         user.password = undefined;
 
@@ -38,6 +40,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         try {
           const user = await getUserByEmail(email as string);
 
+          if (user.deleted_at) throw new Error("User Banned");
           if (!user) throw new Error("User not found");
           if (!user.password) throw new NoPasswordError();
 

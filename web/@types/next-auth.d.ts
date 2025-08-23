@@ -6,5 +6,5 @@ declare module "next-auth" {
     user: UserProfile;
   }
 
-  interface User extends UserProfile {}
+  interface User extends UserProfile {}z
 }
