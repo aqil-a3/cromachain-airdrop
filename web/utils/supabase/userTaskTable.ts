@@ -7,21 +7,33 @@ import { TaskStatus } from "@/@types/tasks";
 
 const tableName = "user_tasks";
 
-export async function getAllUserTasks() {
-  const { data, error } = await supabase
+export async function getAllUserTasks(){
+  const pageSize = 1000;
+  let from = 0;
+  let allData:TaskUserDb[] = []
+
+  while(true){
+    const { data, error } = await supabase
     .from(tableName)
     .select(
       "*, user: user_id(email, full_name), task: task_id(title, category)"
-    );
+    )
+    .range(from, from + pageSize - 1);
 
-  if (error || !data) {
-    console.error(error);
-    throw error;
+    if(error){
+      console.error(error);
+      throw error;
+    }
+
+    if(!data || data.length === 0) break;
+    allData = [...allData, ...data];
+
+    if(data.length < pageSize) break;
+
+    from += pageSize;
   }
 
-  const userTasks = data.map((d) => mapDbTaskUserToClient(d));
-
-  return userTasks;
+  return allData.map(mapDbTaskUserToClient)
 }
 
 export async function getUserTasksByTaskId(taskId: string) {
