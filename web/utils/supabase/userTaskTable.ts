@@ -25,21 +25,32 @@ export async function getAllUserTasks() {
 }
 
 export async function getUserTasksByTaskId(taskId: string) {
-  const { data, error } = await supabase
-    .from(tableName)
-    .select(
-      "*, user: user_id(email, full_name), task: task_id(title, category)"
-    )
-    .eq("task_id", taskId);
+  const pageSize = 1000;
+  let from = 0;
+  let allData: TaskUserDb[] = [];
 
-  if (error || !data) {
-    console.error(error);
-    throw error;
+  while (true) {
+    const { data, error } = await supabase
+      .from(tableName)
+      .select(
+        "*, user: user_id(email, full_name), task: task_id(title, category)"
+      )
+      .eq("task_id", taskId)
+      .range(from, from + pageSize - 1);
+
+    if (error) {
+      console.error(error);
+      throw error;
+    }
+    if (!data || data.length === 0) break;
+
+    allData = [...allData, ...data];
+
+    if (data.length < pageSize) break;
+    from += pageSize;
   }
 
-  const userTasks = data.map((d) => mapDbTaskUserToClient(d));
-
-  return userTasks;
+  return allData.map(mapDbTaskUserToClient);
 }
 
 export async function getBulksUserTaskById(taskId: number[]) {
@@ -60,10 +71,48 @@ export async function getBulksUserTaskById(taskId: number[]) {
   return userTasks;
 }
 
+export async function getUserTaskByTaskIdAndUserId(
+  taskId: string,
+  userId: string
+): Promise<TaskUserDb[]> {
+  const { error, data } = await supabase
+    .from(tableName)
+    .select("*")
+    .eq("user_id", userId)
+    .eq("task_id", taskId);
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  if (!data) return [];
+
+  return data;
+}
+
+export async function deleteUserTaskByTaskIdAndUserId(
+  taskId: string,
+  userId: string
+) {
+  const { error } = await supabase
+    .from(tableName)
+    .delete()
+    .eq("user_id", userId)
+    .eq("task_id", taskId);
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 export async function createNewUserTasks(raw: TaskUser) {
   const data = mapClientTaskUserToDb(raw);
 
-  const { error } = await supabase.from(tableName).insert(data);
+  const { error } = await supabase
+    .from(tableName)
+    .upsert(data, { onConflict: "user_id,task_id" });
   if (error) {
     console.error(error);
     throw error;
@@ -101,7 +150,9 @@ export async function getUnlockedUserTasksByUserId(userId: string) {
     throw error;
   }
 
-  const userTasks = data.filter((d) => !d.task.locked).map((d) => mapDbTaskUserToClient(d));
+  const userTasks = data
+    .filter((d) => !d.task.locked)
+    .map((d) => mapDbTaskUserToClient(d));
 
   return userTasks;
 }

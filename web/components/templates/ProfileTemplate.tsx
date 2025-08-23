@@ -4,7 +4,6 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, useInView } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
@@ -14,19 +13,12 @@ import {
   Mail,
   Twitter,
   MessageCircle,
-  Copy,
   Coins,
   CheckCircle2,
   AlertTriangle,
-  Flame,
-  BookOpen,
-  Gift,
-  Target,
-  ExternalLink,
   Wallet,
   Loader2,
   Info,
-  PlayCircle,
 } from "lucide-react";
 import Link from "next/link";
 import { CustomParticlesBackground } from "@/components/layouts/custom-particles-background";
@@ -38,18 +30,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { getTaskIcon } from "@/lib/tasks";
 import { updateProfile } from "@/app/actions";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { UserProfile } from "@/@types/user";
 import { Task } from "@/@types/tasks";
-import PlayDialog from "../features/protected/profile/playDialog";
 import { TaskUser } from "@/@types/task-user";
-import TaskDetailDialog from "../features/protected/profile/infoDialog";
 import EditPasswordDialog from "../features/protected/profile/passwordDialog";
 import { useRouter, useSearchParams } from "next/navigation";
-import ReferralCard from "../features/admin/user/components/ReferralCard";
+import ReferralCard from "../features/protected/profile/ReferralCard";
 import VerificationCard from "../features/admin/user/components/VerificationCard";
+import TaskListCard from "../features/protected/profile/TaskListCard";
 
 // Animation variants
 const fadeInUp = {
@@ -520,97 +510,8 @@ export default function UserProfileTemplate({
 
               <ReferralCard userData={userData as UserProfile} />
 
-              {/* Task List */}
-              <motion.div variants={fadeInUp}>
-                <Card className="bg-black/40 backdrop-blur-md border border-orange-500/30 p-6 md:p-8 text-left">
-                  <h2 className="text-2xl font-bold text-white mb-4">
-                    Your Tasks
-                  </h2>
-                  <div className="space-y-4">
-                    {tasks.length === 0 ? (
-                      <p className="text-white">
-                        You have no tasks for now. Please wait for the next
-                        task.
-                      </p>
-                    ) : (
-                      tasks.map((task) => {
-                        const IconComponent = getTaskIcon(task.iconName);
-                        const userTask = userTasks.find(
-                          (t) => t.taskId === task.id
-                        );
-                        const userTaskStatus =
-                          userTask?.status as Task["status"];
-                        const taskStatus = userTaskStatus ?? task.status;
-                        const taskReward = task.reward;
-                        const rewardType = task.rewardType;
-
-                        return (
-                          <div
-                            key={task.id}
-                            className="flex flex-col md:flex-row items-start gap-4 md:items-center justify-between p-3 rounded-lg bg-gray-900/30"
-                          >
-                            <div className="flex items-center space-x-3">
-                              <div
-                                className={`p-2 rounded-full ${getTaskStatusColor(
-                                  task.status
-                                )}`}
-                              >
-                                {task.status === "completed" ? (
-                                  <CheckCircle2 className="w-5 h-5 text-green-500" />
-                                ) : (
-                                  <IconComponent className="w-5 h-5" />
-                                )}
-                              </div>
-                              <div className="flex flex-col gap-1">
-                                <span
-                                  className={`font-semibold ${
-                                    task.status === "completed"
-                                      ? "text-green-400"
-                                      : "text-white"
-                                  }`}
-                                >
-                                  {task.title}
-                                </span>
-                                <span className="flex gap-2">
-                                  <Badge className="text-orange-500 border-orange-500">
-                                    {taskReward} {rewardType}
-                                  </Badge>
-                                  {task.link && (
-                                    <Link
-                                      href={task.link}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      <Badge className="text-amber-500 border-amber-500">
-                                        Visit ↗
-                                      </Badge>
-                                    </Link>
-                                  )}
-                                </span>
-                              </div>
-                            </div>
-                            <div className="flex gap-2">
-                              <Badge
-                                className={getTaskStatusColor(
-                                  userTaskStatus ?? task.status
-                                )}
-                              >
-                                {taskStatus
-                                  .replace(/-/g, " ")
-                                  .replace(/\b\w/g, (l) => l.toUpperCase())}
-                              </Badge>
-                              {taskStatus === "not-started" && (
-                                <PlayDialog task={task} />
-                              )}
-                              <TaskDetailDialog task={task} />
-                            </div>
-                          </div>
-                        );
-                      })
-                    )}
-                  </div>
-                </Card>
-              </motion.div>
+              {/* Your Tasks List */}
+              <TaskListCard tasks={tasks} userTasks={userTasks} />
             </div>
           )}
         </motion.div>
