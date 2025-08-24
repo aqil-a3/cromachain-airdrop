@@ -238,18 +238,6 @@ export default function ClaimAirdropTemplate() {
           </motion.p>
 
           <CheckEligibility />
-          {/* <motion.div variants={fadeInUp}>
-            <Card className="bg-black/40 backdrop-blur-md border border-orange-500/30 max-w-xl mx-auto p-6 text-center">
-              <CardContent className="space-y-6">
-                <h2 className="text-3xl font-bold text-orange-400">
-                  🚧 Coming Soon
-                </h2>
-                <p className="text-white text-opacity-80 text-lg">
-                  This feature is not available yet. Stay tuned!
-                </p>
-              </CardContent>
-            </Card>
-          </motion.div> */}
 
           <motion.div className="mt-12 space-y-6" variants={fadeInUp}>
             <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">

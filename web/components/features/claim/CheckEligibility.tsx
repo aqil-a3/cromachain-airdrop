@@ -5,94 +5,31 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 import axios, { isAxiosError } from "axios";
 import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
-// export default function CheckEligibility() {
-//   const [ethAddressInput, setEthAddressInput] = useState<string>("");
-//   const [cromaPoint, setCromaPoint] = useState<number | null>(null);
-//   const [errorMessage, setErrorMessage] = useState<string>("");
-//   const [isChecking, setIsChecking] = useState<boolean>(false);
-
-//   const handleCheckEligibility = async () => {
-//     try {
-//       const { data } = await axios.get<ResponseWithData<TotalUserPoints>>(
-//         "/api/airdrop/check",
-//         {
-//           params: {
-//             ethAddressInput,
-//           },
-//         }
-//       );
-
-//       setCromaPoint(data.data.total_points);
-//     } catch (error) {
-//       console.error(error);
-//       if (isAxiosError(error)) {
-//         const data: ResponseWithData<null> | null = error.response?.data;
-
-//         setErrorMessage(data?.message ?? "Something went error");
-//       }
-//     }
-//   };
-
-//   return (
-//     <motion.div variants={fadeInUp}>
-//       <Card className="bg-black/40 backdrop-blur-md border border-orange-500/30 max-w-xl mx-auto p-6">
-//         <CardContent className="space-y-6">
-//           <div className="space-y-2 text-left">
-//             <Label htmlFor="ethAddress" className="text-white">
-//               Your Ethereum Address
-//             </Label>
-//             <Input
-//               id="ethAddress"
-//               placeholder="0x..."
-//               value={ethAddressInput}
-//               onChange={(e) => setEthAddressInput(e.target.value)}
-//               className="bg-gray-900/50 border-orange-500/30 text-white focus:border-orange-500"
-//               disabled={isChecking}
-//             />
-//           </div>
-//           <Button
-//             onClick={handleCheckEligibility}
-//             disabled={isChecking}
-//             className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white py-3 text-lg font-semibold rounded-xl"
-//           >
-//             {isChecking ? (
-//               <>
-//                 <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-//                 Checking...
-//               </>
-//             ) : (
-//               "Check Eligibility"
-//             )}
-//           </Button>
-//         </CardContent>
-//       </Card>
-//     </motion.div>
-//   );
-// }
-
 export default function CheckEligibility() {
   const [ethAddressInput, setEthAddressInput] = useState<string>("");
   const [cromaPoint, setCromaPoint] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [isChecking, setIsChecking] = useState<boolean>(false);
+  const [source, setSource] = useState<"galxe" | "web">("web");
   const usdtConvert = 0.09;
 
   const handleCheckEligibility = async () => {
     setIsChecking(true);
-    setErrorMessage(""); // reset error lama
-    setCromaPoint(null); // reset hasil lama juga
+    setErrorMessage("");
+    setCromaPoint(null);
 
     try {
       const { data } = await axios.get<
         ResponseWithData<TotalUserPoints | null>
       >("/api/airdrop/check", {
-        params: { ethAddressInput },
+        params: { ethAddressInput, source },
       });
 
       if (!data.success) {
@@ -116,6 +53,28 @@ export default function CheckEligibility() {
     <motion.div variants={fadeInUp}>
       <Card className="bg-black/40 backdrop-blur-md border border-orange-500/30 max-w-xl mx-auto p-6">
         <CardContent className="space-y-6">
+          <div className="flex gap-4">
+            <Button
+              variant={source === "web" ? "outline" : "default"}
+              className={cn(
+                "",
+                source !== "web" && "hover:bg-white hover:text-black"
+              )}
+              onClick={() => setSource("web")}
+            >
+              Web
+            </Button>
+            <Button
+              variant={source === "galxe" ? "outline" : "default"}
+              className={cn(
+                "",
+                source !== "galxe" && "hover:bg-white hover:text-black"
+              )}
+              onClick={() => setSource("galxe")}
+            >
+              Galxe
+            </Button>
+          </div>
           {/* Input Address */}
           <div className="space-y-2 text-left">
             <Label htmlFor="ethAddress" className="text-white">
@@ -164,7 +123,8 @@ export default function CheckEligibility() {
                   {cromaPoint}
                 </p> */}
                 <p className="text-4xl font-bold tracking-wide text-green-500">
-                  {cromaPoint.toLocaleString("en-US")} CRM = ${(cromaPoint * usdtConvert).toLocaleString("en-US")}
+                  {cromaPoint.toLocaleString("en-US")} CRM = $
+                  {(cromaPoint * usdtConvert).toLocaleString("en-US")}
                 </p>
               </div>
             </div>
