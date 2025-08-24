@@ -3,7 +3,7 @@ import { supabase } from "./client";
 import { nanoid } from "nanoid";
 import { mapDbUserToClient } from "@/lib/map-data/mapDbUserToClient";
 import * as bcrypt from "bcryptjs";
-import { BasicHttpResponse } from "@/@types/http";
+import { BasicHttpResponse, DBCodeType, ResponseWithData } from "@/@types/http";
 import { getReferralLimitPerDay } from "./sitesettingsTable";
 
 /** Helper Function for "user" Table in Supabase */
@@ -93,6 +93,51 @@ export async function getUserById(id: string) {
   const user = mapDbUserToClient(userDb);
 
   return user;
+}
+
+export async function getUserByEthAddress(
+  eth_address: string
+): Promise<ResponseWithData<UserProfileDb | null, DBCodeType>> {
+  const { data, error } = await supabase
+    .from(tableName)
+    .select("*")
+    .eq("eth_address", eth_address)
+    .maybeSingle();
+
+  if (error) {
+    console.error(error);
+    return {
+      data: null,
+      code: "ERROR_DB",
+      message: "There is something wrong when get user info",
+      success: false,
+    };
+  }
+
+  if (!data)
+    return {
+      data: null,
+      code: "NOT_FOUND",
+      message: `User with Etherium address ${eth_address} not found. Please register!`,
+      success: false,
+    };
+
+  const userDb: UserProfileDb = data;
+
+  if (userDb.deleted_at)
+    return {
+      data: null,
+      code: "BANNED_ACCOUNT",
+      message: "This account is banned!",
+      success: false,
+    };
+
+  return {
+    data: userDb,
+    code: "SUCCESS",
+    message: "User found",
+    success: true,
+  };
 }
 
 export async function getUserByIdBulks(ids: string[]) {
