@@ -70,6 +70,13 @@ export async function GET(req: NextRequest): GetResponse {
 
   const userPoint = await getGalxeDataByEthAddress(eth_address);
 
+  if (!userPoint.success)
+    return NextResponse.json({
+      message: messageResponse[userPoint.code!],
+      success: userPoint.success,
+      data: null,
+    });
+
   return NextResponse.json({
     message: messageResponse["SUCCESS"],
     data: userPoint.data,
