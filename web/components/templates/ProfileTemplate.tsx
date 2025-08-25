@@ -89,15 +89,17 @@ export default function UserProfileTemplate({
   const [isDemoMode, setIsDemoMode] = useState(false);
 
   const searchParams = useSearchParams();
-  const reason = searchParams.get("reason");
+  const discordTaskInfo = searchParams.get("discord-task-success");
+  const discordTaskMessage = searchParams.get("discord-task-message");
   const router = useRouter();
+
 
   const profileRef = useRef(null);
   const profileInView = useInView(profileRef, { once: true, margin: "-100px" });
 
   useEffect(() => {
-    if (reason === "join_discord_success") {
-      alert("Success to join discrod!");
+    if (discordTaskInfo && discordTaskMessage) {
+      alert(discordTaskMessage);
       router.replace("/profile");
       return;
     }
