@@ -8,10 +8,6 @@ const tableName = "galxe_data";
 export async function getGalxeDataByEthAddress(
   eth_address: string
 ): Promise<ResponseWithData<TotalUserPoints | null, DBCodeType>> {
-  // const { data, error } = await supabase
-  //   .from(tableName)
-  //   .select("*")
-  //   .eq("eth_address", eth_address);
 
   const { data, error } = await supabase
   .from(tableName)

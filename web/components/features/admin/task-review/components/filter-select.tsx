@@ -11,6 +11,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import FilterDialog from "./FilterDialog";
+import ImportDialog from "./ImportDialog";
 
 export default function FilterSelect() {
   const { tasks, setTaskUsers } = useTaskReviewData();
@@ -31,29 +32,32 @@ export default function FilterSelect() {
   };
 
   return (
-    <div className="flex gap-2">
-      <Select onValueChange={setValue} value={value} disabled={isLoading}>
-        <SelectTrigger className="w-[320px] bg-slate-700 text-white font-bold">
-          <SelectValue placeholder="Select Tasks" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">All Tasks</SelectItem>
-          <SelectSeparator />
-          {tasks.map((task) => (
-            <SelectItem key={task.id} value={String(task.id)}>
-              {task.title}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Button
-        disabled={isLoading}
-        onClick={retrieveHandler}
-        className="bg-slate-700 hover:bg-slate-600 disabled:bg-slate-300"
-      >
-        {isLoading ? "Retrieving..." : "Retrieve Data"}
-      </Button>
-      <FilterDialog />
+    <div className="space-y-4">
+      <div className="flex gap-2">
+        <Select onValueChange={setValue} value={value} disabled={isLoading}>
+          <SelectTrigger className="w-[320px] bg-slate-700 text-white font-bold">
+            <SelectValue placeholder="Select Tasks" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Tasks</SelectItem>
+            <SelectSeparator />
+            {tasks.map((task) => (
+              <SelectItem key={task.id} value={String(task.id)}>
+                {task.title}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Button
+          disabled={isLoading}
+          onClick={retrieveHandler}
+          className="bg-slate-700 hover:bg-slate-600 disabled:bg-slate-300"
+        >
+          {isLoading ? "Retrieving..." : "Retrieve Data"}
+        </Button>
+        <FilterDialog />
+      </div>
+      <ImportDialog />
     </div>
   );
 }

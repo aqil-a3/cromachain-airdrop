@@ -140,6 +140,42 @@ export async function getUserByEthAddress(
   };
 }
 
+export async function getUsersByEthAddresses(
+  eth_addresses: string[]
+): Promise<ResponseWithData<UserProfileDb[], DBCodeType>> {
+  if (!eth_addresses || eth_addresses.length === 0) {
+    return {
+      data: [],
+      code: "ERROR_DB",
+      message: "Ethereum addresses are required",
+      success: false,
+    };
+  }
+
+  const { data, error } = await supabase
+    .from(tableName)
+    .select("*")
+    .in("eth_address", eth_addresses);
+
+  if (error) {
+    console.error(error);
+    return {
+      data: [],
+      code: "ERROR_DB",
+      message: "There is something wrong when fetching user info",
+      success: false,
+    };
+  }
+
+  // data otomatis hanya berisi row yang ketemu, sisanya hilang
+  return {
+    data: data || [],
+    code: "SUCCESS",
+    message: `${(data || []).length} user(s) found from ${eth_addresses.length} addresses`,
+    success: true,
+  };
+}
+
 export async function getUserByIdBulks(ids: string[]) {
   const { data, error } = await supabase
     .from(tableName)

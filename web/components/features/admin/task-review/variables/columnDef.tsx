@@ -11,6 +11,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontalIcon, Pencil } from "lucide-react";
 import TaskReviewEditDialog from "../components/EditDialog";
 import { Checkbox } from "@/components/ui/checkbox";
+import { PreviewCsv } from "../logics";
 
 export const taskUserColumnDefs: ColumnDef<TaskUser>[] = [
   {
@@ -131,5 +132,12 @@ export const taskUserColumnDefs: ColumnDef<TaskUser>[] = [
       const date = row.getValue("createdAt");
       return date ? new Date(date as string).toLocaleString() : "-";
     },
+  },
+];
+
+export const previewCsvColumnsDef: ColumnDef<PreviewCsv>[] = [
+  {
+    accessorKey: "eth_address",
+    header: "Smart Contracts",
   },
 ];

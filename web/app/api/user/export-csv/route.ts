@@ -1,4 +1,4 @@
-import { convertToCSV } from "@/utils/paparse/exportToCsv";
+import { convertToCSV } from "@/utils/paparse/csv";
 import { getUserPoints } from "@/utils/supabase/rpc/rpc-points";
 import { getTopReferrers } from "@/utils/supabase/rpc/rpc-referrals";
 import { getAllActiveUser } from "@/utils/supabase/userTable";
