@@ -40,6 +40,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import ReferralCard from "../features/protected/profile/ReferralCard";
 import VerificationCard from "../features/admin/user/components/VerificationCard";
 import TaskListCard from "../features/protected/profile/TaskListCard";
+import ProfileProvider from "../provider/ProfileProvider";
 
 // Animation variants
 const fadeInUp = {
@@ -61,6 +62,7 @@ interface Props {
   userTasks: TaskUser[];
   userPoints: number;
   user: UserProfile;
+  userReferralCount: number;
 }
 
 export default function UserProfileTemplate({
@@ -68,6 +70,7 @@ export default function UserProfileTemplate({
   userTasks,
   userPoints,
   user,
+  userReferralCount,
 }: Props) {
   const session = useSession();
   const userData = session.data?.user;
@@ -92,7 +95,6 @@ export default function UserProfileTemplate({
   const discordTaskInfo = searchParams.get("discord-task-success");
   const discordTaskMessage = searchParams.get("discord-task-message");
   const router = useRouter();
-
 
   const profileRef = useRef(null);
   const profileInView = useInView(profileRef, { once: true, margin: "-100px" });
@@ -133,22 +135,6 @@ export default function UserProfileTemplate({
   const handleCommunityClick = useCallback(() => {
     setShowCommunityModal(true);
   }, []);
-
-  const getTaskStatusColor = (status: Task["status"]) => {
-    switch (status) {
-      case "started":
-        return "bg-amber-500/20 text-amber-400 border-amber-500/30";
-      case "completed":
-        return "bg-green-500/20 text-green-400 border-green-500/30";
-      case "pending-verification":
-        return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
-      case "failed":
-        return "bg-red-500/20 text-red-400 border-red-500/30";
-      case "not-started":
-      default:
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
-    }
-  };
 
   const handleEditProfileClick = useCallback(() => {
     if (userProfile) {
@@ -241,468 +227,478 @@ export default function UserProfileTemplate({
   const totalCroma = userPoints;
 
   return (
-    <div className="min-h-screen text-white overflow-x-hidden flex flex-col">
-      {/* Background Gradients */}
-      <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900 z-[-3]" />
-      <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,69,0,0.1),transparent_50%)] z-[-2]" />
-      <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(255,0,0,0.05),transparent_50%)] z-[-2]" />
+    <ProfileProvider
+      tasks={tasks}
+      user={user}
+      userPoints={userPoints}
+      userReferralCount={userReferralCount}
+      userTasks={userTasks}
+    >
+      <div className="min-h-screen text-white overflow-x-hidden flex flex-col">
+        {/* Background Gradients */}
+        <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900 z-[-3]" />
+        <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,69,0,0.1),transparent_50%)] z-[-2]" />
+        <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(255,0,0,0.05),transparent_50%)] z-[-2]" />
 
-      {/* Particles layer */}
-      <div className="fixed inset-0 z-[-1]">
-        <CustomParticlesBackground />
-      </div>
+        {/* Particles layer */}
+        <div className="fixed inset-0 z-[-1]">
+          <CustomParticlesBackground />
+        </div>
 
-      {/* Navbar */}
-      <Navbar
-        onRegisterClick={handleNewUserRegistration}
-        onSignInClick={handleExistingUserSignIn}
-        onCommunityClick={handleCommunityClick}
-        userName={userProfile?.name || "Guest"}
-      />
+        {/* Navbar */}
+        <Navbar
+          onRegisterClick={handleNewUserRegistration}
+          onSignInClick={handleExistingUserSignIn}
+          onCommunityClick={handleCommunityClick}
+          userName={userProfile?.name || "Guest"}
+        />
 
-      {/* Profile Section */}
-      <section
-        ref={profileRef}
-        className="relative min-h-screen flex items-center justify-center px-4 py-20 pt-24"
-      >
-        <motion.div
-          className="container mx-auto text-center space-y-8 max-w-5xl"
-          variants={staggerContainer}
-          initial="initial"
-          animate={profileInView ? "animate" : "initial"}
+        {/* Profile Section */}
+        <section
+          ref={profileRef}
+          className="relative min-h-screen flex items-center justify-center px-4 py-20 pt-24"
         >
-          <motion.h1
-            className="text-2xl md:text-5xl lg:text-6xl font-bold mb-6"
-            variants={fadeInUp}
+          <motion.div
+            className="container mx-auto text-center space-y-8 max-w-5xl"
+            variants={staggerContainer}
+            initial="initial"
+            animate={profileInView ? "animate" : "initial"}
           >
-            <span className="bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 bg-clip-text text-transparent">
-              Your Profile & Progress
-            </span>
-          </motion.h1>
+            <motion.h1
+              className="text-2xl md:text-5xl lg:text-6xl font-bold mb-6"
+              variants={fadeInUp}
+            >
+              <span className="bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 bg-clip-text text-transparent">
+                Your Profile & Progress
+              </span>
+            </motion.h1>
 
-          {!userProfile ? (
-            <motion.div variants={fadeInUp}>
-              <Alert className="bg-yellow-900/20 border-yellow-500/30 max-w-2xl mx-auto">
-                <AlertTriangle className="h-4 w-4 text-yellow-500" />
-                <AlertDescription className="text-yellow-200">
-                  <strong>Not Registered:</strong> Please register or sign in to
-                  view your profile and progress.
-                  <Button
-                    onClick={handleNewUserRegistration}
-                    className="ml-4 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-4 py-2 rounded-lg text-sm"
+            {!userProfile ? (
+              <motion.div variants={fadeInUp}>
+                <Alert className="bg-yellow-900/20 border-yellow-500/30 max-w-2xl mx-auto">
+                  <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                  <AlertDescription className="text-yellow-200">
+                    <strong>Not Registered:</strong> Please register or sign in
+                    to view your profile and progress.
+                    <Button
+                      onClick={handleNewUserRegistration}
+                      className="ml-4 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-4 py-2 rounded-lg text-sm"
+                    >
+                      Register Now
+                    </Button>
+                  </AlertDescription>
+                </Alert>
+              </motion.div>
+            ) : (
+              <div className="space-y-8">
+                {isDemoMode && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
                   >
-                    Register Now
-                  </Button>
-                </AlertDescription>
-              </Alert>
-            </motion.div>
-          ) : (
-            <div className="space-y-8">
-              {isDemoMode && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <Alert className="bg-blue-900/20 border-blue-500/30 max-w-2xl mx-auto mb-4">
-                    <Info className="h-4 w-4 text-blue-500" />
-                    <AlertDescription className="text-blue-200">
-                      You are viewing a demo profile. To save your own data,
-                      please register or sign in. To return to demo mode, clear
-                      site data from your browser localStorage.
-                    </AlertDescription>
-                  </Alert>
-                </motion.div>
-              )}
+                    <Alert className="bg-blue-900/20 border-blue-500/30 max-w-2xl mx-auto mb-4">
+                      <Info className="h-4 w-4 text-blue-500" />
+                      <AlertDescription className="text-blue-200">
+                        You are viewing a demo profile. To save your own data,
+                        please register or sign in. To return to demo mode,
+                        clear site data from your browser localStorage.
+                      </AlertDescription>
+                    </Alert>
+                  </motion.div>
+                )}
 
-              {profileUpdateMessage && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <Alert
-                    className={`mt-4 max-w-2xl mx-auto ${
-                      profileUpdateMessage.type === "success"
-                        ? "bg-green-900/20 border-green-500/30"
-                        : "bg-red-900/20 border-red-500/30"
-                    }`}
+                {profileUpdateMessage && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
                   >
-                    {profileUpdateMessage.type === "success" ? (
-                      <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    ) : (
-                      <AlertTriangle className="h-4 w-4 text-red-500" />
-                    )}
-                    <AlertDescription
-                      className={`${
+                    <Alert
+                      className={`mt-4 max-w-2xl mx-auto ${
                         profileUpdateMessage.type === "success"
-                          ? "text-green-200"
-                          : "text-red-200"
+                          ? "bg-green-900/20 border-green-500/30"
+                          : "bg-red-900/20 border-red-500/30"
                       }`}
                     >
-                      {profileUpdateMessage.description}
-                    </AlertDescription>
-                  </Alert>
-                </motion.div>
-              )}
-
-              {/* User Info Card */}
-              <motion.div variants={fadeInUp}>
-                <Card className="bg-black/40 backdrop-blur-md border border-orange-500/30 p-4 md:p-8 text-left">
-                  <CardHeader className="flex flex-col md:flex-row items-center justify-between pb-4">
-                    <h2 className="text-2xl font-bold text-white">
-                      Personal Information
-                    </h2>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                      <Button
-                        variant="outline"
-                        className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white bg-transparent"
-                        onClick={handleEditProfileClick}
+                      {profileUpdateMessage.type === "success" ? (
+                        <CheckCircle2 className="h-4 w-4 text-green-500" />
+                      ) : (
+                        <AlertTriangle className="h-4 w-4 text-red-500" />
+                      )}
+                      <AlertDescription
+                        className={`${
+                          profileUpdateMessage.type === "success"
+                            ? "text-green-200"
+                            : "text-red-200"
+                        }`}
                       >
-                        Edit Profile
-                      </Button>
-
-                      <EditPasswordDialog />
-
-                      <Button
-                        variant="outline"
-                        className="border-orange-500 col-span-2 md:col-span-1 text-orange-500 hover:bg-orange-500 hover:text-white bg-transparent"
-                        onClick={async () => await signOut({ redirectTo: "/" })}
-                      >
-                        Logout
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300">
-                    <div className="flex items-center space-x-2">
-                      <User className="w-5 h-5 text-orange-500" />
-                      <span>
-                        Name:{" "}
-                        <span className="font-semibold text-white">
-                          {authStatus === "loading" ? (
-                            <span className="inline-block bg-gray-700 rounded w-24 h-4 animate-pulse"></span>
-                          ) : (
-                            userProfile.name
-                          )}
-                        </span>
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Mail className="w-5 h-5 text-orange-500" />
-                      <span>
-                        Email:{" "}
-                        <span className="font-semibold text-white">
-                          {authStatus === "loading" ? (
-                            <span className="inline-block bg-gray-700 rounded w-32 h-4 animate-pulse"></span>
-                          ) : (
-                            userProfile.email
-                          )}
-                        </span>
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <MessageCircle className="w-5 h-5 text-orange-500" />
-                      <span>
-                        Telegram:{" "}
-                        <span className="font-semibold text-white">
-                          {authStatus === "loading" ? (
-                            <span className="inline-block bg-gray-700 rounded w-20 h-4 animate-pulse"></span>
-                          ) : (
-                            userProfile.telegramUsername
-                          )}
-                        </span>
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <MessageCircle className="w-5 h-5 text-orange-500" />
-                      <span>
-                        Discord:{" "}
-                        <span className="font-semibold text-white">
-                          {authStatus === "loading" ? (
-                            <span className="inline-block bg-gray-700 rounded w-20 h-4 animate-pulse"></span>
-                          ) : (
-                            userProfile.discordUsername
-                          )}
-                        </span>
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Twitter className="w-5 h-5 text-orange-500" />
-                      <span>
-                        Twitter/X:{" "}
-                        <span className="font-semibold text-white">
-                          {authStatus === "loading" ? (
-                            <span className="inline-block bg-gray-700 rounded w-20 h-4 animate-pulse"></span>
-                          ) : (
-                            userProfile.twitterUsername
-                          )}
-                        </span>
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Wallet className="w-5 h-5 text-orange-500" />
-                      <span>
-                        ETH Address:{" "}
-                        <span className="font-semibold text-white break-all">
-                          {authStatus === "loading" ? (
-                            <span className="inline-block bg-gray-700 rounded w-48 h-4 animate-pulse"></span>
-                          ) : (
-                            userProfile.ethAddress
-                          )}
-                        </span>
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-
-              <VerificationCard user={user} />
-
-              {/* Progress & Rewards Summary */}
-              <motion.div variants={fadeInUp}>
-                <Card className="bg-black/40 backdrop-blur-md border border-orange-500/30 p-6 md:p-8">
-                  <h2 className="text-2xl font-bold text-white text-left mb-4">
-                    Your Progress
-                  </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {tasks.length === 0 ? (
-                      <p className="text-white">
-                        You have no tasks for now. Please wait for the next
-                        task.
-                      </p>
-                    ) : (
-                      <div>
-                        <div className="flex justify-between text-sm text-gray-400 mb-2">
-                          <span>Tasks Completed</span>
-                          <span>
-                            {completedTasksCount}/{totalTasksCount}
-                          </span>
-                        </div>
-                        <Progress
-                          value={progressPercentage}
-                          className="h-3 bg-gray-800"
-                        >
-                          <motion.div
-                            className="h-full bg-gradient-to-r from-orange-500 to-red-500 rounded-full"
-                            initial={{ width: 0 }}
-                            animate={{ width: `${progressPercentage}%` }}
-                            transition={{
-                              delay: 0.2,
-                              duration: 1.5,
-                              ease: "easeOut",
-                            }}
-                          />
-                        </Progress>
-                      </div>
-                    )}
-                    <div className="flex items-center justify-center space-x-2 bg-orange-500/10 border border-orange-500/30 rounded-lg p-4">
-                      <Coins className="w-6 h-6 text-orange-500" />
-                      <div>
-                        <div className="text-sm text-gray-400">
-                          Total CROMA Earned
-                        </div>
-                        <div className="text-xl font-bold text-orange-500">
-                          {totalCroma}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-              </motion.div>
-
-              <ReferralCard userData={userData as UserProfile} />
-
-              {/* Your Tasks List */}
-              <TaskListCard tasks={tasks} userTasks={userTasks} />
-            </div>
-          )}
-        </motion.div>
-      </section>
-
-      {/* Edit Profile Dialog */}
-      <Dialog
-        open={showEditProfileDialog}
-        onOpenChange={setShowEditProfileDialog}
-      >
-        <DialogContent className="bg-black/90 border border-orange-500/30 text-white max-w-2xl">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
-              Edit Your Profile
-            </DialogTitle>
-            <DialogDescription className="text-gray-300">
-              Update your social media usernames and Ethereum address.
-            </DialogDescription>
-          </DialogHeader>
-
-          {profileUpdateMessage && profileUpdateMessage.type === "error" && (
-            <Alert className="bg-red-900/20 border-red-500/30">
-              <AlertTriangle className="h-4 w-4 text-red-500" />
-              <AlertDescription className="text-red-200">
-                {profileUpdateMessage.description}
-              </AlertDescription>
-            </Alert>
-          )}
-
-          {editErrors.length > 0 && (
-            <Alert className="bg-red-900/20 border-red-500/30">
-              <AlertTriangle className="h-4 w-4 text-red-500" />
-              <AlertDescription className="text-red-200">
-                <ul className="list-disc list-inside">
-                  {editErrors.map((error, index) => (
-                    <li key={index}>{error}</li>
-                  ))}
-                </ul>
-              </AlertDescription>
-            </Alert>
-          )}
-
-          {editProfileData && (
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="edit-name" className="text-white">
-                  Full Name
-                </Label>
-                <Input
-                  id="edit-name"
-                  value={editProfileData.name}
-                  className="bg-gray-900/50 border-orange-500/30 text-white"
-                  disabled
-                />
-              </div>
-              <div>
-                <Label htmlFor="edit-email" className="text-white">
-                  Email
-                </Label>
-                <Input
-                  id="edit-email"
-                  value={editProfileData.email}
-                  className="bg-gray-900/50 border-orange-500/30 text-white"
-                  disabled
-                />
-              </div>
-              <div>
-                <Label htmlFor="edit-telegram" className="text-white">
-                  Telegram Username *
-                </Label>
-                <Input
-                  id="edit-telegram"
-                  placeholder="@yourusername"
-                  value={editProfileData.telegramUsername}
-                  onChange={(e) =>
-                    handleEditInputChange("telegramUsername", e.target.value)
-                  }
-                  className="bg-gray-900/50 border-orange-500/30 text-white focus:border-orange-500"
-                />
-              </div>
-              <div>
-                <Label htmlFor="edit-discord" className="text-white">
-                  Discord Username *
-                </Label>
-                <Input
-                  id="edit-discord"
-                  placeholder="username#1234"
-                  value={editProfileData.discordUsername}
-                  onChange={(e) =>
-                    handleEditInputChange("discordUsername", e.target.value)
-                  }
-                  className="bg-gray-900/50 border-orange-500/30 text-white focus:border-orange-500"
-                />
-              </div>
-              <div>
-                <Label htmlFor="edit-twitter" className="text-white">
-                  Twitter/X Username *
-                </Label>
-                <Input
-                  id="edit-twitter"
-                  placeholder="@yourusername"
-                  value={editProfileData.twitterUsername}
-                  onChange={(e) =>
-                    handleEditInputChange("twitterUsername", e.target.value)
-                  }
-                  className="bg-gray-900/50 border-orange-500/30 text-white focus:border-orange-500"
-                />
-              </div>
-              <div>
-                <Label htmlFor="edit-ethAddress" className="text-white">
-                  Ethereum Address *
-                </Label>
-                <Input
-                  id="edit-ethAddress"
-                  placeholder="0x..."
-                  value={editProfileData.ethAddress}
-                  onChange={(e) =>
-                    handleEditInputChange("ethAddress", e.target.value)
-                  }
-                  className="bg-gray-900/50 border-orange-500/30 text-white focus:border-orange-500"
-                />
-              </div>
-
-              <Button
-                onClick={handleSaveProfile}
-                disabled={isSavingProfile}
-                className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white py-3 text-lg font-semibold rounded-xl"
-              >
-                {isSavingProfile ? (
-                  <>
-                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    Saving...
-                  </>
-                ) : (
-                  "Save Changes"
+                        {profileUpdateMessage.description}
+                      </AlertDescription>
+                    </Alert>
+                  </motion.div>
                 )}
-              </Button>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
 
-      {/* Community CTA Modal */}
-      <Dialog open={showCommunityModal} onOpenChange={setShowCommunityModal}>
-        <DialogContent className="bg-black/90 border border-orange-500/30 text-white max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
-              Join Our Community
-            </DialogTitle>
-            <DialogDescription className="text-gray-300">
-              Connect with us on our official social channels to stay updated!
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            {[
-              {
-                name: "Join Discord",
-                icon: MessageCircle,
-                url: "https://discord.gg/SWj8TWfu9k",
-              },
-              {
-                name: "Join Telegram",
-                icon: MessageCircle,
-                url: "https://t.me/Cromaartofficial",
-              },
-              {
-                name: "Follow on X",
-                icon: Twitter,
-                url: "https://x.com/cromachain",
-              },
-            ].map((social, index) => (
-              <Link
-                key={social.name}
-                href={social.url}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+                {/* User Info Card */}
+                <motion.div variants={fadeInUp}>
+                  <Card className="bg-black/40 backdrop-blur-md border border-orange-500/30 p-4 md:p-8 text-left">
+                    <CardHeader className="flex flex-col md:flex-row items-center justify-between pb-4">
+                      <h2 className="text-2xl font-bold text-white">
+                        Personal Information
+                      </h2>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <Button
+                          variant="outline"
+                          className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white bg-transparent"
+                          onClick={handleEditProfileClick}
+                        >
+                          Edit Profile
+                        </Button>
+
+                        <EditPasswordDialog />
+
+                        <Button
+                          variant="outline"
+                          className="border-orange-500 col-span-2 md:col-span-1 text-orange-500 hover:bg-orange-500 hover:text-white bg-transparent"
+                          onClick={async () =>
+                            await signOut({ redirectTo: "/" })
+                          }
+                        >
+                          Logout
+                        </Button>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300">
+                      <div className="flex items-center space-x-2">
+                        <User className="w-5 h-5 text-orange-500" />
+                        <span>
+                          Name:{" "}
+                          <span className="font-semibold text-white">
+                            {authStatus === "loading" ? (
+                              <span className="inline-block bg-gray-700 rounded w-24 h-4 animate-pulse"></span>
+                            ) : (
+                              userProfile.name
+                            )}
+                          </span>
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Mail className="w-5 h-5 text-orange-500" />
+                        <span>
+                          Email:{" "}
+                          <span className="font-semibold text-white">
+                            {authStatus === "loading" ? (
+                              <span className="inline-block bg-gray-700 rounded w-32 h-4 animate-pulse"></span>
+                            ) : (
+                              userProfile.email
+                            )}
+                          </span>
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <MessageCircle className="w-5 h-5 text-orange-500" />
+                        <span>
+                          Telegram:{" "}
+                          <span className="font-semibold text-white">
+                            {authStatus === "loading" ? (
+                              <span className="inline-block bg-gray-700 rounded w-20 h-4 animate-pulse"></span>
+                            ) : (
+                              userProfile.telegramUsername
+                            )}
+                          </span>
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <MessageCircle className="w-5 h-5 text-orange-500" />
+                        <span>
+                          Discord:{" "}
+                          <span className="font-semibold text-white">
+                            {authStatus === "loading" ? (
+                              <span className="inline-block bg-gray-700 rounded w-20 h-4 animate-pulse"></span>
+                            ) : (
+                              userProfile.discordUsername
+                            )}
+                          </span>
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Twitter className="w-5 h-5 text-orange-500" />
+                        <span>
+                          Twitter/X:{" "}
+                          <span className="font-semibold text-white">
+                            {authStatus === "loading" ? (
+                              <span className="inline-block bg-gray-700 rounded w-20 h-4 animate-pulse"></span>
+                            ) : (
+                              userProfile.twitterUsername
+                            )}
+                          </span>
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Wallet className="w-5 h-5 text-orange-500" />
+                        <span>
+                          ETH Address:{" "}
+                          <span className="font-semibold text-white break-all">
+                            {authStatus === "loading" ? (
+                              <span className="inline-block bg-gray-700 rounded w-48 h-4 animate-pulse"></span>
+                            ) : (
+                              userProfile.ethAddress
+                            )}
+                          </span>
+                        </span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+
+                <VerificationCard user={user} />
+
+                {/* Progress & Rewards Summary */}
+                <motion.div variants={fadeInUp}>
+                  <Card className="bg-black/40 backdrop-blur-md border border-orange-500/30 p-6 md:p-8">
+                    <h2 className="text-2xl font-bold text-white text-left mb-4">
+                      Your Progress
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {tasks.length === 0 ? (
+                        <p className="text-white">
+                          You have no tasks for now. Please wait for the next
+                          task.
+                        </p>
+                      ) : (
+                        <div>
+                          <div className="flex justify-between text-sm text-gray-400 mb-2">
+                            <span>Tasks Completed</span>
+                            <span>
+                              {completedTasksCount}/{totalTasksCount}
+                            </span>
+                          </div>
+                          <Progress
+                            value={progressPercentage}
+                            className="h-3 bg-gray-800"
+                          >
+                            <motion.div
+                              className="h-full bg-gradient-to-r from-orange-500 to-red-500 rounded-full"
+                              initial={{ width: 0 }}
+                              animate={{ width: `${progressPercentage}%` }}
+                              transition={{
+                                delay: 0.2,
+                                duration: 1.5,
+                                ease: "easeOut",
+                              }}
+                            />
+                          </Progress>
+                        </div>
+                      )}
+                      <div className="flex items-center justify-center space-x-2 bg-orange-500/10 border border-orange-500/30 rounded-lg p-4">
+                        <Coins className="w-6 h-6 text-orange-500" />
+                        <div>
+                          <div className="text-sm text-gray-400">
+                            Total CROMA Earned
+                          </div>
+                          <div className="text-xl font-bold text-orange-500">
+                            {totalCroma}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                </motion.div>
+
+                <ReferralCard />
+
+                {/* Your Tasks List */}
+                <TaskListCard tasks={tasks} userTasks={userTasks} />
+              </div>
+            )}
+          </motion.div>
+        </section>
+
+        {/* Edit Profile Dialog */}
+        <Dialog
+          open={showEditProfileDialog}
+          onOpenChange={setShowEditProfileDialog}
+        >
+          <DialogContent className="bg-black/90 border border-orange-500/30 text-white max-w-2xl">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
+                Edit Your Profile
+              </DialogTitle>
+              <DialogDescription className="text-gray-300">
+                Update your social media usernames and Ethereum address.
+              </DialogDescription>
+            </DialogHeader>
+
+            {profileUpdateMessage && profileUpdateMessage.type === "error" && (
+              <Alert className="bg-red-900/20 border-red-500/30">
+                <AlertTriangle className="h-4 w-4 text-red-500" />
+                <AlertDescription className="text-red-200">
+                  {profileUpdateMessage.description}
+                </AlertDescription>
+              </Alert>
+            )}
+
+            {editErrors.length > 0 && (
+              <Alert className="bg-red-900/20 border-red-500/30">
+                <AlertTriangle className="h-4 w-4 text-red-500" />
+                <AlertDescription className="text-red-200">
+                  <ul className="list-disc list-inside">
+                    {editErrors.map((error, index) => (
+                      <li key={index}>{error}</li>
+                    ))}
+                  </ul>
+                </AlertDescription>
+              </Alert>
+            )}
+
+            {editProfileData && (
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="edit-name" className="text-white">
+                    Full Name
+                  </Label>
+                  <Input
+                    id="edit-name"
+                    value={editProfileData.name}
+                    className="bg-gray-900/50 border-orange-500/30 text-white"
+                    disabled
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="edit-email" className="text-white">
+                    Email
+                  </Label>
+                  <Input
+                    id="edit-email"
+                    value={editProfileData.email}
+                    className="bg-gray-900/50 border-orange-500/30 text-white"
+                    disabled
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="edit-telegram" className="text-white">
+                    Telegram Username *
+                  </Label>
+                  <Input
+                    id="edit-telegram"
+                    placeholder="@yourusername"
+                    value={editProfileData.telegramUsername}
+                    onChange={(e) =>
+                      handleEditInputChange("telegramUsername", e.target.value)
+                    }
+                    className="bg-gray-900/50 border-orange-500/30 text-white focus:border-orange-500"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="edit-discord" className="text-white">
+                    Discord Username *
+                  </Label>
+                  <Input
+                    id="edit-discord"
+                    placeholder="username#1234"
+                    value={editProfileData.discordUsername}
+                    onChange={(e) =>
+                      handleEditInputChange("discordUsername", e.target.value)
+                    }
+                    className="bg-gray-900/50 border-orange-500/30 text-white focus:border-orange-500"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="edit-twitter" className="text-white">
+                    Twitter/X Username *
+                  </Label>
+                  <Input
+                    id="edit-twitter"
+                    placeholder="@yourusername"
+                    value={editProfileData.twitterUsername}
+                    onChange={(e) =>
+                      handleEditInputChange("twitterUsername", e.target.value)
+                    }
+                    className="bg-gray-900/50 border-orange-500/30 text-white focus:border-orange-500"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="edit-ethAddress" className="text-white">
+                    Ethereum Address *
+                  </Label>
+                  <Input
+                    id="edit-ethAddress"
+                    placeholder="0x..."
+                    value={editProfileData.ethAddress}
+                    onChange={(e) =>
+                      handleEditInputChange("ethAddress", e.target.value)
+                    }
+                    className="bg-gray-900/50 border-orange-500/30 text-white focus:border-orange-500"
+                  />
+                </div>
+
                 <Button
-                  className="w-full gradient-border-btn py-3 text-lg font-semibold rounded-xl"
-                  onClick={() => setShowCommunityModal(false)}
+                  onClick={handleSaveProfile}
+                  disabled={isSavingProfile}
+                  className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white py-3 text-lg font-semibold rounded-xl"
                 >
-                  <social.icon className="w-5 h-5 mr-2" />
-                  {social.name}
+                  {isSavingProfile ? (
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    "Save Changes"
+                  )}
                 </Button>
-              </Link>
-            ))}
-          </div>
-        </DialogContent>
-      </Dialog>
-    </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+
+        {/* Community CTA Modal */}
+        <Dialog open={showCommunityModal} onOpenChange={setShowCommunityModal}>
+          <DialogContent className="bg-black/90 border border-orange-500/30 text-white max-w-md">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
+                Join Our Community
+              </DialogTitle>
+              <DialogDescription className="text-gray-300">
+                Connect with us on our official social channels to stay updated!
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              {[
+                {
+                  name: "Join Discord",
+                  icon: MessageCircle,
+                  url: "https://discord.gg/SWj8TWfu9k",
+                },
+                {
+                  name: "Join Telegram",
+                  icon: MessageCircle,
+                  url: "https://t.me/Cromaartofficial",
+                },
+                {
+                  name: "Follow on X",
+                  icon: Twitter,
+                  url: "https://x.com/cromachain",
+                },
+              ].map((social, index) => (
+                <Link
+                  key={social.name}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button
+                    className="w-full gradient-border-btn py-3 text-lg font-semibold rounded-xl"
+                    onClick={() => setShowCommunityModal(false)}
+                  >
+                    <social.icon className="w-5 h-5 mr-2" />
+                    {social.name}
+                  </Button>
+                </Link>
+              ))}
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </ProfileProvider>
   );
 }
