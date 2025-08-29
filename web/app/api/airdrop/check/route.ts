@@ -49,7 +49,7 @@ export async function GET(req: NextRequest): GetResponse {
       data: user,
       success,
       code,
-    } = await getUserByEthAddress(eth_address);
+    } = await getUserByEthAddress(eth_address.toLowerCase());
     if (!success)
       return NextResponse.json({
         data: null,
