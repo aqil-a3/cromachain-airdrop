@@ -9,7 +9,7 @@ import {
 import { NextResponse } from "next/server";
 
 const CROMA_WALLET_ADDRESS = "0x119fd986e1c30cc6e2e28993c9bdbc1b5e466116";
-const TASK_IDS: string[] = [];
+const TASK_IDS: string[] = ["f7f89788-d176-4d8c-a5e4-f87f4500bb1e", "06e075ae-721f-416a-9251-07db24c05c40"];
 
 // const BASE_URL = "http://localhost:3000";
 const BASE_URL = "https://airdrop.cromachain.com";
@@ -62,7 +62,7 @@ export async function GET() {
 
   //   Pertama-tama, ambil data dari tugas terkait
   const tasks = await gettaskRewardByTaskIdBulks(TASK_IDS);
-  const verifTask = await getUserTaskByTaskIdAndUserId("", userId!);
+  const verifTask = await getUserTaskByTaskIdAndUserId("06e075ae-721f-416a-9251-07db24c05c40", userId!);
 
   if (verifTask[0].status === "completed")
     return NextResponse.redirect(

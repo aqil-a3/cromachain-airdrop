@@ -20,12 +20,6 @@ export async function GET() {
     };
   });
 
-  const debugData = points.find((d) => d.user_id ==="6aa78e3e-f972-4e9b-bd3d-cec70a96ab97");
-   const userPoint = await getUserPoints("6aa78e3e-f972-4e9b-bd3d-cec70a96ab97");
-
-  console.log(debugData)
-  console.log(userPoint)
-
   const csv = convertToCSV(data);
 
   return new NextResponse(csv, {
