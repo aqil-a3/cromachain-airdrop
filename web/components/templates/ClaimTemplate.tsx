@@ -79,47 +79,6 @@ export default function ClaimAirdropTemplate() {
     }
   }, []);
 
-  const handleCheckEligibility = async () => {
-    setIsChecking(true);
-    setEligibilityMessage(null); // Clear previous messages
-
-    // Simulate API call or processing delay
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    if (!ethAddressInput.trim()) {
-      setEligibilityMessage({
-        type: "error",
-        title: "Input Required",
-        description: "Please enter your Ethereum address to check eligibility.",
-      });
-    } else if (!/^0x[a-fA-F0-9]{40}$/.test(ethAddressInput)) {
-      setEligibilityMessage({
-        type: "error",
-        title: "Invalid Address",
-        description:
-          "Please enter a valid Ethereum address format (e.g., 0x...).",
-      });
-    } else if (
-      registeredEthAddress &&
-      ethAddressInput.toLowerCase() === registeredEthAddress.toLowerCase()
-    ) {
-      setEligibilityMessage({
-        type: "success",
-        title: "Address Registered!",
-        description:
-          "Congratulations! Your address is registered for the CromaChain Airdrop. Distribution details will be announced soon on our official social channels. Please stay tuned!",
-      });
-    } else {
-      setEligibilityMessage({
-        type: "error",
-        title: "Address Not Found",
-        description:
-          "Your address is not found or not registered. Please ensure you have completed the registration process on the main page.",
-      });
-    }
-    setIsChecking(false);
-  };
-
   // Function for new user registration flow (via Google simulation)
   const handleNewUserRegistration = useCallback(() => {
     // Simulate Google OAuth initial data

@@ -49,7 +49,7 @@ export async function GET(req: NextRequest): GetResponse {
       data: user,
       success,
       code,
-    } = await getUserByEthAddress(eth_address);
+    } = await getUserByEthAddress(eth_address.toLowerCase());
     if (!success)
       return NextResponse.json({
         data: null,
@@ -57,9 +57,10 @@ export async function GET(req: NextRequest): GetResponse {
         message: messageResponse[code as CodeType],
       });
 
-    const userId = user!.id;
-
-    const userPoint = await getUserPoints(userId);
+      
+      const userId = user!.id;
+      
+      const userPoint = await getUserPoints(userId);
 
     return NextResponse.json({
       message: messageResponse["SUCCESS"],

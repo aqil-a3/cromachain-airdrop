@@ -37,6 +37,7 @@ export default function CheckEligibility() {
         return;
       }
 
+
       setCromaPoint(data.data!.total_points);
     } catch (error) {
       console.error(error);
