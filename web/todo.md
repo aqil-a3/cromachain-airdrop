@@ -1,49 +1,55 @@
-🧾 Laporan Permasalahan Website: airdrop.cromachain.com
+📌 Catatan Case / Perbaruan
 
-✅1. Permasalahan pada Proses Pendaftaran dan Login
+1. Referral System – Tampilan di Profil
 
-Di halaman daftar (register) tidak terdapat kolom untuk kata sandi, namun saat login, sistem meminta kata sandi.
+Setiap user memiliki informasi jumlah referral pada halaman profil:
 
-Beberapa peserta tidak melihat kolom input email saat mendaftar.
+✅Total referral → menampilkan jumlah total user yang berhasil diundang.
 
+✅> Contoh tampilan di web:
+✅Total Referrals: 100 Users
 
-✅2. Permasalahan pada Verifikasi Telegram dan Discord
+Total referral yang sudah membeli NFT / menyelesaikan misi NFT → menampilkan jumlah referral yang sudah melakukan pembelian NFT atau menyelesaikan misi yang berhubungan dengan NFT.
 
-Banyak peserta mengalami kesulitan melewati verifikasi Telegram dan Discord.
+> Contoh tampilan di web:
+NFT Buyers Referrals: 10 Users
 
-Diduga karena sistem membaca username tanpa format @ atau username yang tidak sesuai dengan akun asli pengguna.
+---
 
+2. Reward System
 
-✅3. Permasalahan pada Halaman Beranda (Homepage)
+✅Referral sukses daftar
 
-Tidak terdapat judul airdrop dan deskripsi pada halaman utama.
+✅Jika 1 user berhasil mengundang orang lain, lalu referral tersebut berhasil mendaftar → user pengundang akan mendapatkan bonus +10% dari total balance.
 
-Halaman tidak menampilkan identitas campaign aktif, yang dibutuhkan untuk rotasi airdrop setiap 7 hari.
+Referral sukses misi NFT
 
+Jika referral yang diundang berhasil menyelesaikan misi pembelian NFT → user pengundang akan mendapatkan 40 poin CROMA.
 
-✅4. Permasalahan pada Sistem Reward
+---
 
-Jenis reward tidak dapat diubah atau dikonfigurasi, misalnya penggantian antara $CRM, USDT, atau token lainnya.
+✅3. Bahasa di Web (Front-End)
 
+✅Profile Section
 
-✅5. Permasalahan pada Sistem Referral
+✅Total Referrals: X Users
 
-Link referral pengguna tidak berfungsi sebagaimana mestinya.
+✅NFT Buyers Referrals: X Users
 
-Pengguna tidak dapat mengundang teman dan tidak dapat menyelesaikan misi referral atau mengklaim bonus referral.
+✅Reward Notification / Logs
 
+✅Saat referral baru berhasil daftar:
+✅You earned +10% balance from your referral.
 
-✅ 6. Permasalahan pada Data dan Dashboard Admin
+✅Saat referral berhasil menyelesaikan misi NFT:
+✅You earned 40 CROMA points from your referral.
 
-Data peserta tidak dapat diunduh dalam bentuk CSV.
+---
 
-Tidak semua data peserta ditampilkan secara lengkap di dashboard, meskipun kemungkinan sudah tercatat di database.
+📖 Jadi flow-nya:
 
-Di dashboard admin tidak ditampilkan daftar pengguna yang telah berhasil mengundang peserta lain, sehingga tidak dapat dipantau siapa mengundang siapa.
+✅User A undang User B → User A dapat +10% balance.
 
+User B beli NFT → User A dapat 40 CROMA points.
 
-✅7. Permasalahan pada Fitur Claim Airdrop
-
-Fitur claim/check eligibility sudah tersedia meskipun belum waktunya.
-
-Hal ini membuat peserta tidak tenang dan terburu-buru menanyakan proses klaim.
+✅Data statistik ditampilkan di profil User A.

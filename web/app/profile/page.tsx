@@ -2,6 +2,7 @@ import { auth, signOut } from "@/auth";
 import UserProfileTemplate from "@/components/templates/ProfileTemplate";
 import { Button } from "@/components/ui/button";
 import { getUserPoints } from "@/utils/supabase/rpc/rpc-points";
+import { getTotalReferrerById } from "@/utils/supabase/rpc/rpc-referrals";
 import { getUnlockedTasks } from "@/utils/supabase/taskTable";
 import { getUserById } from "@/utils/supabase/userTable";
 import { getUnlockedUserTasksByUserId } from "@/utils/supabase/userTaskTable";
@@ -42,12 +43,15 @@ export default async function ProfilePage() {
       </form>
     );
 
+  const userReferralCount = await getTotalReferrerById(user.userId!);
+
   return (
     <UserProfileTemplate
       tasks={tasks}
       user={user}
       userTasks={userTasks}
       userPoints={selectedPoints}
+      userReferralCount={userReferralCount}
     />
   );
 }

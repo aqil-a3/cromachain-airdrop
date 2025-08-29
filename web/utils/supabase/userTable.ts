@@ -257,6 +257,24 @@ export async function getUserByReferrerCode(referrerCode: string) {
   return user;
 }
 
+export async function getUsersByReferrerCode(referrerCodes: string[]) {
+  const { data, error } = await supabase
+    .from(tableName)
+    .select("*")
+    .in("referral_code", referrerCodes);
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  if (!data || data.length === 0) {
+    return [];
+  }
+
+  return data as UserProfileDb[];
+}
+
 export async function getAllActiveUser() {
   const batchSize = 1000;
   let allData: any[] = [];

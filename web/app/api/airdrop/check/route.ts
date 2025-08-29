@@ -57,9 +57,10 @@ export async function GET(req: NextRequest): GetResponse {
         message: messageResponse[code as CodeType],
       });
 
-    const userId = user!.id;
-
-    const userPoint = await getUserPoints(userId);
+      
+      const userId = user!.id;
+      
+      const userPoint = await getUserPoints(userId);
 
     return NextResponse.json({
       message: messageResponse["SUCCESS"],

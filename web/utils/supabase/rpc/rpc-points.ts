@@ -27,7 +27,7 @@ export async function getUserPoints(userId?: string) {
   const { data, error } = await supabase.rpc("get_user_points", {
     p_user_id: userId,
   });
-
+  
   if(error){
     console.error(error)
     throw error;
