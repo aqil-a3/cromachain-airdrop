@@ -1,6 +1,6 @@
 export interface OpenseaAPI {
   getEventsByCollection: (collection_slug: string) => Promise<unknown>;
-  getEventsByAccount: (address: string, event_type: string) => Promise<unknown>;
+  getEventSalesByAccount: (address: string) => Promise<OpenseaEventSaleResponse>;
   getNFTsByAccount: (
     wallet_address: string,
     chain: string,
@@ -31,7 +31,7 @@ export interface NftResponse {
 }
 
 // EVENT ENDPOINT
-export interface OpenseaEventResponse {
+export interface OpenseaEventSaleResponse {
   asset_events: AssetEvent[];
   next: string | null;
 }

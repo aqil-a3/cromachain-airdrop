@@ -1,4 +1,9 @@
-import { NftResponse, OpenseaAPI, OpenseaEventResponse } from "@/@types/opensea";
+import {
+  AssetEvent,
+  NftResponse,
+  OpenseaAPI,
+  OpenseaEventSaleResponse,
+} from "@/@types/opensea";
 import axios from "axios";
 
 const api = axios.create({
@@ -20,15 +25,34 @@ export const opensea: OpenseaAPI = {
       throw error;
     }
   },
-  async getEventsByAccount(address, event_type) {
-    try {
-      const { data } = await api.get<OpenseaEventResponse[]>(`/events/accounts/${address}`, {
-        params: {
-          event_type,
-        },
-      });
+  async getEventSalesByAccount(address) {
+    let allEvents: AssetEvent[] = [];
+    let next: string | null = null;
 
-      return data;
+    try {
+      do {
+        const res = await api.get<OpenseaEventSaleResponse>(
+          `/events/accounts/${address}`,
+          {
+            params: {
+              event_type: "sale",
+              ...(next ? { next } : {}),
+            },
+          }
+        );
+
+        const data: OpenseaEventSaleResponse = res.data;
+
+        allEvents.push(...data.asset_events);
+        next = data.next;
+      } while (next);
+
+      const response: OpenseaEventSaleResponse = {
+        asset_events: allEvents,
+        next,
+      };
+
+      return response;
     } catch (error) {
       console.error(error);
       throw error;

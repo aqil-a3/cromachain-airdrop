@@ -1,4 +1,4 @@
-import { OpenseaEventResponse } from "@/@types/opensea";
+import { OpenseaEventSaleResponse } from "@/@types/opensea";
 import { UserNftRewardsDB } from "@/@types/user_nft_rewards";
 import { opensea } from "@/utils/opensea/api";
 import { saveNftData } from "@/utils/supabase/userNftRewardTable";
@@ -11,13 +11,10 @@ import { NextResponse } from "next/server";
 const CROMA_WALLET_ADDRESS = "0x119fd986e1c30cc6e2e28993c9bdbc1b5e466116";
 
 export async function GET() {
-  const { getEventsByAccount } = opensea;
+  const { getEventSalesByAccount } = opensea;
 
   // Ambil data apakah ada transaksi di akun penjual?
-  const res = (await getEventsByAccount(
-    CROMA_WALLET_ADDRESS,
-    "sale"
-  )) as OpenseaEventResponse;
+  const res = await getEventSalesByAccount(CROMA_WALLET_ADDRESS);
 
   // Filter transaksi tersebut agar hanya dari collection "croma-executive-portrait-series"?
   const selectedCollections =

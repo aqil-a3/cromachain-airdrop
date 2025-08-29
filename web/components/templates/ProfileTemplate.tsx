@@ -94,6 +94,7 @@ export default function UserProfileTemplate({
   const searchParams = useSearchParams();
   const discordTaskInfo = searchParams.get("discord-task-success");
   const discordTaskMessage = searchParams.get("discord-task-message");
+  const openseaTaskMessage = searchParams.get("opensea-task-message");
   const router = useRouter();
 
   const profileRef = useRef(null);
@@ -102,6 +103,10 @@ export default function UserProfileTemplate({
   useEffect(() => {
     if (discordTaskInfo && discordTaskMessage) {
       alert(discordTaskMessage);
+      router.replace("/profile");
+      return;
+    } else if (openseaTaskMessage) {
+      alert(openseaTaskMessage);
       router.replace("/profile");
       return;
     }
