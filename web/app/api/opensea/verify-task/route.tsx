@@ -2,7 +2,10 @@ import { TaskUser } from "@/@types/task-user";
 import { auth } from "@/auth";
 import { opensea } from "@/utils/opensea/api";
 import { gettaskRewardByTaskIdBulks } from "@/utils/supabase/taskTable";
-import { updateStatusUserTasksBulks } from "@/utils/supabase/userTaskTable";
+import {
+  getUserTaskByTaskIdAndUserId,
+  updateStatusUserTasksBulks,
+} from "@/utils/supabase/userTaskTable";
 import { NextResponse } from "next/server";
 
 const CROMA_WALLET_ADDRESS = "0x119fd986e1c30cc6e2e28993c9bdbc1b5e466116";
@@ -28,17 +31,18 @@ export async function GET() {
   // Filter transaksi tersebut agar hanya dari collection "croma-executive-portrait-series"
   const selectedCollections =
     assets.filter(
-      (val) => val.nft.collection.toLowerCase() === "croma-executive-portrait-series"
+      (val) =>
+        val.nft.collection.toLowerCase() === "croma-executive-portrait-series"
     ) ?? [];
 
   // Kalau belum ada yang beli, otomatis user belum beli.
-    if (selectedCollections.length === 0)
-      return NextResponse.redirect(
-        new URL(
-          "/profile?opensea-task-message=You haven't bought NFT from our store.",
-          BASE_URL
-        )
-      );
+  if (selectedCollections.length === 0)
+    return NextResponse.redirect(
+      new URL(
+        "/profile?opensea-task-message=You haven't bought NFT from our store.",
+        BASE_URL
+      )
+    );
 
   //  Cari pembelinya
   const buyer = selectedCollections.find(
@@ -58,6 +62,15 @@ export async function GET() {
 
   //   Pertama-tama, ambil data dari tugas terkait
   const tasks = await gettaskRewardByTaskIdBulks(TASK_IDS);
+  const verifTask = await getUserTaskByTaskIdAndUserId("", userId!);
+
+  if (verifTask[0].status === "completed")
+    return NextResponse.redirect(
+      new URL(
+        "/profile?opensea-task-message=You've finished the task.",
+        BASE_URL
+      )
+    );
 
   //   Selanjutnya, mapping agar sesuai bentuk DB
   const payloads: TaskUser[] = tasks.map((task) => ({

@@ -1,5 +1,5 @@
 import { convertToCSV } from "@/utils/paparse/csv";
-import { getUserPoints } from "@/utils/supabase/rpc/rpc-points";
+import { getAllUserPoints, getUserPoints } from "@/utils/supabase/rpc/rpc-points";
 import { getTopReferrers } from "@/utils/supabase/rpc/rpc-referrals";
 import { getAllActiveUser } from "@/utils/supabase/userTable";
 import { NextResponse } from "next/server";
@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
 export async function GET() {
   const [users, points, referrals] = await Promise.all([
     getAllActiveUser(),
-    getUserPoints(),
+    getAllUserPoints(),
     getTopReferrers(),
   ]);
   const data = users.map((user) => {
@@ -19,6 +19,12 @@ export async function GET() {
       referralCount: userReferral?.referral_count ?? 0,
     };
   });
+
+  const debugData = points.find((d) => d.user_id ==="6aa78e3e-f972-4e9b-bd3d-cec70a96ab97");
+   const userPoint = await getUserPoints("6aa78e3e-f972-4e9b-bd3d-cec70a96ab97");
+
+  console.log(debugData)
+  console.log(userPoint)
 
   const csv = convertToCSV(data);
 

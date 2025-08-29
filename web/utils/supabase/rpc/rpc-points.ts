@@ -35,3 +35,25 @@ export async function getUserPoints(userId?: string) {
 
   return data as TotalUserPoints[]
 }
+
+export async function getAllUserPoints() {
+  let from = 0;
+  let to = 999;
+  let allPoints: any[] = [];
+
+  while (true) {
+    const { data, error } = await supabase
+      .rpc("get_all_user_points")
+      .range(from, to);
+
+    if (error) throw error;
+
+    allPoints.push(...(data ?? []));
+    if (!data || data.length < 1000) break; // sudah habis
+
+    from += 1000;
+    to += 1000;
+  }
+
+  return allPoints;
+}
