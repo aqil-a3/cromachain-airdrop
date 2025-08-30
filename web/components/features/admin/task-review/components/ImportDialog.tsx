@@ -24,6 +24,7 @@ export default function ImportDialog() {
     csvReadHandler,
     previewCsv,
     totalData,
+    isSubmitting,
     submitHandler
   } = useImportDialog();
 
@@ -80,10 +81,10 @@ export default function ImportDialog() {
         <DialogFooter>
           <Button
             className="bg-green-500 hover:bg-green-600"
-            disabled={!totalData}
+            disabled={!totalData || isSubmitting}
             onClick={submitHandler}
           >
-            <Upload /> <span>Submit</span>
+            <Upload /> <span>{isSubmitting ? "Submitting..." : "Submit"}</span>
           </Button>
           <DialogClose asChild>
             <Button>Close</Button>

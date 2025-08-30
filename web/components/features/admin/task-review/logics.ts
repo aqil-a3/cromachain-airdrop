@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 import { useRef, useState, useEffect } from "react";
 import { parse } from "papaparse";
 
@@ -79,6 +79,11 @@ export function useImportDialog() {
       alert("Under Development");
     } catch (error) {
       console.error(error);
+      if (isAxiosError(error)) {
+        const data = error.response?.data;
+
+        alert(data.message ?? "Something went wrong!");
+      }
       throw error;
     } finally {
       setIsSubmitting(false);
@@ -94,6 +99,7 @@ export function useImportDialog() {
   return {
     downloadTemplateHandler,
     fileInputRef,
+    isSubmitting,
     isProcessingDownload,
     csvReadHandler,
     previewCsv,

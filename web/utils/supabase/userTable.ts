@@ -354,7 +354,7 @@ export async function isDupplicateUser(formData: UserProfileDb) {
         field: "twitterUsername",
       };
     }
-    if (existing.eth_address === formData.eth_address) {
+    if (existing.eth_address.toLowerCase() === formData.eth_address.toLowerCase()) {
       return {
         message: `Ethereum address ${formData.eth_address} already used!`,
         field: "ethAddress",
