@@ -1,4 +1,3 @@
-import { OpenseaEventSaleResponse } from "@/@types/opensea";
 import { UserNftRewardsDB } from "@/@types/user_nft_rewards";
 import { opensea } from "@/utils/opensea/api";
 import { saveNftData } from "@/utils/supabase/userNftRewardTable";
