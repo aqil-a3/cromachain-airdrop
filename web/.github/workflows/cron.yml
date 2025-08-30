@@ -11,6 +11,6 @@ jobs:
     steps:
       - name: Call Vercel API endpoint
         run: |
-          curl -X POST "http://airdrop.cromachain.com/api/opensea/refresh-nft-referrals" \
+          curl -X POST "https://airdrop.cromachain.com/api/opensea/refresh-nft-referrals" \
             -H "Authorization: Bearer ${{ secrets.OPENSEA_CRON_SECRET_KEY }}"
 
