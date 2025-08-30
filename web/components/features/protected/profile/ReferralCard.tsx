@@ -21,7 +21,7 @@ interface ReferralCardProps {
 }
 
 export default function ReferralCard() {
-  const { user, userReferralCount } = useProfileData();
+  const { user, userReferralCount, userNFTReferalCount } = useProfileData();
   const [referralCode, setReferralCode] = useState<string>(
     user?.referralCode ?? ""
   );
@@ -63,11 +63,11 @@ export default function ReferralCard() {
             icon={<Users className="w-5 h-5 text-green-400" />}
             label="Total Referrals"
             value={`${userReferralCount} ${userReferralCount > 1 ? "Users" : "User"}`}
-          />
+            />
           <StatCard
             icon={<Sparkles className="w-5 h-5 text-green-400" />}
             label="NFT Buyer Referrals"
-            value="COMING SOON"
+            value={`${userNFTReferalCount} ${userNFTReferalCount > 1 ? "Users" : "User"}`}
           />
         </div>
 

@@ -9,6 +9,7 @@ interface ProfileContextType {
   userPoints: number;
   user: UserProfile;
   userReferralCount: number;
+  userNFTReferalCount: number;
 }
 
 const ProfileContext = createContext<ProfileContextType>(
@@ -22,6 +23,7 @@ interface ProfileProviderProps {
   user: UserProfile;
   userReferralCount: number;
   children: React.ReactNode;
+  userNFTReferalCount: number;
 }
 
 export default function ProfileProvider({
@@ -31,6 +33,7 @@ export default function ProfileProvider({
   userPoints,
   userReferralCount,
   userTasks,
+  userNFTReferalCount,
 }: ProfileProviderProps) {
   const value: ProfileContextType = {
     tasks,
@@ -38,6 +41,7 @@ export default function ProfileProvider({
     userPoints,
     userReferralCount,
     userTasks,
+    userNFTReferalCount,
   };
   return (
     <ProfileContext.Provider value={value}>{children}</ProfileContext.Provider>

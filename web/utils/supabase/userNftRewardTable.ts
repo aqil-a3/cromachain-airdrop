@@ -15,3 +15,21 @@ export async function saveNftData(raw: UserNftRewardsDB[]) {
 
   return data;
 }
+
+export async function getNFTReferralsByInviterId(
+  inviterId: string
+): Promise<number> {
+  const { data, error, count } = await supabase
+    .from(tableName)
+    .select("*", { count: "exact" })
+    .eq("inviter_id", inviterId);
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  if (!data || !count) return 0;
+
+  return count;
+}

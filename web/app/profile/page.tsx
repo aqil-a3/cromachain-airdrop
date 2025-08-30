@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { getUserPoints } from "@/utils/supabase/rpc/rpc-points";
 import { getTotalReferrerById } from "@/utils/supabase/rpc/rpc-referrals";
 import { getUnlockedTasks } from "@/utils/supabase/taskTable";
+import { getNFTReferralsByInviterId } from "@/utils/supabase/userNftRewardTable";
 import { getUserById } from "@/utils/supabase/userTable";
 import { getUnlockedUserTasksByUserId } from "@/utils/supabase/userTaskTable";
 import { redirect } from "next/navigation";
@@ -44,9 +45,11 @@ export default async function ProfilePage() {
     );
 
   const userReferralCount = await getTotalReferrerById(user.userId!);
+  const userNFTReferalCount = await getNFTReferralsByInviterId(user.userId!)
 
   return (
     <UserProfileTemplate
+      userNFTReferalCount={userNFTReferalCount}
       tasks={tasks}
       user={user}
       userTasks={userTasks}

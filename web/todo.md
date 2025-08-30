@@ -22,9 +22,9 @@ NFT Buyers Referrals: 10 Users
 
 ✅Jika 1 user berhasil mengundang orang lain, lalu referral tersebut berhasil mendaftar → user pengundang akan mendapatkan bonus +10% dari total balance.
 
-Referral sukses misi NFT
+✅Referral sukses misi NFT
 
-Jika referral yang diundang berhasil menyelesaikan misi pembelian NFT → user pengundang akan mendapatkan 40 poin CROMA.
+✅Jika referral yang diundang berhasil menyelesaikan misi pembelian NFT → user pengundang akan mendapatkan 40 poin CROMA.
 
 ---
 
@@ -48,8 +48,8 @@ Jika referral yang diundang berhasil menyelesaikan misi pembelian NFT → user p
 
 📖 Jadi flow-nya:
 
-✅User A undang User B → User A dapat +10% balance.
+✅User A undang User     → User A dapat +10% balance.
 
-User B beli NFT → User A dapat 40 CROMA points.
+✅User B beli NFT → User A dapat 40 CROMA points.
 
 ✅Data statistik ditampilkan di profil User A.

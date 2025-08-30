@@ -63,6 +63,7 @@ interface Props {
   userPoints: number;
   user: UserProfile;
   userReferralCount: number;
+  userNFTReferalCount: number;
 }
 
 export default function UserProfileTemplate({
@@ -71,6 +72,7 @@ export default function UserProfileTemplate({
   userPoints,
   user,
   userReferralCount,
+  userNFTReferalCount
 }: Props) {
   const session = useSession();
   const userData = session.data?.user;
@@ -237,6 +239,7 @@ export default function UserProfileTemplate({
       user={user}
       userPoints={userPoints}
       userReferralCount={userReferralCount}
+      userNFTReferalCount={userNFTReferalCount}
       userTasks={userTasks}
     >
       <div className="min-h-screen text-white overflow-x-hidden flex flex-col">
