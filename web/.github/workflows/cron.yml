@@ -1,0 +1,16 @@
+name: Call Vercel API every 5 minutes
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"  # setiap 5 menit
+  workflow_dispatch:       # bisa juga manual run dari GitHub UI
+
+jobs:
+  call-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Vercel API endpoint
+        run: |
+          curl -X POST "http://airdrop.cromachain.com/api/opensea/refresh-nft-referrals" \
+            -H "Authorization: Bearer ${{ secrets.OPENSEA_CRON_SECRET_KEY }}"
+
