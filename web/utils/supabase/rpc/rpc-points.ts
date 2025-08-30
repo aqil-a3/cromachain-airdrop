@@ -24,7 +24,7 @@ export async function getUserReferralsPoints() {
 }
 
 export async function getUserPoints(userId?: string) {
-  const { data, error } = await supabase.rpc("get_user_points", {
+  const { data, error } = await supabase.rpc("get_user_points_debug", {
     p_user_id: userId,
   });
   
