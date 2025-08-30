@@ -76,7 +76,7 @@ export function useImportDialog() {
       setIsSubmitting(true);
       await axios.post("/api/user-tasks/csv/submit", csvData);
 
-      alert("Under Development");
+      alert("Update task user is success!");
     } catch (error) {
       console.error(error);
       if (isAxiosError(error)) {
