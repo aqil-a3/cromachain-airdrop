@@ -7,33 +7,33 @@ import { TaskStatus } from "@/@types/tasks";
 
 const tableName = "user_tasks";
 
-export async function getAllUserTasks(){
+export async function getAllUserTasks() {
   const pageSize = 1000;
   let from = 0;
-  let allData:TaskUserDb[] = []
+  let allData: TaskUserDb[] = [];
 
-  while(true){
+  while (true) {
     const { data, error } = await supabase
-    .from(tableName)
-    .select(
-      "*, user: user_id(email, full_name), task: task_id(title, category)"
-    )
-    .range(from, from + pageSize - 1);
+      .from(tableName)
+      .select(
+        "*, user: user_id(email, full_name), task: task_id(title, category)"
+      )
+      .range(from, from + pageSize - 1);
 
-    if(error){
+    if (error) {
       console.error(error);
       throw error;
     }
 
-    if(!data || data.length === 0) break;
+    if (!data || data.length === 0) break;
     allData = [...allData, ...data];
 
-    if(data.length < pageSize) break;
+    if (data.length < pageSize) break;
 
     from += pageSize;
   }
 
-  return allData.map(mapDbTaskUserToClient)
+  return allData.map(mapDbTaskUserToClient);
 }
 
 export async function getUserTasksByTaskId(taskId: string) {
@@ -205,6 +205,7 @@ export async function updateStatusUserTasksBulks(
   const dbPayload = raw.map(mapClientTaskUserToDb);
   const turId = dbPayload.map((payload) => payload.id!);
 
+
   if (turId.length === 0) return;
 
   const taskId = dbPayload.map((payload) => payload.task_id);
@@ -231,7 +232,10 @@ export async function updateStatusUserTasksBulks(
   for (const payload of newPayload) {
     const { id, ...rest } = payload;
     if (!id) continue;
-    const { error } = await supabase.from(tableName).update(rest).eq("id", id);
+    const { data, error } = await supabase
+      .from(tableName)
+      .update(rest)
+      .eq("id", id);
 
     if (error) {
       console.error("Failed update id", id, error);

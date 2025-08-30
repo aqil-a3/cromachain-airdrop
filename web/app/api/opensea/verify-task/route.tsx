@@ -9,7 +9,10 @@ import {
 import { NextResponse } from "next/server";
 
 const CROMA_WALLET_ADDRESS = "0x119fd986e1c30cc6e2e28993c9bdbc1b5e466116";
-const TASK_IDS: string[] = ["f7f89788-d176-4d8c-a5e4-f87f4500bb1e", "06e075ae-721f-416a-9251-07db24c05c40"];
+const TASK_IDS: string[] = [
+  "f7f89788-d176-4d8c-a5e4-f87f4500bb1e",
+  "06e075ae-721f-416a-9251-07db24c05c40",
+];
 
 // const BASE_URL = "http://localhost:3000";
 const BASE_URL = "https://airdrop.cromachain.com";
@@ -46,7 +49,9 @@ export async function GET() {
 
   //  Cari pembelinya
   const buyer = selectedCollections.find(
-    (col) => col.buyer.toLowerCase() === ethAddress.toLowerCase()
+    (col) =>
+      col.buyer.toLowerCase() ===
+      ethAddress.toLowerCase()
   );
 
   //   Kalo pembeli tidak ditemukan, redirect dan beri pesan bahwa user belum beli
@@ -58,11 +63,18 @@ export async function GET() {
       )
     );
 
-  //   Kalo pembeli ditemukan, mapping dulu agar valid disimpan ke db
-
   //   Pertama-tama, ambil data dari tugas terkait
   const tasks = await gettaskRewardByTaskIdBulks(TASK_IDS);
-  const verifTask = await getUserTaskByTaskIdAndUserId("06e075ae-721f-416a-9251-07db24c05c40", userId!);
+  const verifTask = await getUserTaskByTaskIdAndUserId(
+    "06e075ae-721f-416a-9251-07db24c05c40",
+    userId!
+  );
+  const buyTask = await getUserTaskByTaskIdAndUserId(
+    "f7f89788-d176-4d8c-a5e4-f87f4500bb1e",
+    userId!
+  );
+
+  const combinedTask = [...verifTask, ...buyTask]
 
   if (verifTask[0].status === "completed")
     return NextResponse.redirect(
@@ -73,13 +85,18 @@ export async function GET() {
     );
 
   //   Selanjutnya, mapping agar sesuai bentuk DB
-  const payloads: TaskUser[] = tasks.map((task) => ({
-    taskId: task.id,
-    userId: userId!,
-    status: "completed",
-    rewardEarned: task.reward,
-    rewardType: task.reward_type,
-  }));
+  const payloads: TaskUser[] = tasks.map((task) => {
+    const selectedTaskUser = combinedTask.find((tur) => tur.task_id === task.id);
+
+    return {
+      id: selectedTaskUser?.id,
+      taskId: task.id,
+      userId: userId!,
+      status: "completed",
+      rewardEarned: task.reward,
+      rewardType: task.reward_type,
+    };
+  });
 
   //   Simpan
   await updateStatusUserTasksBulks(payloads, "completed");
