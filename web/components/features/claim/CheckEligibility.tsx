@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { ChangeWalletDialog } from "./ChangeDialog";
 
 export default function CheckEligibility() {
   const [ethAddressInput, setEthAddressInput] = useState<string>("");
@@ -36,7 +37,6 @@ export default function CheckEligibility() {
         setErrorMessage(data?.message ?? "Something went error");
         return;
       }
-
 
       setCromaPoint(data.data!.total_points);
     } catch (error) {
@@ -116,6 +116,7 @@ export default function CheckEligibility() {
 
           {/* Success Result */}
           {cromaPoint !== null && (
+<<<<<<< HEAD
             <div className="mt-6 flex justify-center items-center gap-8">
               {/* Points Section */}
               <div className="text-center">
@@ -127,8 +128,21 @@ export default function CheckEligibility() {
                   {cromaPoint.toLocaleString("en-US")} CRM = $
                   {(cromaPoint * usdtConvert).toLocaleString("en-US")}
                 </p>
+=======
+            <>
+              <div className="mt-6 flex justify-center items-center gap-8">
+                {/* Points Section */}
+                <div className="text-center">
+                  <p className="text-gray-400 text-sm">Your total points</p>
+                  <p className="text-4xl font-bold tracking-wide text-green-500">
+                    {cromaPoint.toLocaleString("en-US")} CRM = $
+                    {(cromaPoint * usdtConvert).toLocaleString("en-US")}
+                  </p>
+                </div>
+>>>>>>> 91697ef (Update change token)
               </div>
-            </div>
+              <ChangeWalletDialog />
+            </>
           )}
         </CardContent>
       </Card>
