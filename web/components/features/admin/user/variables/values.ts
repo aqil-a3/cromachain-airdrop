@@ -4,6 +4,7 @@ export const userDefaultValues: UserSchemaType = {
   role: "user",
   discordUsername: "",
   email: "",
+  isHuman: false,
   password: "",
   confirmPassword: "",
   ethAddress: "",
