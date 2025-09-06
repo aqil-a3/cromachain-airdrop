@@ -44,13 +44,6 @@ const staggerContainer = {
 };
 
 export default function ClaimAirdropTemplate() {
-  const [ethAddressInput, setEthAddressInput] = useState("");
-  const [eligibilityMessage, setEligibilityMessage] = useState<{
-    type: "success" | "error" | "info" | null;
-    title: string;
-    description: string;
-  } | null>(null);
-  const [isChecking, setIsChecking] = useState(false);
   const [registeredEthAddress, setRegisteredEthAddress] = useState<
     string | null
   >(null);
