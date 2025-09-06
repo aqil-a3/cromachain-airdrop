@@ -2,9 +2,9 @@ import { UserSchemaType } from "@/schemas/userSchema";
 
 export const userDefaultValues: UserSchemaType = {
   role: "user",
+  isHuman: false,
   discordUsername: "",
   email: "",
-  isHuman: false,
   password: "",
   confirmPassword: "",
   ethAddress: "",

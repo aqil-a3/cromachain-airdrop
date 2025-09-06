@@ -115,19 +115,22 @@ export default function CheckEligibility() {
 
           {/* Success Result */}
           {cromaPoint !== null && (
-            <>
-              <div className="mt-6 flex justify-center items-center gap-8">
-                {/* Points Section */}
-                <div className="text-center">
-                  <p className="text-gray-400 text-sm">Your total points</p>
-                  <p className="text-4xl font-bold tracking-wide text-green-500">
-                    {cromaPoint.toLocaleString("en-US")} CRM = $
-                    {(cromaPoint * usdtConvert).toLocaleString("en-US")}
-                  </p>
+            <div className="mt-6 flex flex-col justify-center items-center gap-8">
+              {/* Points Section */}
+              <div className="text-center">
+                <div className="mt-6 flex justify-center items-center gap-8">
+                  {/* Points Section */}
+                  <div className="text-center">
+                    <p className="text-gray-400 text-sm">Your total points</p>
+                    <p className="text-4xl font-bold tracking-wide text-green-500">
+                      {cromaPoint.toLocaleString("en-US")} CRM = $
+                      {(cromaPoint * usdtConvert).toLocaleString("en-US")}
+                    </p>
+                  </div>
                 </div>
               </div>
               <ChangeWalletDialog />
-            </>
+            </div>
           )}
         </CardContent>
       </Card>
