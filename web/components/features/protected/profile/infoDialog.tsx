@@ -25,7 +25,7 @@ export default function TaskDetailDialog({ task }: { task: Task }) {
           <Info className="text-blue-500" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-slate-900 text-white">
+      <DialogContent className="bg-slate-900 text-white max-w-lg break-all max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Task Details</DialogTitle>
         </DialogHeader>
@@ -39,7 +39,10 @@ export default function TaskDetailDialog({ task }: { task: Task }) {
           </p>
           <div className="flex gap-1 items-center">
             <strong>Category:</strong>
-            <Badge variant="outline" className="capitalize text-white border-white">
+            <Badge
+              variant="outline"
+              className="capitalize text-white border-white"
+            >
               {task.category}
             </Badge>
           </div>
@@ -68,8 +71,8 @@ export default function TaskDetailDialog({ task }: { task: Task }) {
                 task.status === "completed"
                   ? "bg-green-100 text-green-700"
                   : task.status === "failed"
-                  ? "bg-red-100 text-red-700"
-                  : "bg-slate-100 text-slate-700"
+                    ? "bg-red-100 text-red-700"
+                    : "bg-slate-100 text-slate-700"
               }
             >
               {task.status}
@@ -102,7 +105,9 @@ export default function TaskDetailDialog({ task }: { task: Task }) {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button className="bg-orange-500 hover:bg-orange-400 cursor-pointer">Close</Button>
+            <Button className="bg-orange-500 hover:bg-orange-400 cursor-pointer">
+              Close
+            </Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>
