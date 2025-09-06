@@ -18,23 +18,10 @@ const evmAddress = z
   .string()
   .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid wallet address format");
 
-const bodySchema = z
-  .object({
-    old_wallet_address: evmAddress,
-    new_wallet_address: evmAddress,
-  })
-  .superRefine((val, ctx) => {
-    if (
-      val.old_wallet_address.toLowerCase() ===
-      val.new_wallet_address.toLowerCase()
-    ) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["new_wallet_address"],
-        message: "New wallet address must be different from current one",
-      });
-    }
-  });
+const bodySchema = z.object({
+  old_wallet_address: evmAddress,
+  new_wallet_address: evmAddress,
+});
 
 /**
  * Aturannya
