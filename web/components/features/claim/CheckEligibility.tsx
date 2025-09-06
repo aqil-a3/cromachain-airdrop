@@ -116,19 +116,6 @@ export default function CheckEligibility() {
 
           {/* Success Result */}
           {cromaPoint !== null && (
-<<<<<<< HEAD
-            <div className="mt-6 flex justify-center items-center gap-8">
-              {/* Points Section */}
-              <div className="text-center">
-                <p className="text-gray-400 text-sm">Your total points</p>
-                {/* <p className="text-4xl font-bold tracking-wide bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 bg-clip-text text-transparent">
-                  {cromaPoint}
-                </p> */}
-                <p className="text-4xl font-bold tracking-wide text-green-500">
-                  {cromaPoint.toLocaleString("en-US")} CRM = $
-                  {(cromaPoint * usdtConvert).toLocaleString("en-US")}
-                </p>
-=======
             <>
               <div className="mt-6 flex justify-center items-center gap-8">
                 {/* Points Section */}
@@ -139,7 +126,6 @@ export default function CheckEligibility() {
                     {(cromaPoint * usdtConvert).toLocaleString("en-US")}
                   </p>
                 </div>
->>>>>>> 91697ef (Update change token)
               </div>
               <ChangeWalletDialog />
             </>
@@ -149,42 +135,3 @@ export default function CheckEligibility() {
     </motion.div>
   );
 }
-
-//   {cromaPoint !== null && (
-//     <div className="mt-6 space-y-6">
-//       {/* Points Section */}
-//       <div className="text-center">
-//         <p className="text-gray-400 text-sm">Your total points</p>
-//         <p className="text-4xl font-extrabold text-orange-400 tracking-wide">
-//           {cromaPoint}
-//         </p>
-//       </div>
-
-//       {/* Conversion Section */}
-//       <div className="flex items-center justify-center gap-6">
-//         <div className="flex flex-col items-center">
-//           <Image
-//             src="/logo.png"
-//             alt="Cromachain logo"
-//             width={36}
-//             height={36}
-//             className="mb-1"
-//           />
-//           <p className="text-white font-semibold">1 CRM</p>
-//         </div>
-
-//         <span className="text-orange-400 text-xl font-bold">=</span>
-
-//         <div className="flex flex-col items-center">
-//           <Image
-//             src="/usdt-logo.png"
-//             alt="USDT logo"
-//             width={36}
-//             height={36}
-//             className="mb-1"
-//           />
-//           <p className="text-white font-semibold">$0.09 USDT</p>
-//         </div>
-//       </div>
-//     </div>
-//   )}

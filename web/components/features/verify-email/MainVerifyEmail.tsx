@@ -28,7 +28,7 @@ export default function MainVerifyEmail() {
       return;
     }
     
-    setMessage(message);
+    setMessage(message!);
     setIsSent(true);
     setResendCooldown(30);
     startCooldown();
@@ -45,7 +45,7 @@ export default function MainVerifyEmail() {
       setMessage(message ?? "Something went wrong");
       return;
     }
-    setMessage(message);
+    setMessage(message!);
     setResendCooldown(30);
     startCooldown();
   };
@@ -60,7 +60,7 @@ export default function MainVerifyEmail() {
       return;
     }
 
-    setMessage(message);
+    setMessage(message!);
     setTimeout(() => router.replace("/"), 1000);
   };
 
