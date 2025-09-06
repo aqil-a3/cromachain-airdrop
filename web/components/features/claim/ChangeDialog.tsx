@@ -45,6 +45,11 @@ export function ChangeWalletDialog() {
     }
 
     try {
+      const confirmationAlert = confirm(
+        `We will distribute to this wallet (${walletElement.value}). Are you sure? You may can't change this wallet later`
+      );
+
+      if (!confirmationAlert) return;
       const { data } = await axios.post<BasicHttpResponse>(
         "/api/user/wallet/update",
         {
