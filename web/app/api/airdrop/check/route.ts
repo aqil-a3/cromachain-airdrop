@@ -1,11 +1,18 @@
 import { DBCodeType, ResponseWithData } from "@/@types/http";
 import { TotalUserPoints } from "@/@types/user-points";
+import { auth } from "@/auth";
 import { getGalxeDataByEthAddress } from "@/utils/supabase/galxeTable";
 import { getUserPoints } from "@/utils/supabase/rpc/rpc-points";
 import { getUserByEthAddress } from "@/utils/supabase/userTable";
+import { getUserTaskByBulksTaskIdAndUserId } from "@/utils/supabase/userTaskTable";
 import { NextRequest, NextResponse } from "next/server";
 
-type CodeType = "ETHERIUM_REQUIRED" | "SOURCE_REQUIRED" | DBCodeType;
+type CodeType =
+  | "ETHERIUM_REQUIRED"
+  | "SOURCE_REQUIRED"
+  | "LOGIN_REQUIRED"
+  | "NFT_BUY_REQUIRED"
+  | DBCodeType;
 type Response = ResponseWithData<null | TotalUserPoints, CodeType>;
 type GetResponse = Promise<NextResponse<Response>>;
 
@@ -16,12 +23,56 @@ const messageResponse: Record<CodeType, string> = {
   SOURCE_REQUIRED: "Source data is required",
   NOT_FOUND: "Account not found",
   SUCCESS: "Success",
+  LOGIN_REQUIRED: "You have to login to continue this action!",
+  NFT_BUY_REQUIRED: "You have to buy at least 1 NFT to see your ballance",
 };
+
+const NFTBuyTasksId: string[] = [
+  "f7f89788-d176-4d8c-a5e4-f87f4500bb1e", // Buy NFTs & Unlock Extra CROMA
+  "4038bc6d-a2ce-4bb1-8ced-9e91468197b1", // Buy NFTs Pavel Durov & Unlock Extra CROMA
+  "ee74e98e-eb6b-4dbf-afd6-a02550489573", // Buy NFTs The Visionary’s Smile & Unlock Extra CROMA
+  "11f4a316-5a69-4893-b70e-79e260c2aca3", // Buy the 2nd NFT & Unlock Extra CROMA
+  "06e075ae-721f-416a-9251-07db24c05c40", //Verify NFT Purchase
+];
 
 export async function GET(req: NextRequest): GetResponse {
   const { searchParams } = req.nextUrl;
+  const session = await auth();
   const eth_address = searchParams.get("ethAddressInput");
   const source = searchParams.get("source") as "galxe" | "web" | null;
+
+  if (!session)
+    return NextResponse.json(
+      {
+        data: null,
+        success: false,
+        code: "LOGIN_REQUIRED",
+        message: messageResponse["LOGIN_REQUIRED"],
+      },
+      {
+        status: 401,
+      }
+    );
+
+  const NFTBuyTasks = await getUserTaskByBulksTaskIdAndUserId(
+    NFTBuyTasksId,
+    session.user.userId!
+  );
+
+  const NFTTaskStatus = NFTBuyTasks.filter(
+    (task) => task.status === "completed"
+  );
+
+  if (NFTTaskStatus.length < 1)
+    return NextResponse.json(
+      {
+        data: null,
+        success: false,
+        code: "NFT_BUY_REQUIRED",
+        message: messageResponse["NFT_BUY_REQUIRED"],
+      },
+      { status: 400 }
+    );
 
   if (!eth_address)
     return NextResponse.json(
@@ -57,10 +108,9 @@ export async function GET(req: NextRequest): GetResponse {
         message: messageResponse[code as CodeType],
       });
 
-      
-      const userId = user!.id;
-      
-      const userPoint = await getUserPoints(userId);
+    const userId = user!.id;
+
+    const userPoint = await getUserPoints(userId);
 
     return NextResponse.json({
       message: messageResponse["SUCCESS"],

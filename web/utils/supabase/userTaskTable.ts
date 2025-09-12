@@ -103,6 +103,26 @@ export async function getUserTaskByTaskIdAndUserId(
   return data;
 }
 
+export async function getUserTaskByBulksTaskIdAndUserId(
+  taskId: string[],
+  userId: string
+): Promise<TaskUserDb[]> {
+  const { error, data } = await supabase
+    .from(tableName)
+    .select("*")
+    .eq("user_id", userId)
+    .in("task_id", taskId);
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  if (!data) return [];
+
+  return data;
+}
+
 export async function deleteUserTaskByTaskIdAndUserId(
   taskId: string,
   userId: string

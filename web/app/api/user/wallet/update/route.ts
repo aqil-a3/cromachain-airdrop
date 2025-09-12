@@ -9,6 +9,7 @@ import {
   createNewMigrationData,
   getMigrationDataByAddress,
   getMigrationDataByCurrentAddress,
+  getMigrationDataByUserId,
   MigrationDataFromClient,
 } from "@/utils/supabase/migrationTable";
 
@@ -113,9 +114,10 @@ export async function POST(req: NextRequest): PatchResponse {
       { status: 400 }
     );
 
-  const existingData = await getMigrationDataByAddress(newAddr);
+    
+    // 7) Denny action if new Address is Exist. One account only one wallet address
+    const existingData = await getMigrationDataByAddress(newAddr);
 
-  // 7) Denny action if new Address is Exist. One account only one wallet address
   if (existingData)
     return NextResponse.json(
       {
@@ -124,6 +126,16 @@ export async function POST(req: NextRequest): PatchResponse {
       },
       { status: 400 }
     );
+
+  // 8) Deny action if user_id is exist.
+  const existingUserId = await getMigrationDataByUserId(user.userId!);
+  if(existingUserId)
+    return NextResponse.json({
+        success: false,
+        message: `Your account have updated a wallet! Action dennied!`,
+      },
+      { status: 400 }
+    )
 
   // Get all user point from web and galxe
   const [web, galxe] = await Promise.all([
@@ -137,6 +149,7 @@ export async function POST(req: NextRequest): PatchResponse {
 
   const total_points = web[0].total_points + galxePoints;
   const payload: MigrationDataFromClient = {
+    user_id: session.user.userId!,
     points: total_points,
     wallet_address: newAddr,
     from_address: oldAddr,

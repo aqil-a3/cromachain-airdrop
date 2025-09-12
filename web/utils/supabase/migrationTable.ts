@@ -5,6 +5,7 @@ const tableName = "migration_data";
 export interface MigrationDataDB {
   readonly id: number;
   readonly created_at: string;
+  readonly user_id: string;
   wallet_address: string;
   points: number;
   from_address: string;
@@ -12,8 +13,25 @@ export interface MigrationDataDB {
 
 export type MigrationDataFromClient = Pick<
   MigrationDataDB,
-  "wallet_address" | "points" | "from_address"
+  "wallet_address" | "points" | "from_address" | "user_id"
 >;
+
+export async function getMigrationDataByUserId(
+  user_id: string
+): Promise<MigrationDataDB | null> {
+  const { data, error } = await supabase
+    .from(tableName)
+    .select("*")
+    .eq("user_id", user_id)
+    .maybeSingle();
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return data;
+}
 
 export async function getMigrationDataByAddress(
   wallet_address: string
