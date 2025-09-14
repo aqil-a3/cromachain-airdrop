@@ -75,3 +75,15 @@ export async function createNewMigrationData(payload: MigrationDataFromClient) {
     throw error;
   }
 }
+
+export async function updatePointsByUserId(points: number, user_id: string) {
+  const { error } = await supabase
+    .from(tableName)
+    .update({ points })
+    .eq("user_id", user_id);
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+}

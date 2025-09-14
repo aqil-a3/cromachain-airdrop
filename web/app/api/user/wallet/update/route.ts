@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { z } from "zod";
-import type { BasicHttpResponse } from "@/@types/http";
+import type { BasicHttpResponse, ResponseWithData } from "@/@types/http";
 import { getUserById } from "@/utils/supabase/userTable";
 import { getUserPoints } from "@/utils/supabase/rpc/rpc-points";
 import { getGalxeDataByEthAddress } from "@/utils/supabase/galxeTable";
@@ -11,9 +11,11 @@ import {
   getMigrationDataByCurrentAddress,
   getMigrationDataByUserId,
   MigrationDataFromClient,
+  updatePointsByUserId,
 } from "@/utils/supabase/migrationTable";
+import { TotalUserPoints } from "@/@types/user-points";
 
-type PatchResponse = Promise<NextResponse<BasicHttpResponse>>;
+type PostResponse = Promise<NextResponse<BasicHttpResponse>>;
 
 const evmAddress = z
   .string()
@@ -37,7 +39,7 @@ const bodySchema = z.object({
  * - Harusnya, kalau sudah relog poin 3 dan 4 udah minim.
  */
 
-export async function POST(req: NextRequest): PatchResponse {
+export async function POST(req: NextRequest): PostResponse {
   // 1) Auth
   const session = await auth();
   if (!session) {
@@ -114,9 +116,8 @@ export async function POST(req: NextRequest): PatchResponse {
       { status: 400 }
     );
 
-    
-    // 7) Denny action if new Address is Exist. One account only one wallet address
-    const existingData = await getMigrationDataByAddress(newAddr);
+  // 7) Denny action if new Address is Exist. One account only one wallet address
+  const existingData = await getMigrationDataByAddress(newAddr);
 
   if (existingData)
     return NextResponse.json(
@@ -129,13 +130,14 @@ export async function POST(req: NextRequest): PatchResponse {
 
   // 8) Deny action if user_id is exist.
   const existingUserId = await getMigrationDataByUserId(user.userId!);
-  if(existingUserId)
-    return NextResponse.json({
+  if (existingUserId)
+    return NextResponse.json(
+      {
         success: false,
         message: `Your account have updated a wallet! Action dennied!`,
       },
       { status: 400 }
-    )
+    );
 
   // Get all user point from web and galxe
   const [web, galxe] = await Promise.all([
@@ -158,4 +160,60 @@ export async function POST(req: NextRequest): PatchResponse {
   await createNewMigrationData(payload);
 
   return NextResponse.json({ success: true, message: "OK" }, { status: 200 });
+}
+
+/**
+ * FLOWNYA, setelah user klik tombol Update Point dari '/claim'
+ * - Server menerima user id
+ * - Akan dicek dlu. Apakah user sudah melakukan update wallet? Jika belum akan menampilkan error
+ * - Server akan mengakumulasikan ulang total point yang sudah didapat
+ * - Setelah diakumulasi, server akan menyimpan total point ke database
+ * - Setelah disimpan, baru akan ditampilkan data terbarunya
+ */
+
+type PatchResponse = Promise<
+  NextResponse<ResponseWithData<TotalUserPoints | null>>
+>;
+
+export async function PATCH(): PatchResponse {
+  const session = await auth();
+  if (!session)
+    return NextResponse.json(
+      {
+        data: null,
+        success: false,
+        message: "You are not logged in! Access denied!",
+      },
+      { status: 401 }
+    );
+
+  const isThere = await getMigrationDataByUserId(session.user.userId!);
+  if (!isThere)
+    return NextResponse.json(
+      {
+        data: null,
+        success: false,
+        message: "Data not found! Have you updated your wallet?",
+      },
+      { status: 404 }
+    );
+
+  // Get all user point from web and galxe
+  const [web, galxe] = await Promise.all([
+    getUserPoints(session.user.userId!),
+    getGalxeDataByEthAddress(session.user.ethAddress),
+  ]);
+
+  let galxePoints: number = 0;
+
+  if (galxe.data) galxePoints = galxe.data.total_points;
+
+  const total_points = web[0].total_points + galxePoints;
+
+  await updatePointsByUserId(total_points, session.user.userId!);
+
+  return NextResponse.json({
+    success: true,
+    data: { total_points, user_id: session.user.userId! },
+  });
 }

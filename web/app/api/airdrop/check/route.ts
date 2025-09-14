@@ -2,6 +2,10 @@ import { DBCodeType, ResponseWithData } from "@/@types/http";
 import { TotalUserPoints } from "@/@types/user-points";
 import { auth } from "@/auth";
 import { getGalxeDataByEthAddress } from "@/utils/supabase/galxeTable";
+import {
+  getMigrationDataByUserId,
+  updatePointsByUserId,
+} from "@/utils/supabase/migrationTable";
 import { getUserPoints } from "@/utils/supabase/rpc/rpc-points";
 import { getUserByEthAddress } from "@/utils/supabase/userTable";
 import { getUserTaskByBulksTaskIdAndUserId } from "@/utils/supabase/userTaskTable";
@@ -39,7 +43,7 @@ export async function GET(req: NextRequest): GetResponse {
   const { searchParams } = req.nextUrl;
   const session = await auth();
   const eth_address = searchParams.get("ethAddressInput");
-  const source = searchParams.get("source") as "galxe" | "web" | null;
+  const source = searchParams.get("source") as "galxe" | "web" | "all" | null;
 
   if (!session)
     return NextResponse.json(
@@ -74,17 +78,6 @@ export async function GET(req: NextRequest): GetResponse {
       { status: 400 }
     );
 
-  if (!eth_address)
-    return NextResponse.json(
-      {
-        data: null,
-        message: messageResponse["ETHERIUM_REQUIRED"],
-        code: "ETHERIUM_REQUIRED",
-        success: false,
-      },
-      { status: 400 }
-    );
-
   if (!source)
     return NextResponse.json(
       {
@@ -96,6 +89,17 @@ export async function GET(req: NextRequest): GetResponse {
     );
 
   if (source === "web") {
+    if (!eth_address)
+      return NextResponse.json(
+        {
+          data: null,
+          message: messageResponse["ETHERIUM_REQUIRED"],
+          code: "ETHERIUM_REQUIRED",
+          success: false,
+        },
+        { status: 400 }
+      );
+
     const {
       data: user,
       success,
@@ -118,6 +122,58 @@ export async function GET(req: NextRequest): GetResponse {
       success: true,
     });
   }
+
+  if (source === "all") {
+    const userPoint = await getMigrationDataByUserId(session.user.userId!);
+
+    if (!userPoint)
+      return NextResponse.json(
+        {
+          data: null,
+          success: false,
+          message: "Data not found! Have you update your wallet?",
+        },
+        {
+          status: 400,
+        }
+      );
+
+    const points: TotalUserPoints = {
+      total_points: userPoint.points,
+      user_id: userPoint.user_id,
+    };
+
+    // TODO : Ini kayaknya pisah aja dah
+
+    // const [web, galxe] = await Promise.all([
+    //   getUserPoints(session.user.userId!),
+    //   getGalxeDataByEthAddress(session.user.ethAddress),
+    // ]);
+
+    // let galxePoints: number = 0;
+
+    // if (galxe.data) galxePoints = galxe.data.total_points;
+    // const total_points = web[0].total_points + galxePoints;
+
+    // await updatePointsByUserId(total_points, session.user.userId!)
+
+    return NextResponse.json({
+      message: "Success",
+      data: points,
+      success: true,
+    });
+  }
+
+  if (!eth_address)
+    return NextResponse.json(
+      {
+        data: null,
+        message: messageResponse["ETHERIUM_REQUIRED"],
+        code: "ETHERIUM_REQUIRED",
+        success: false,
+      },
+      { status: 400 }
+    );
 
   const userPoint = await getGalxeDataByEthAddress(eth_address);
 
