@@ -14,7 +14,7 @@ const CROMA_SMART_CONTRACT = "0x1d53b6c882ac7fbd5ea0eeca00d59b843ef50525";
 
 // const BASE_URL = "http://localhost:3000";
 const BASE_URL = "https://airdrop.cromachain.com";
-const allowedToken = ["8", "10", "9", "12"];
+const allowedToken = ["8", "10", "9", "12", "11"];
 
 // Verif Task Id in first
 // Second is buy task
@@ -25,6 +25,7 @@ const taskIds: Record<string, string[]> = {
   ],
   "9": ["4038bc6d-a2ce-4bb1-8ced-9e91468197b1"],
   "10": ["11f4a316-5a69-4893-b70e-79e260c2aca3"],
+  "11": ["302bd96e-5ec7-4be7-b83a-c557638e485f"],
   "12": ["ee74e98e-eb6b-4dbf-afd6-a02550489573"],
 };
 

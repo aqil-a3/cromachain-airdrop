@@ -37,6 +37,7 @@ const NFTBuyTasksId: string[] = [
   "ee74e98e-eb6b-4dbf-afd6-a02550489573", // Buy NFTs The Visionary’s Smile & Unlock Extra CROMA
   "11f4a316-5a69-4893-b70e-79e260c2aca3", // Buy the 2nd NFT & Unlock Extra CROMA
   "06e075ae-721f-416a-9251-07db24c05c40", //Verify NFT Purchase
+  "302bd96e-5ec7-4be7-b83a-c557638e485f", // Token 11
 ];
 
 export async function GET(req: NextRequest): GetResponse {
