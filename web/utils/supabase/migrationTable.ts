@@ -16,6 +16,17 @@ export type MigrationDataFromClient = Pick<
   "wallet_address" | "points" | "from_address" | "user_id"
 >;
 
+export async function getMigrationData(): Promise<MigrationDataDB[]> {
+  const { data, error } = await supabase.from(tableName).select("*");
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return data;
+}
+
 export async function getMigrationDataByUserId(
   user_id: string
 ): Promise<MigrationDataDB | null> {

@@ -72,7 +72,7 @@ export default function UserProfileTemplate({
   userPoints,
   user,
   userReferralCount,
-  userNFTReferalCount
+  userNFTReferalCount,
 }: Props) {
   const session = useSession();
   const userData = session.data?.user;
