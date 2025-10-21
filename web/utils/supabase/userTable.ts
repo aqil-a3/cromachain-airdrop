@@ -176,21 +176,72 @@ export async function getUsersByEthAddresses(
   };
 }
 
-export async function getUserByIdBulks(ids: string[]) {
-  const { data, error } = await supabase
-    .from(tableName)
-    .select("*")
-    .in("id", ids)
-    .is("deleted_at", null);
+// export async function getUserByIdBulks(ids: string[]) {
+//   const { data, error } = await supabase
+//     .from(tableName)
+//     .select("*")
+//     .in("id", ids)
+//     .is("deleted_at", null);
 
-  if (!data || error) {
-    console.error(error);
-    throw error;
+//   if (!data || error) {
+//     console.error(error);
+//     throw error;
+//   }
+
+//   const userDb: UserProfileDb[] = data;
+//   const user = userDb.map(mapDbUserToClient);
+
+//   return user;
+// }
+
+export async function getUserByIdBulks(
+  ids: string[],
+  chunkSize = 500,
+  concurrency = 3
+) {
+  const chunks: string[][] = [];
+  for (let i = 0; i < ids.length; i += chunkSize) {
+    chunks.push(ids.slice(i, i + chunkSize));
   }
 
-  const userDb: UserProfileDb[] = data;
-  const user = userDb.map(mapDbUserToClient);
+  const results: any[] = [];
+  let index = 0;
 
+  while (index < chunks.length) {
+    const currentBatch = chunks.slice(index, index + concurrency);
+
+    // jalankan 3 batch sekaligus
+    const batchResults = await Promise.all(
+      currentBatch.map(async (chunk, i) => {
+        try {
+          const { data, error } = await supabase
+            .from(tableName)
+            .select("*")
+            .in("id", chunk)
+            .is("deleted_at", null);
+
+          if (error) {
+            console.error("Error fetching chunk", index + i + 1, error);
+            return [];
+          }
+          return data ?? [];
+        } catch (err) {
+          console.error("Fetch failed for chunk", index + i + 1, err);
+          return [];
+        }
+      })
+    );
+
+    results.push(...batchResults.flat());
+    console.log(
+      `✅ Processed batch ${index + concurrency > chunks.length ? chunks.length : index + concurrency}/${chunks.length}`
+    );
+    index += concurrency;
+  }
+
+  const allData = results.flat();
+  const userDb: UserProfileDb[] = allData;
+  const user = userDb.map(mapDbUserToClient);
   return user;
 }
 
@@ -354,7 +405,9 @@ export async function isDupplicateUser(formData: UserProfileDb) {
         field: "twitterUsername",
       };
     }
-    if (existing.eth_address.toLowerCase() === formData.eth_address.toLowerCase()) {
+    if (
+      existing.eth_address.toLowerCase() === formData.eth_address.toLowerCase()
+    ) {
       return {
         message: `Ethereum address ${formData.eth_address} already used!`,
         field: "ethAddress",
