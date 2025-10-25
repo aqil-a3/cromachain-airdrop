@@ -26,6 +26,10 @@ export const reply_markup: InlineKeyboardMarkup = {
         text: "🚀 Register!",
         url: `https://airdrop.cromachain.com`,
       },
+      {
+        text: "🚀 Presale!",
+        url: `https://presale.cromachain.com`,
+      },
     ],
     [
       {
