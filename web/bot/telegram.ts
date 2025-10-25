@@ -31,24 +31,24 @@ export const reply_markup: InlineKeyboardMarkup = {
         url: `https://presale.cromachain.com`,
       },
     ],
-    [
-      {
-        text: "Have I joined the channel?",
-        callback_data: "verify_join_telegram",
-      },
-    ],
-    [
-      {
-        text: "Have I registered to web?",
-        callback_data: "verify_join_web",
-      },
-    ],
-    [
-      {
-        text: "Claim reward",
-        callback_data: "claim_reward",
-      },
-    ],
+    // [
+    //   {
+    //     text: "Have I joined the channel?",
+    //     callback_data: "verify_join_telegram",
+    //   },
+    // ],
+    // [
+    //   {
+    //     text: "Have I registered to web?",
+    //     callback_data: "verify_join_web",
+    //   },
+    // ],
+    // [
+    //   {
+    //     text: "Claim reward",
+    //     callback_data: "claim_reward",
+    //   },
+    // ],
   ],
 };
 
@@ -56,8 +56,8 @@ bot.start(async (ctx) => {
   await ctx.reply("👋 Welcome to Cromachain Bot!", { reply_markup });
 });
 
-bot.action("verify_join_telegram", async (ctx) => verifyUserMember(ctx));
-bot.action("verify_join_web", async (ctx) => verifyUserWeb(ctx));
-bot.action("claim_reward", async (ctx) => claimReward(ctx));
+// bot.action("verify_join_telegram", async (ctx) => verifyUserMember(ctx));
+// bot.action("verify_join_web", async (ctx) => verifyUserWeb(ctx));
+// bot.action("claim_reward", async (ctx) => claimReward(ctx));
 
 export { bot };
