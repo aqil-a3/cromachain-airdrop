@@ -4,9 +4,14 @@ import dotenv from "dotenv";
 import { verifyUserMember } from "./services/verifyUser";
 import { verifyUserWeb } from "./services/verifyUserWeb";
 import { claimReward } from "./services/claimReward";
+import { session } from "telegraf";
+import { joinWithReferral, referralCheck } from "./services/joinWithReferral";
+import { CustomContext } from "./telegramType";
 dotenv.config();
 
-const bot = new Telegraf(process.env.TELEGRAM_BOT_API_KEY!);
+const bot = new Telegraf<CustomContext>(process.env.TELEGRAM_BOT_API_KEY!);
+
+bot.use(session());
 
 export const serverEndpoint =
   process.env.NODE_ENV === "development"
@@ -22,33 +27,12 @@ export const reply_markup: InlineKeyboardMarkup = {
         text: "🚀 Join Channel",
         url: `https://t.me/${channelUsername.replace("@", "")}`,
       },
-      {
-        text: "🚀 Register!",
-        url: `https://airdrop.cromachain.com`,
-      },
-      {
-        text: "🚀 Presale!",
-        url: `https://presale.cromachain.com`,
-      },
+      { text: "🌟 Join With Referral", callback_data: "join_with_referral" },
     ],
-    // [
-    //   {
-    //     text: "Have I joined the channel?",
-    //     callback_data: "verify_join_telegram",
-    //   },
-    // ],
-    // [
-    //   {
-    //     text: "Have I registered to web?",
-    //     callback_data: "verify_join_web",
-    //   },
-    // ],
-    // [
-    //   {
-    //     text: "Claim reward",
-    //     callback_data: "claim_reward",
-    //   },
-    // ],
+    [
+      { text: "🚀 Register!", url: `https://airdrop.cromachain.com` },
+      { text: "🚀 Presale!", url: `https://presale.cromachain.com` },
+    ],
   ],
 };
 
@@ -56,8 +40,8 @@ bot.start(async (ctx) => {
   await ctx.reply("👋 Welcome to Cromachain Bot!", { reply_markup });
 });
 
-// bot.action("verify_join_telegram", async (ctx) => verifyUserMember(ctx));
-// bot.action("verify_join_web", async (ctx) => verifyUserWeb(ctx));
-// bot.action("claim_reward", async (ctx) => claimReward(ctx));
+bot.action("join_with_referral", async (ctx) => joinWithReferral(ctx));
+
+bot.on("text", async (ctx) => referralCheck(ctx));
 
 export { bot };
