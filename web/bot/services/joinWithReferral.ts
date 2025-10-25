@@ -34,7 +34,7 @@ export async function referralCheck(ctx: CustomContext) {
 
   try {
     // ✅ Send as POST JSON body
-    const res = await axios.post(`${ambassadorBaseUrl}/api/telegram/referral`, {
+    const res = await axios.post(`${ambassadorBaseUrl}/api/referral/telegram`, {
       telegram_id: ctx.from?.id,
       username: ctx.from?.username || ctx.from?.first_name,
       referral_code: referralCode,
