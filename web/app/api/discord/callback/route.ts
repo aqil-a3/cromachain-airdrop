@@ -6,7 +6,7 @@ import { exchangeCodeForToken, fetchDiscordUser } from "@/utils/discord/oauth";
 import { addUserToGuild } from "@/utils/discord/guild";
 import { completeJoinDiscordTask } from "@/utils/discord/task";
 
-const cromaartAmbassadorLink = "http://localhost:3000/api/referral/discord";
+const cromaartAmbassadorLink = "https://ranking.cromaart.io/api/referral/discord";
 
 export async function GET(req: NextRequest) {
   const code = req.nextUrl.searchParams.get("code");

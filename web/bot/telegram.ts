@@ -30,7 +30,7 @@ export const reply_markup: InlineKeyboardMarkup = {
       { text: "🌟 Join With Referral", callback_data: "join_with_referral" },
     ],
     [
-      { text: "🚀 Register!", url: `https://airdrop.cromachain.com` },
+      // { text: "🚀 Register!", url: `https://airdrop.cromachain.com` },
       { text: "🚀 Presale!", url: `https://presale.cromachain.com` },
     ],
   ],

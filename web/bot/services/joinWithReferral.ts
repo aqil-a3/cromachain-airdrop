@@ -4,7 +4,7 @@ import axios from "axios";
 const ambassadorBaseUrl =
   process.env.NODE_ENV === "development"
     ? "http://localhost:3000"
-    : "https://ambassador.cromaart.io";
+    : "https://ranking.cromaart.io";
 
 export async function joinWithReferral(ctx: CustomContext) {
   ctx.session ??= {};
@@ -42,7 +42,7 @@ export async function referralCheck(ctx: CustomContext) {
 
     if (res.data.success) {
       await ctx.reply(
-        `✅ *Referral verified successfully!*\n\nWelcome to *CromaChain*, ${ctx.from?.first_name}! 🎉`,
+        `✅ *Referral verified successfully!*\n\nWelcome to *CromaChain*, ${ctx.from?.first_name}! 🎉\n\n👉 Join our community here:\n[Click to Join CromaArt Official](https://t.me/Cromaartofficial)`,
         { parse_mode: "Markdown" }
       );
     } else {
