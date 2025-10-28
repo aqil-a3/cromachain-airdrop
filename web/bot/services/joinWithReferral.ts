@@ -1,8 +1,8 @@
 import type { CustomContext } from "../telegramType";
 import axios from "axios";
 
-const ambassadorBaseUrl = "http://localhost:3001"
-// const ambassadorBaseUrl = "https://ranking.cromaart.io";
+// const ambassadorBaseUrl = "http://localhost:3001"
+const ambassadorBaseUrl = "https://ranking.cromaart.io";
 
 export async function joinWithReferral(ctx: CustomContext) {
   ctx.session ??= {};
