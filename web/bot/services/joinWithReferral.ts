@@ -1,10 +1,8 @@
 import type { CustomContext } from "../telegramType";
 import axios from "axios";
 
-const ambassadorBaseUrl =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:3000"
-    : "https://ranking.cromaart.io";
+const ambassadorBaseUrl = "http://localhost:3001"
+// const ambassadorBaseUrl = "https://ranking.cromaart.io";
 
 export async function joinWithReferral(ctx: CustomContext) {
   ctx.session ??= {};
@@ -61,4 +59,50 @@ export async function referralCheck(ctx: CustomContext) {
   }
 
   ctx.session.awaitingReferral = false;
+}
+
+export async function referralPayloadCheck(
+  referralCode: string,
+  ctx: CustomContext
+) {
+  if (!referralCode) return;
+
+  const from = ctx.from;
+  if (!from) throw new Error("User not found");
+  const { id, first_name, last_name } = from;
+  const payload = {
+    telegram_id: id,
+    username: `${first_name} ${last_name}`,
+    referralCode: referralCode.split("AMB_")[1],
+  };
+
+  try {
+    const res = await axios.post(
+      `${ambassadorBaseUrl}/api/referral/telegram`,
+      payload
+    );
+
+    console.log(res);
+    console.log(res.data);
+
+    if (res.data.success) {
+      await ctx.reply(
+        `✅ *Referral verified successfully!*\n\nWelcome to *CromaChain*, ${ctx.from?.first_name}! 🎉\n\n👉 Join our community here:\n[Click to Join CromaArt Official](https://t.me/Cromaartofficial)`,
+        { parse_mode: "Markdown" }
+      );
+    } else {
+      await ctx.reply(
+        `❌ ${res.data.message || "Invalid referral code. Please double-check and try again."}`,
+        { parse_mode: "Markdown" }
+      );
+    }
+  } catch (err: any) {
+    console.error(err)
+    console.error("Referral check error:", err.response?.data || err.message);
+    await ctx.reply(
+      `⚠️ A server error occurred.\n\n${
+        err.response?.data?.message || "Please try again later."
+      }`
+    );
+  }
 }

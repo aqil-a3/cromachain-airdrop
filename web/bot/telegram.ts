@@ -1,11 +1,11 @@
 import { Telegraf } from "telegraf";
-import { InlineKeyboardMarkup } from "telegraf/types";
 import dotenv from "dotenv";
-import { verifyUserMember } from "./services/verifyUser";
-import { verifyUserWeb } from "./services/verifyUserWeb";
-import { claimReward } from "./services/claimReward";
 import { session } from "telegraf";
-import { joinWithReferral, referralCheck } from "./services/joinWithReferral";
+import {
+  joinWithReferral,
+  referralCheck,
+  referralPayloadCheck,
+} from "./services/joinWithReferral";
 import { CustomContext } from "./telegramType";
 dotenv.config();
 
@@ -20,24 +20,14 @@ export const serverEndpoint =
 // export const serverEndpoint = "http://localhost:3000";
 export const channelUsername = "@Cromaartofficial";
 
-export const reply_markup: InlineKeyboardMarkup = {
-  inline_keyboard: [
-    [
-      {
-        text: "🚀 Join Channel",
-        url: `https://t.me/${channelUsername.replace("@", "")}`,
-      },
-      { text: "🌟 Join With Referral", callback_data: "join_with_referral" },
-    ],
-    [
-      // { text: "🚀 Register!", url: `https://airdrop.cromachain.com` },
-      { text: "🚀 Presale!", url: `https://presale.cromachain.com` },
-    ],
-  ],
-};
-
 bot.start(async (ctx) => {
-  await ctx.reply("👋 Welcome to Cromachain Bot!", { reply_markup });
+  const { payload } = ctx;
+  const isFromAmbassador = payload.startsWith("AMB_CROMA");
+  if (isFromAmbassador) {
+    await referralPayloadCheck(payload, ctx);
+    return;
+  }
+  await ctx.reply("👋 Welcome to Cromachain Bot!");
 });
 
 bot.action("join_with_referral", async (ctx) => joinWithReferral(ctx));
